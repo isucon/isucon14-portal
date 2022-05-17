@@ -39,6 +39,9 @@ resource "aws_subnet" "az-a" {
   cidr_block              = "10.1.0.0/24"
   map_public_ip_on_launch = true
   availability_zone       = "ap-northeast-1a"
+  tags = {
+    Name = "${local.env}-${local.project}-az-a"
+  }
 }
 
 resource "aws_subnet" "az-c" {
@@ -46,6 +49,9 @@ resource "aws_subnet" "az-c" {
   cidr_block              = "10.1.1.0/24"
   map_public_ip_on_launch = true
   availability_zone       = "ap-northeast-1c"
+  tags = {
+    Name = "${local.env}-${local.project}-az-c"
+  }
 }
 
 resource "aws_subnet" "az-d" {
@@ -53,4 +59,7 @@ resource "aws_subnet" "az-d" {
   cidr_block              = "10.1.2.0/24"
   map_public_ip_on_launch = true
   availability_zone       = "ap-northeast-1d"
+  tags = {
+    Name = "${local.env}-${local.project}-az-d"
+  }
 }
