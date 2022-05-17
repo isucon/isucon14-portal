@@ -1,12 +1,13 @@
 locals {
-  env = "stg"
+  env     = "stg"
+  project = "portal"
 }
 
 provider "aws" {
   region = "ap-northeast-1"
   default_tags {
     tags = {
-      Project = "portal"
+      Project = local.project
       Env     = local.env
     }
   }
@@ -17,7 +18,7 @@ provider "aws" {
   alias  = "us-east-1"
   default_tags {
     tags = {
-      Project = "portal"
+      Project = local.project
       Env     = local.env
     }
   }
