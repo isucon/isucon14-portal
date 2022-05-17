@@ -63,3 +63,29 @@ resource "aws_subnet" "az-d" {
     Name = "${local.env}-${local.project}-az-d"
   }
 }
+
+resource "aws_security_group" "internal" {
+  vpc_id = aws_vpc.main.id
+  name   = "${local.env}-${local.project}-internal"
+
+  ingress {
+    description = "from myself"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
+  }
+
+  egress {
+    description      = "to any"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
