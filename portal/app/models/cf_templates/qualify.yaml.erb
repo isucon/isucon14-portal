@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  AWS CloudFormation for ISUCON11 Qualify
+  AWS CloudFormation for ISUCON12 Qualify
 Resources:
   GetAvailabilityZoneFunctionExecutionRole:
     Type: AWS::IAM::Role
@@ -92,7 +92,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       VpcId: !Ref VPC
-      GroupDescription: Security Group for ISUCON11 Qualify
+      GroupDescription: Security Group for ISUCON12 Qualify
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: "22"
