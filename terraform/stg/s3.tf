@@ -63,3 +63,28 @@ resource "aws_s3_bucket_policy" "logs" {
     ]
   })
 }
+
+resource "aws_s3_bucket" "config" {
+  bucket = "config-${local.env}-${local.project}-isucon12"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "config" {
+  bucket = aws_s3_bucket.config.bucket
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.main.arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_acl" "config" {
+  bucket = aws_s3_bucket.config.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_public_access_block" "config" {
+  bucket              = aws_s3_bucket.config.id
+  block_public_acls   = true
+  block_public_policy = true
+}

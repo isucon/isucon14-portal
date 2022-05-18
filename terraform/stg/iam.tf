@@ -1,5 +1,5 @@
 data "aws_iam_role" "admin" {
-	  name = "AdminRole"
+  name = "AdminRole"
 }
 
 resource "aws_iam_role" "rds-monitoring" {
@@ -56,6 +56,13 @@ resource "aws_iam_policy" "ecs-task" {
             "cloudwatch:Get*",
             "cloudwatch:List*",
             "cloudwatch:Put*",
+            "logs:CreateLog*",
+            "logs:Put*",
+            "ecr:Get*",
+            "ecr:List*",
+            "ecr:Batch*",
+            "s3:Get*",
+            "s3:List*",
             "ssm:Describe*",
             "ssm:Get*",
             "ssm:List*",
