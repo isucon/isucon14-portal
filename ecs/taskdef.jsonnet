@@ -1,15 +1,9 @@
+local app = import 'lib/app.libsonnet';
+
 {
   containerDefinitions: [
-    {
-      cpu: 0,
-      environmentFiles: [
-        {
-          type: "s3",
-          value: "{{ tfstate `aws_s3_bucket.config.arn` }}/ecs/{{ must_env `ENV` }}.env",
-        },
-      ],
-      essential: true,
-      image: '{{ tfstate `aws_ecr_repository.app.repository_url` }}:{{ must_env `TAG` }}',
+    app {
+      name: 'app',
       logConfiguration: {
         logDriver: 'awslogs',
         options: {
@@ -18,7 +12,6 @@
           'awslogs-stream-prefix': 'app',
         },
       },
-      name: 'app',
       portMappings: [
         {
           containerPort: 3000,
@@ -26,6 +19,26 @@
           protocol: 'tcp',
         },
       ],
+    },
+    app {
+      name: 'worker',
+      command: [
+        'bundle',
+        'exec',
+        'shoryuken',
+        'start',
+        '--config',
+        'config/shoryuken.yml',
+        '--rails',
+      ],
+      logConfiguration: {
+        logDriver: 'awslogs',
+        options: {
+          'awslogs-group': "{{ tfstate `aws_cloudwatch_log_group.ecs['app'].name` }}",
+          'awslogs-region': 'ap-northeast-1',
+          'awslogs-stream-prefix': 'worker',
+        },
+      },
     },
   ],
   cpu: '1024',

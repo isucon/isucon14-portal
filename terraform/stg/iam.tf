@@ -72,6 +72,10 @@ resource "aws_iam_policy" "ecs-task" {
             "ssmmessages:OpenControlChannel",
             "ssmmessages:OpenDataChannel",
             "xray:Put*",
+            "sqs:SendMessage",
+            "sqs:ReceiveMessage",
+            "sqs:DeleteMessage",
+            "sqs:Get*",
           ]
           Resource = "*"
         }
