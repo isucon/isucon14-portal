@@ -29,7 +29,7 @@ export class Landing extends React.Component<Props, State> {
       <header className="hero">
         <div className="hero-body">
           <div className="isux-landing-logo-wrapper container has-text-centered">
-            <img src="/isucon11_logo.png" />
+            <img src="/isucon12_logo.png" />
           </div>
         </div>
       </header>
