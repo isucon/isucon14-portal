@@ -12,7 +12,7 @@ COPY sw ./sw
 RUN NODE_ENV=production node_modules/.bin/webpack
 
 # https://github.com/sorah-rbpkg/dockerfiles
-FROM sorah/ruby:3.1-dev as builder
+FROM sorah/ruby:3.1-dev-focal as builder
 
 RUN rm /etc/apt/sources.list.d/sorah-ruby.list
 
@@ -27,7 +27,7 @@ COPY Gemfile.lock /app/
 ENV BUNDLE_FORCE_RUBY_PLATFORM 1
 RUN bundle install --path /gems --jobs 2 --deployment --without development:test
 
-FROM sorah/ruby:3.1
+FROM sorah/ruby:3.1-focal
 
 RUN rm /etc/apt/sources.list.d/sorah-ruby.list
 
