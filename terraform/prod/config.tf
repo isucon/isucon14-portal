@@ -1,5 +1,5 @@
 locals {
-  env     = "stg"
+  env     = "prod"
   project = "portal"
 }
 
@@ -35,7 +35,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "tfstate-stg-portal-isucon12"
+    bucket = "tfstate-prod-portal-isucon12"
     key    = "terraform.tfstate"
     region = "ap-northeast-1"
   }
