@@ -12,13 +12,6 @@ local app = import 'lib/app.libsonnet';
           'awslogs-stream-prefix': 'app',
         },
       },
-      portMappings: [
-        {
-          containerPort: 3000,
-          hostPort: 3000,
-          protocol: 'tcp',
-        },
-      ],
     },
     app {
       name: 'worker',
@@ -39,6 +32,27 @@ local app = import 'lib/app.libsonnet';
           'awslogs-stream-prefix': 'worker',
         },
       },
+    },
+    {
+      name: 'nginx',
+      environment: [],
+      essential: true,
+      image: '{{ tfstate `aws_ecr_repository.nginx.repository_url` }}:{{ must_env `TAG` }}',
+      logConfiguration: {
+        logDriver: 'awslogs',
+        options: {
+          'awslogs-group': "{{ tfstate `aws_cloudwatch_log_group.ecs['app'].name` }}",
+          'awslogs-region': 'ap-northeast-1',
+          'awslogs-stream-prefix': 'nginx',
+        },
+      },
+      portMappings: [
+        {
+          containerPort: 80,
+          hostPort: 80,
+          protocol: 'tcp',
+        },
+      ],
     },
   ],
   cpu: '1024',

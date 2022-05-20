@@ -13,8 +13,8 @@
   launchType: 'FARGATE',
   loadBalancers: [
     {
-      containerName: 'app',
-      containerPort: 3000,
+      containerName: 'nginx',
+      containerPort: 80,
       targetGroupArn: '{{ tfstate `aws_lb_target_group.app.arn` }}',
     },
   ],

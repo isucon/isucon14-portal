@@ -58,22 +58,22 @@ resource "aws_lb_listener" "https" {
 }
 
 resource "aws_lb_target_group" "app" {
-  name                 = "${local.env}-${local.project}-app"
-  port                 = 3000
+  name                 = "${local.env}-${local.project}-app2"
+  port                 = 80
   protocol             = "HTTP"
   vpc_id               = aws_vpc.main.id
   target_type          = "ip"
   deregistration_delay = 30
 
   health_check {
-	path                = "/site/sha"
-	interval            = 12
-	port                = 3000
-	protocol            = "HTTP"
-	timeout             = 10
-	healthy_threshold   = 2
-	unhealthy_threshold = 10
-	matcher             = "200-499"
+    path                = "/site/sha"
+    interval            = 12
+    port                = 80
+    protocol            = "HTTP"
+    timeout             = 10
+    healthy_threshold   = 2
+    unhealthy_threshold = 10
+    matcher             = "200-499"
   }
 }
 

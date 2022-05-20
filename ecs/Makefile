@@ -3,16 +3,29 @@ export TAG?=$(shell git log -1 --format=%H)
 export ECR?=$(shell jq -r '.credHelpers | keys | .[0]' .docker/config.json)
 export KMS=arn:aws:kms:ap-northeast-1:497146501771:alias/$(ENV)-portal
 
-build:
+build/app:
 	cd ../portal && \
 	docker --config .docker \
 		build \
 		--build-arg ENV=$(ENV) \
 		-t $(ECR)/$(ENV)/portal/app:$(TAG) .
 
-push:
+build/nginx:
+	cd nginx && \
 	docker --config .docker \
-		push $(ECR)/$(ENV)/portal/app:$(TAG)
+		build \
+		-t $(ECR)/$(ENV)/portal/nginx:$(TAG) .
+
+push/%:
+	docker --config .docker \
+		push $(ECR)/$(ENV)/portal/$*:$(TAG)
+
+build: build/app build/nginx
+
+push: push/app push/nginx
+
+create:
+	ecspresso create
 
 diff: $(ENV).env
 	bash -c 'diff -u <(aws s3 cp s3://config-$(ENV)-portal-isucon12/ecs/$(ENV).env -) $(ENV).env' || exit 0
