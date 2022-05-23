@@ -48,7 +48,7 @@ status:
 	ecspresso status
 
 exec:
-	ecspresso exec
+	ecspresso exec --command=bash
 
 tasks:
 	ecspresso tasks $(OPT)
