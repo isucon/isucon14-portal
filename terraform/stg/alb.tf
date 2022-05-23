@@ -42,10 +42,7 @@ resource "aws_lb_listener" "https" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
-  // certificate_arn   = aws_acm_certificate.main.arn
-  // stg.portal.flchr.net (TODO fujiwara所有のドメインなのであとで portal.isucon.net を委譲してもらう)
-  certificate_arn = "arn:aws:acm:ap-northeast-1:497146501771:certificate/636c6a4a-1868-4a1d-b7ed-3c1b113c7bec"
-
+  certificate_arn   = aws_acm_certificate.wildcard.arn
   default_action {
     type = "fixed-response"
 
@@ -88,7 +85,9 @@ resource "aws_lb_listener_rule" "app" {
 
   condition {
     host_header {
-      values = ["stg.portal.flchr.net"] // TODO FIX domain
+      values = [
+        aws_route53_record.portal.name,
+      ]
     }
   }
 }
