@@ -53,6 +53,12 @@ local app = import 'lib/app.libsonnet';
           protocol: 'tcp',
         },
       ],
+      volumesFrom: [
+        {
+          sourceContainer: 'app',
+          readOnly: true,
+        },
+      ],
     },
   ],
   cpu: '1024',
