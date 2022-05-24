@@ -24,6 +24,7 @@ func LoadPortalCredentials() (*Portal, error) {
 	var credentials struct {
 		Dev   bool   `json:"dev"`
 		Token string `json:"token"`
+		Host  string `json:"host"`
 	}
 	f, err := os.Open("/opt/isucon-env-checker/portal_credentials.json")
 	if err != nil {
@@ -34,12 +35,8 @@ func LoadPortalCredentials() (*Portal, error) {
 	if err := json.NewDecoder(f).Decode(&credentials); err != nil {
 		return nil, err
 	}
-	endpoint := "https://portal.isucon.net"
-	if credentials.Dev {
-		endpoint = "https://portal-dev.isucon.net"
-	}
 	return &Portal{
-		Endpoint: endpoint,
+		Endpoint: "https://" + credentials.Host,
 		Token:    credentials.Token,
 	}, nil
 }

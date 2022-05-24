@@ -28,8 +28,8 @@ func (c *checker) checkInstances() {
 
 func (c *checker) checkInstance(i *ec2.Instance) {
 	id := *i.InstanceId
-	if *i.InstanceType != "t2.micro" {
-		c.addFailure("%s のインスタンスタイプが %s です (t2.micro である必要があります)", id, *i.InstanceType)
+	if *i.InstanceType != "t3.micro" {
+		c.addFailure("%s のインスタンスタイプが %s です (t3.micro である必要があります)", id, *i.InstanceType)
 	}
 	if c.ExpectedAMI != "" && *i.ImageId != c.ExpectedAMI {
 		c.addFailure("%s の AMI が %s です (%s である必要があります)", id, *i.ImageId, c.ExpectedAMI)

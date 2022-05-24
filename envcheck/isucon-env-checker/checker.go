@@ -47,7 +47,7 @@ type Result struct {
 	RawData      string
 }
 
-func Check(cfg CheckConfig) Result {
+func Check(cfg CheckConfig) (Result, error) {
 	buf := new(bytes.Buffer)
 	logger := log.New(buf, "", log.LstdFlags)
 	c := &checker{
@@ -66,7 +66,7 @@ func Check(cfg CheckConfig) Result {
 			Message:      "AWS との通信でエラーが発生しました",
 			AdminMessage: c.adminLog.String(),
 			RawData:      string(raw),
-		}
+		}, err
 	}
 
 	c.checkAll()
@@ -79,7 +79,7 @@ func Check(cfg CheckConfig) Result {
 		Message:      c.message(),
 		AdminMessage: c.adminLog.String(),
 		RawData:      string(raw),
-	}
+	}, nil
 }
 
 func (c *checker) loadAWS() error {

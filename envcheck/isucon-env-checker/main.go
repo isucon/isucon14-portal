@@ -27,11 +27,15 @@ func main() {
 	}
 
 	fmt.Println("環境をチェックしています...")
-	result := Check(CheckConfig{
+	result, err := Check(CheckConfig{
 		Name: name,
 		AMI:  info.AMI,
 		AZ:   info.AZ,
 	})
+	if err != nil {
+		fmt.Printf("環境チェックに失敗しました: %v\n", err)
+		os.Exit(1)
+	}
 
 	if err := p.SendResult(result); err != nil {
 		fmt.Printf("チェック結果の送信に失敗しました: %v\n", err)

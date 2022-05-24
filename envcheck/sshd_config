@@ -1,3 +1,5 @@
+PubkeyAcceptedAlgorithms=+ssh-rsa
+
 Match User isucon
   PermitTTY no
   AllowTcpForwarding no
