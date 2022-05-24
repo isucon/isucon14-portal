@@ -44,7 +44,7 @@ Resources:
             elif event['RequestType'] == "Delete":
               cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
       Handler: index.handler
-      Runtime: python3.8
+      Runtime: python3.9
       Timeout: 30
       Role: !GetAtt GetAvailabilityZoneFunctionExecutionRole.Arn
   GetAvailabilityZone:
@@ -135,8 +135,8 @@ Resources:
   EnvcheckInstance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-0e22b2e5f011bcb69
-      InstanceType: t2.micro
+      ImageId: <%= ami_id %>
+      InstanceType: t3.micro
       SecurityGroupIds:
         - !Ref SecurityGroup
       SubnetId: !Ref Subnet

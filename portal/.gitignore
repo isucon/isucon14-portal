@@ -34,3 +34,5 @@ node_modules/
 /REVISION
 
 docker-compose-local.yaml
+
+vendor/

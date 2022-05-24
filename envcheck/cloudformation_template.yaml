@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  AWS CloudFormation for ISUCON12 Qualify
+  AWS CloudFormation for ISUCON11 Environment Checks
 Resources:
   GetAvailabilityZoneFunctionExecutionRole:
     Type: AWS::IAM::Role
@@ -35,7 +35,7 @@ Resources:
             if event['RequestType'] == "Create":
               ec2 = boto3.client('ec2')
               response = ec2.describe_availability_zones(
-                ZoneIds = ['<%= zone_id %>']
+                ZoneIds = ['__AZ_ID__']
               )
               ZoneName = response['AvailabilityZones'][0]['ZoneName']
               cfnresponse.send(event, context, cfnresponse.SUCCESS, {"ZoneName" : ZoneName})
@@ -44,7 +44,7 @@ Resources:
             elif event['RequestType'] == "Delete":
               cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
       Handler: index.handler
-      Runtime: python3.9
+      Runtime: python3.8
       Timeout: 30
       Role: !GetAtt GetAvailabilityZoneFunctionExecutionRole.Arn
   GetAvailabilityZone:
@@ -92,18 +92,12 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       VpcId: !Ref VPC
-      GroupDescription: Security Group for ISUCON12 Qualify
+      GroupDescription: Enable SSH access via port 22
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: "22"
           ToPort: "22"
           CidrIp: "0.0.0.0/0"
-        - IpProtocol: tcp
-          FromPort: "443"
-          ToPort: "443"
-          CidrIp: "0.0.0.0/0"
-        - IpProtocol: -1
-          CidrIp: "192.168.0.0/24"
 
   InstanceRole:
     Type: AWS::IAM::Role
@@ -138,108 +132,40 @@ Resources:
       Roles:
         - !Ref InstanceRole
 
-  QualifyInstance1:
+  EnvcheckInstance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: <%= ami_id %>
-      InstanceType: c5.large
+      ImageId: __AMI_ID__
+      InstanceType: t2.micro
       SecurityGroupIds:
         - !Ref SecurityGroup
       SubnetId: !Ref Subnet
-      PrivateIpAddress: "192.168.0.11"
       IamInstanceProfile:
         !Ref InstanceProfile
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
           Ebs:
-            VolumeSize: 20
-            VolumeType: gp3
+            VolumeSize: 8
+            VolumeType: gp2
       Tags:
         - Key: Name
-          Value: isucon12-qualify-1
+          Value: isucon11-envcheck
       UserData:
         Fn::Base64: |
           #cloud-config
           write_files:
+          - path: /home/isucon/.ssh/authorized_keys
+            owner: isucon:isucon
+            permissions: '0600'
+            encoding: b64
+            content: __SSH_KEYS__
           - path: /opt/isucon-env-checker/portal_credentials.json
             owner: root:root
             permissions: '0644'
             encoding: b64
-            content: '<%= portal_credentials %>'
-          runcmd:
-            - 'curl --retry 5 --retry-connrefused --max-time 10 --connect-timeout 5 "https://<%= portal_host %>/api/ssh_public_keys?token=<%= token %>" | sudo -u isucon sh -c "umask 077; cat > /home/isucon/.ssh/authorized_keys"'
-  QualifyInstanceIP1:
+            content: __PORTAL_CREDENTIALS__
+  EnvcheckInstanceIP:
     Type: AWS::EC2::EIP
     Properties:
       Domain: vpc
-      InstanceId: !Ref QualifyInstance1
-  QualifyInstance2:
-    Type: AWS::EC2::Instance
-    Properties:
-      ImageId: <%= ami_id %>
-      InstanceType: c5.large
-      SecurityGroupIds:
-        - !Ref SecurityGroup
-      SubnetId: !Ref Subnet
-      PrivateIpAddress: "192.168.0.12"
-      IamInstanceProfile:
-        !Ref InstanceProfile
-      BlockDeviceMappings:
-        - DeviceName: /dev/sda1
-          Ebs:
-            VolumeSize: 20
-            VolumeType: gp3
-      Tags:
-        - Key: Name
-          Value: isucon12-qualify-2
-      UserData:
-        Fn::Base64: |
-          #cloud-config
-          write_files:
-          - path: /opt/isucon-env-checker/portal_credentials.json
-            owner: root:root
-            permissions: '0644'
-            encoding: b64
-            content: '<%= portal_credentials %>'
-          runcmd:
-            - 'curl --retry 5 --retry-connrefused --max-time 10 --connect-timeout 5 "https://<%= portal_host %>/api/ssh_public_keys?token=<%= token %>" | sudo -u isucon sh -c "umask 077; cat > /home/isucon/.ssh/authorized_keys"'
-  QualifyInstanceIP2:
-    Type: AWS::EC2::EIP
-    Properties:
-      Domain: vpc
-      InstanceId: !Ref QualifyInstance2
-  QualifyInstance3:
-    Type: AWS::EC2::Instance
-    Properties:
-      ImageId: <%= ami_id %>
-      InstanceType: c5.large
-      SecurityGroupIds:
-        - !Ref SecurityGroup
-      SubnetId: !Ref Subnet
-      PrivateIpAddress: "192.168.0.13"
-      IamInstanceProfile:
-        !Ref InstanceProfile
-      BlockDeviceMappings:
-        - DeviceName: /dev/sda1
-          Ebs:
-            VolumeSize: 20
-            VolumeType: gp3
-      Tags:
-        - Key: Name
-          Value: isucon12-qualify-3
-      UserData:
-        Fn::Base64: |
-          #cloud-config
-          write_files:
-          - path: /opt/isucon-env-checker/portal_credentials.json
-            owner: root:root
-            permissions: '0644'
-            encoding: b64
-            content: '<%= portal_credentials %>'
-          runcmd:
-            - 'curl --retry 5 --retry-connrefused --max-time 10 --connect-timeout 5 "https://<%= portal_host %>/api/ssh_public_keys?token=<%= token %>" | sudo -u isucon sh -c "umask 077; cat > /home/isucon/.ssh/authorized_keys"'
-  QualifyInstanceIP3:
-    Type: AWS::EC2::EIP
-    Properties:
-      Domain: vpc
-      InstanceId: !Ref QualifyInstance3
+      InstanceId: !Ref EnvcheckInstance

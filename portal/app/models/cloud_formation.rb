@@ -11,13 +11,14 @@ module CloudFormation
   end
 
   def self.test_template(team)
-    zone_id = team.availability_zone
+    zone_id = Rails.application.config.x.availability_zone_id
     token = create_token(
       team,
       test_token_expiry
     )
     portal_credentials = create_portal_credentials(token)
     portal_host = get_portal_host()
+    ami_id = Rails.application.config.x.test_ami_id
 
     unless zone_id.nil?
       template(TEST_ERB, binding)
@@ -27,13 +28,14 @@ module CloudFormation
   end
 
   def self.qualify_template(team)
-    zone_id = team.availability_zone
+    zone_id = Rails.application.config.x.availability_zone_id
     token = create_token(
       team,
       qualify_token_expiry
     )
     portal_credentials = create_portal_credentials(token)
     portal_host = get_portal_host()
+    ami_id = Rails.application.config.x.qualify_ami_id
 
     unless zone_id.nil?
       template(QUALIFY_ERB, binding)
@@ -47,16 +49,12 @@ module CloudFormation
   end
 
   def self.get_portal_host
-    if !is_for_staging
-      "portal.isucon.net"
-    else
-      "portal-dev.isucon.net"
-    end
+    Rails.application.config.x.public_url_host
   end
 
   def self.test_token_expiry
     if is_for_staging
-      Time.now.to_i + 60 * 60 # 発行時から1時間後
+      Time.now.to_i + 24 * 60 * 60 # 発行時から24時間後
     else
       Rails.application.config.x.contest.contest_start.to_i
     end
@@ -81,6 +79,7 @@ module CloudFormation
     Base64.strict_encode64(JSON.dump(
       token: token,
       dev: is_for_staging,
+      host: Rails.application.config.x.public_url_host,
     ))
   end
 end
