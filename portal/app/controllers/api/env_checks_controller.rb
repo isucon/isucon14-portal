@@ -63,7 +63,7 @@ class Api::EnvChecksController < Api::ApplicationController
         return render status: :bad_request, body: "unknown name param"
       end
 
-    az_id = team.availability_zone
+    az_id = Rails.application.config.x.availability_zone_id
 
     render json: {
       ami_id: ami_ids.first || "",
