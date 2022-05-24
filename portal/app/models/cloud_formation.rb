@@ -18,6 +18,7 @@ module CloudFormation
     )
     portal_credentials = create_portal_credentials(token)
     portal_host = get_portal_host()
+    ami_id = Rails.application.config.x.test_ami_id
 
     unless zone_id.nil?
       template(TEST_ERB, binding)
@@ -34,6 +35,7 @@ module CloudFormation
     )
     portal_credentials = create_portal_credentials(token)
     portal_host = get_portal_host()
+    ami_id = Rails.application.config.x.qualify_ami_id
 
     unless zone_id.nil?
       template(QUALIFY_ERB, binding)

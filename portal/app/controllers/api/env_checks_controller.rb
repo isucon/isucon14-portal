@@ -3,8 +3,8 @@ class Api::EnvChecksController < Api::ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :require_valid_checker_token
 
-  TEST_AMI_IDS = ["ami-0e22b2e5f011bcb69"]
-  QUALIFY_AMI_IDS = ["ami-0be3f7cce0ddfa2a3"]
+  TEST_AMI_IDS = [Rails.application.config.x.test_ami_id]
+  QUALIFY_AMI_IDS = [Rails.application.config.x.qualify_ami_id]
 
   def create
     team_id = @payload[:team_id]
