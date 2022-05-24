@@ -4,10 +4,10 @@ variable "revision" {
 }
 
 locals {
-  name = "isucon11-envcheck-${formatdate("YYYYMMDD-hhmm", timestamp())}"
+  name = "isucon12-envcheck-${formatdate("YYYYMMDD-hhmm", timestamp())}"
   ami_tags = {
     Project  = "portal"
-    Family   = "isucon11-envcheck"
+    Family   = "isucon12-envcheck"
     Name     = "${local.name}"
     Revision = "${var.revision}"
     Packer   = "1"
@@ -20,9 +20,9 @@ locals {
   }
 }
 
-data "amazon-ami" "ubuntu-focal" {
+data "amazon-ami" "ubuntu-jammy" {
   filters = {
-    name                = "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
+    name                = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
     root-device-type    = "ebs"
     virtualization-type = "hvm"
   }
@@ -38,15 +38,16 @@ source "amazon-ebs" "envcheck" {
   tags          = local.ami_tags
   snapshot_tags = local.ami_tags
 
-  source_ami = "${data.amazon-ami.ubuntu-focal.id}"
-  region     = "ap-northeast-1"
-  instance_type = "t2.micro"
+  source_ami    = "${data.amazon-ami.ubuntu-jammy.id}"
+  region        = "ap-northeast-1"
+  instance_type = "t3.micro"
 
   run_tags        = local.run_tags
   run_volume_tags = local.run_tags
 
-  ssh_interface = "public_ip"
-  ssh_username  = "ubuntu"
+  ssh_interface           = "public_ip"
+  ssh_username            = "ubuntu"
+  temporary_key_pair_type = "ed25519"
 }
 
 build {
