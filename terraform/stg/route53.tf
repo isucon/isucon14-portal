@@ -8,6 +8,17 @@ resource "aws_route53_record" "portal" {
   name    = "portal.${aws_route53_zone.xii.name}"
   type    = "A"
   alias {
+    name                   = aws_cloudfront_distribution.portal.domain_name
+    zone_id                = aws_cloudfront_distribution.portal.hosted_zone_id
+    evaluate_target_health = true
+  }
+}
+
+resource "aws_route53_record" "portal-lb" {
+  zone_id = aws_route53_zone.xii.zone_id
+  name    = "portal-lb.${aws_route53_zone.xii.name}"
+  type    = "A"
+  alias {
     name                   = aws_lb.main.dns_name
     zone_id                = aws_lb.main.zone_id
     evaluate_target_health = true
