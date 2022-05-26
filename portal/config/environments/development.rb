@@ -126,5 +126,5 @@ Rails.application.configure do
   config.x.test_ami_id = ENV['ISUXPORTAL_TEST_AMI_ID']
   config.x.qualify_ami_id = ENV['ISUXPORTAL_QUALIFY_AMI_ID']
 
-  config.x.availability_zone_id = ENV.fetch('ISUXPORTAL_ZONE_ID', 'apne1-az2')
+  config.x.availability_zones = ['apne1-az1', 'apne1-az2', 'apne1-az4']
 end

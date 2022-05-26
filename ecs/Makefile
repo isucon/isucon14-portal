@@ -27,15 +27,19 @@ push: push/app push/nginx
 create:
 	ecspresso create
 
-diff: $(ENV).env
+diff/env: $(ENV).env
 	bash -c 'diff -u <(aws s3 cp s3://config-$(ENV)-portal-isucon12/ecs/$(ENV).env -) $(ENV).env' || exit 0
+
+diff: diff/env
 	ecspresso diff --unified
 
 verify:
 	ecspresso verify
 
-deploy: $(ENV).env verify
+deploy/env: $(ENV).env
 	aws s3 cp $(ENV).env s3://config-$(ENV)-portal-isucon12/ecs/$(ENV).env
+
+deploy: verify deploy/env
 	ecspresso deploy
 
 rollback:
