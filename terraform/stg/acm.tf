@@ -3,7 +3,7 @@ resource "aws_acm_certificate" "wildcard" {
   validation_method = "DNS"
 
   subject_alternative_names = [
-	  aws_route53_zone.xii.name,
+    aws_route53_zone.xii.name,
   ]
 
   lifecycle {
@@ -18,7 +18,7 @@ resource "aws_acm_certificate" "wildcard-use1" {
   validation_method = "DNS"
 
   subject_alternative_names = [
-	  aws_route53_zone.xii.name,
+    aws_route53_zone.xii.name,
   ]
 
   lifecycle {
