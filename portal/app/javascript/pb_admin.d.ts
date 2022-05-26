@@ -3090,8 +3090,8 @@ export namespace isuxportal {
                     /** ListBenchmarkJobsQuery page */
                     page?: (number|Long|null);
 
-                    /** ListBenchmarkJobsQuery onlyFailed */
-                    onlyFailed?: (boolean|null);
+                    /** ListBenchmarkJobsQuery failedOnly */
+                    failedOnly?: (boolean|null);
                 }
 
                 /** Represents a ListBenchmarkJobsQuery. */
@@ -3112,8 +3112,8 @@ export namespace isuxportal {
                     /** ListBenchmarkJobsQuery page. */
                     public page: (number|Long);
 
-                    /** ListBenchmarkJobsQuery onlyFailed. */
-                    public onlyFailed: boolean;
+                    /** ListBenchmarkJobsQuery failedOnly. */
+                    public failedOnly: boolean;
 
                     /**
                      * Creates a new ListBenchmarkJobsQuery instance using the specified properties.
