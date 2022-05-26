@@ -59,9 +59,13 @@ export class RegistrationStatus extends React.Component<Props, State> {
     }
   }
 
-  async onCopyCouponButtonClick(event: React.MouseEvent<HTMLElement>) {
-    event.preventDefault();
-    await navigator.clipboard.writeText(this.props.registrationSession.coupon?.code ?? '');
+  onCopyCouponButtonClickIndex(index: number) {
+    const c = this.props.registrationSession.coupon?.code
+    const code = c ? c[index] : '';
+    return async (event: React.MouseEvent<HTMLElement>) => {
+      event.preventDefault();
+      await navigator.clipboard.writeText(code);
+    }
   }
 
   async onCopyInviteButtonClick(event: React.MouseEvent<HTMLElement>) {
@@ -203,12 +207,12 @@ export class RegistrationStatus extends React.Component<Props, State> {
                 className="input"
                 type="text"
                 readOnly
-                value={this.props.registrationSession.coupon?.code?.split(',')[0] ?? ''}
+                value={this.props.registrationSession.coupon?.code ? this.props.registrationSession.coupon?.code[0] : ''}
                 onClick={this.onCopyTargetInputClick.bind(this)}
               />
             </div>
             <div className="control">
-              <button className="button" onClick={this.onCopyCouponButtonClick.bind(this)}>
+              <button className="button" onClick={this.onCopyCouponButtonClickIndex(0).bind(this)}>
                 <span className="material-icons">content_copy</span>
               </button>
             </div>
@@ -222,12 +226,12 @@ export class RegistrationStatus extends React.Component<Props, State> {
                 className="input"
                 type="text"
                 readOnly
-                value={this.props.registrationSession.coupon?.code?.split(',')[1] ?? ''}
+                value={this.props.registrationSession.coupon?.code ? this.props.registrationSession.coupon?.code[1] : ''}
                 onClick={this.onCopyTargetInputClick.bind(this)}
               />
             </div>
             <div className="control">
-              <button className="button" onClick={this.onCopyCouponButtonClick.bind(this)}>
+              <button className="button" onClick={this.onCopyCouponButtonClickIndex(1).bind(this)}>
                 <span className="material-icons">content_copy</span>
               </button>
             </div>
