@@ -11,7 +11,7 @@ module CloudFormation
   end
 
   def self.test_template(team)
-    zone_id = Rails.application.config.x.availability_zone_id
+    zone_id = team.availability_zone
     token = create_token(
       team,
       test_token_expiry
@@ -28,7 +28,7 @@ module CloudFormation
   end
 
   def self.qualify_template(team)
-    zone_id = Rails.application.config.x.availability_zone_id
+    zone_id = team.availability_zone
     token = create_token(
       team,
       qualify_token_expiry
