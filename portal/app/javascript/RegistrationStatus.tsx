@@ -112,8 +112,8 @@ export class RegistrationStatus extends React.Component<Props, State> {
               </div>
 
               <div className="field">
-                <label className="label">AWSクーポン</label>
-                { this.renderCoupon() }
+                <label className="label">クーポン</label>
+                {this.renderCoupon()}
               </div>
 
               <h5 className="title is-5 mt-3">メンバーリスト</h5>
@@ -193,27 +193,51 @@ export class RegistrationStatus extends React.Component<Props, State> {
   renderCoupon() {
     if (this.props.registrationSession.coupon?.activate) {
       return (
-        <div className="field has-addons">
-          <div className="control is-expanded">
-            <input
-              className="input"
-              type="text"
-              readOnly
-              value={this.props.registrationSession.coupon?.code ?? ''}
-              onClick={this.onCopyTargetInputClick.bind(this)}
-            />
+        <div>
+          <div className="field has-addons">
+            <div className="field-label is-normal">
+              <label className="label">AWS</label>
+            </div>
+            <div className="control is-expanded">
+              <input
+                className="input"
+                type="text"
+                readOnly
+                value={this.props.registrationSession.coupon?.code?.split(',')[0] ?? ''}
+                onClick={this.onCopyTargetInputClick.bind(this)}
+              />
+            </div>
+            <div className="control">
+              <button className="button" onClick={this.onCopyCouponButtonClick.bind(this)}>
+                <span className="material-icons">content_copy</span>
+              </button>
+            </div>
           </div>
-          <div className="control">
-            <button className="button" onClick={this.onCopyCouponButtonClick.bind(this)}>
-              <span className="material-icons">content_copy</span>
-            </button>
+          <div className="field has-addons">
+            <div className="field-label">
+              <label className="label">さくらインターネット</label>
+            </div>
+            <div className="control is-expanded">
+              <input
+                className="input"
+                type="text"
+                readOnly
+                value={this.props.registrationSession.coupon?.code?.split(',')[1] ?? ''}
+                onClick={this.onCopyTargetInputClick.bind(this)}
+              />
+            </div>
+            <div className="control">
+              <button className="button" onClick={this.onCopyCouponButtonClick.bind(this)}>
+                <span className="material-icons">content_copy</span>
+              </button>
+            </div>
           </div>
         </div>
       )
     } else {
       return (
         <button className="button is-info" onClick={this.onActivateCouponButtonClick.bind(this)}>
-          AWSクーポンを獲得
+          クーポンを獲得
         </button>
       )
     }
