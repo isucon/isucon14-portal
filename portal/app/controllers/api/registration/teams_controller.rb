@@ -14,8 +14,6 @@ class Api::Registration::TeamsController < Api::Registration::ApplicationControl
       @team = Team.new(
         name: pb.team_name,
         email_address: pb.email_address,
-        # AZは3AZの中からランダムに選ぶ
-        availability_zone: Rails.application.config.x.availability_zones.sample,
       )
       @team.is_hidden = true if current_bypass_allowed?(:HIDDEN_TEAM)
       @contestant = Contestant.new(
@@ -28,6 +26,11 @@ class Api::Registration::TeamsController < Api::Registration::ApplicationControl
         github_login: github_login.fetch('login'),
       )
       @team.save!
+
+      # AZはidの剰余で割り当てる
+      zones = Rails.application.config.x.availability_zones
+      @team.update!(availability_zone: zones[@team.id % zones.size])
+
       @contestant.team = @team
       @contestant.save!
       @team.leader_id = @contestant.id
