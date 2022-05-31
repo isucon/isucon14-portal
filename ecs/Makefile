@@ -24,47 +24,50 @@ build: build/app build/nginx
 
 push: push/app push/nginx
 
-create:
-	ecspresso create
+create/%:
+	ecspresso create --config $*.yml
 
 diff/env: $(ENV).env
 	bash -c 'diff -u <(aws s3 cp s3://config-$(ENV)-portal-isucon12/ecs/$(ENV).env -) $(ENV).env' || exit 0
 
-diff: diff/env
-	ecspresso diff --unified
+diff/%: diff/env
+	ecspresso diff --unified --config $*.yml
 
-verify:
-	ecspresso verify
+verify/%:
+	ecspresso verify --config $*.yml
 
 deploy/env: $(ENV).env
 	aws s3 cp $(ENV).env s3://config-$(ENV)-portal-isucon12/ecs/$(ENV).env
 
-deploy: verify deploy/env
-	ecspresso deploy
+deploy/app: verify/app deploy/env
+	ecspresso deploy --config app.yml
 
-rollback:
-	ecspresso rollback --deregister-task-definition
+deploy/bot: verify/bot
+	ecspresso deploy --config bot.yml
 
-scale:
-	ecspresso scale --tasks=$(TASKS)
+rollback/%:
+	ecspresso rollback --deregister-task-definition --config $*.yml
 
-status:
-	ecspresso status
+scale/%:
+	ecspresso scale --tasks=$(TASKS) --config $*.yml
 
-exec:
-	ecspresso exec --command=bash
+status/%:
+	ecspresso status --config $*.yml
 
-tasks:
-	ecspresso tasks $(OPT)
+exec/%:
+	ecspresso exec --command=bash --config $*.yml
 
-revisions:
-	ecspresso revisions
+tasks/%:
+	ecspresso tasks $(OPT) --config $*.yml
 
-refresh:
-	ecspresso refresh
+revisions/%:
+	ecspresso revisions --config $*.yml
+
+refresh/%:
+	ecspresso refresh --config $*.yml
 
 run:
-	ecspresso run --latest-task-definition --overrides-file=overrides.jsonnet --wait-until running
+	ecspresso --config app.yml run --latest-task-definition --overrides-file=overrides.jsonnet --wait-until running
 
 $(ENV).env: $(ENV).encrypted.env
 	sops -d $(ENV).encrypted.env > $(ENV).env
