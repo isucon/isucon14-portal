@@ -116,8 +116,8 @@ export class RegistrationStatus extends React.Component<Props, State> {
               </div>
 
               <div className="field">
-                <label className="label">クーポン</label>
-                {this.renderCoupon()}
+                <label className="label">クーポンは準備中です</label>
+                {/*this.renderCoupon()*/}
               </div>
 
               <h5 className="title is-5 mt-3">メンバーリスト</h5>
