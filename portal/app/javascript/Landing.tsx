@@ -7,7 +7,7 @@ export interface Props {
   client: ApiClient;
 }
 
-export interface State {}
+export interface State { }
 
 export class Landing extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -53,6 +53,13 @@ export class Landing extends React.Component<Props, State> {
           <p className="block">
             参加登録は右上から行えます
           </p>
+          <p className="block">
+            予選参加確定枠を利用される方は2022年6月17日以降、本登録開始となります。
+            <br />
+            個別にメールにて案内している手順を参照してください。
+            <br />
+            予選参加確定枠のチームメンバーは代表者の方から招待を受け取ってください。
+          </p>
         </main>
       )
     } else {
@@ -60,6 +67,13 @@ export class Landing extends React.Component<Props, State> {
         <main>
           <p className="block">
             現在は参加登録を受け付けていません
+          </p>
+          <p className="block">
+            予選参加確定枠を利用される方は2022年6月17日以降、本登録開始となります。
+            <br />
+            個別にメールにて案内している手順を参照してください。
+            <br />
+            予選参加確定枠のチームメンバーは代表者の方から招待を受け取ってください。
           </p>
         </main>
       )
