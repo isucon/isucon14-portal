@@ -25,7 +25,7 @@ local app = import 'lib/app.libsonnet';
   ],
   cpu: '1024',
   executionRoleArn: '{{ tfstate `aws_iam_role.ecs-task.arn` }}',
-  family: '{{ must_env `ENV` }}-portal',
+  family: '{{ must_env `ENV` }}-portal-worker',
   memory: '4096',
   networkMode: 'awsvpc',
   requiresCompatibilities: [
