@@ -39,9 +39,11 @@ verify/%:
 deploy/env: $(ENV).env
 	aws s3 cp $(ENV).env s3://config-$(ENV)-portal-isucon12/ecs/$(ENV).env
 
-deploy: verify/app verify/worker deploy/env
-	ecspresso deploy --config worker.yml
-	ecspresso deploy --config app.yml
+deploy: deploy/app deploy/worker
+
+
+deploy/%: verify/% deploy/env
+	ecspresso deploy --config $*.yml
 
 deploy/bot: verify/bot
 	ecspresso deploy --config bot.yml
