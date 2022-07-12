@@ -11,7 +11,7 @@
     },
     {
       name: 'ISUXPORTAL_QUALIFY_AMI_ID',
-      value: 'ami-dummy',
+      value: '{{ tfstate `data.aws_ami.qualify.id` }}',
     },
   ],
   environmentFiles: [

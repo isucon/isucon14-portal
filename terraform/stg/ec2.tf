@@ -6,3 +6,12 @@ data "aws_ami" "envcheck" {
     values = ["isucon12-envcheck"]
   }
 }
+
+data "aws_ami" "qualify" {
+  most_recent = true
+  owners      = ["self"]
+  filter {
+    name   = "tag:Family"
+    values = ["isucon12-qualify"]
+  }
+}

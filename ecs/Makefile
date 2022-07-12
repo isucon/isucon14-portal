@@ -36,7 +36,7 @@ diff/%: diff/env
 verify/%:
 	ecspresso verify --config $*.yml
 
-deploy/env: $(ENV).env
+deploy/env: diff/env
 	aws s3 cp $(ENV).env s3://config-$(ENV)-portal-isucon12/ecs/$(ENV).env
 
 deploy: deploy/app deploy/worker
@@ -68,6 +68,9 @@ revisions/%:
 
 refresh/%:
 	ecspresso refresh --config $*.yml
+
+revisions/%:
+	ecspresso revisions --config $*.yml --output=tsv
 
 run:
 	ecspresso --config app.yml run --latest-task-definition --overrides-file=overrides.jsonnet --wait-until running
