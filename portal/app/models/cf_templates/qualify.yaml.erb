@@ -118,6 +118,8 @@ Resources:
             Action:
               - sts:AssumeRole
       Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
       Policies:
         - PolicyName: IsuconEC2InstancePolicy
           PolicyDocument:
