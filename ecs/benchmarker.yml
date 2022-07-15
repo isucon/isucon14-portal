@@ -1,0 +1,12 @@
+required_version: ">= 1.7.10, < 2.0.0"
+region: ap-northeast-1
+cluster: "{{ must_env `ENV` }}-benchmarker"
+service: benchmarker
+service_definition: servicedef/benchmarker.jsonnet
+task_definition: taskdef/benchmarker.jsonnet
+timeout: 10m0s
+plugins:
+  - name: tfstate
+    config:
+      url: "s3://tfstate-{{ must_env `ENV` }}-portal-isucon12/terraform.tfstate"
+filter_command: peco

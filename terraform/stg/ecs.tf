@@ -29,8 +29,8 @@ resource "aws_ecr_repository" "nginx" {
   image_tag_mutability = "MUTABLE"
 }
 
-resource "aws_ecs_cluster" "qualify-benchmarker" {
-  name = "${local.env}-qualify-benchmarker"
+resource "aws_ecs_cluster" "benchmarker" {
+  name = "${local.env}-benchmarker"
 
   setting {
     name  = "containerInsights"
@@ -50,7 +50,7 @@ resource "aws_ecs_cluster" "qualify-benchmarker" {
   }
 }
 
-resource "aws_ecr_repository" "qualify-benchmarker" {
-  name                 = "${local.env}/qualify/benchmarker"
+resource "aws_ecr_repository" "benchmarker" {
+  name                 = "${local.env}/benchmarker"
   image_tag_mutability = "MUTABLE"
 }
