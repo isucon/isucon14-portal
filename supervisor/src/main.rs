@@ -3,7 +3,7 @@ use isuxportal_supervisor::config::Config;
 use isuxportal_supervisor::worker::Worker;
 
 fn main() {
-    env_logger::from_env(env_logger::Env::default().default_filter_or("info")).init();
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
 
     let config = envy::prefixed("ISUXPORTAL_SUPERVISOR_").from_env::<Config>().unwrap();
 
