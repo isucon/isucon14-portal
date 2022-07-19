@@ -21,6 +21,19 @@
       linuxParameters: {
         initProcessEnabled: true,
       },
+      stopTimeout: 120,
+      ulimits: [
+        {
+          softLimit: 10000,
+          name: 'nofile',
+          hardLimit: 10000,
+        },
+        {
+          softLimit: 10000,
+          name: 'nproc',
+          hardLimit: 10000,
+        },
+      ],
     },
   ],
   cpu: '4096',
