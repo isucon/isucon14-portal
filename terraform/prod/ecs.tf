@@ -30,7 +30,7 @@ resource "aws_ecr_repository" "nginx" {
 }
 
 resource "aws_appautoscaling_target" "app" {
-  max_capacity       = 16
+  max_capacity       = 32
   min_capacity       = 2
   resource_id        = "service/${aws_ecs_cluster.main.name}/app"
   scalable_dimension = "ecs:service:DesiredCount"
@@ -53,4 +53,30 @@ resource "aws_appautoscaling_policy" "app" {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
     }
   }
+}
+
+resource "aws_ecs_cluster" "benchmarker" {
+  name = "${local.env}-benchmarker"
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
+
+  configuration {
+    execute_command_configuration {
+      kms_key_id = aws_kms_key.main.arn
+      logging    = "OVERRIDE"
+
+      log_configuration {
+        cloud_watch_encryption_enabled = false
+        cloud_watch_log_group_name     = aws_cloudwatch_log_group.ecs["execute-command"].name
+      }
+    }
+  }
+}
+
+resource "aws_ecr_repository" "benchmarker" {
+  name                 = "${local.env}/benchmarker"
+  image_tag_mutability = "MUTABLE"
 }

@@ -18,6 +18,9 @@
           'awslogs-stream-prefix': 'benchmarker',
         },
       },
+      linuxParameters: {
+        initProcessEnabled: true,
+      },
     },
   ],
   cpu: '4096',
