@@ -8,7 +8,7 @@ class Api::Admin::DashboardsController < Api::Admin::ApplicationController
 
     final = Rails.application.config.x.contest.final ? "final" : "qualify"
     clar_count = Clarification.unanswered.requested.count
-    cached_lb = Rails.cache.read("leaderboard-v2:#{final}:admin")&.yield_self { |_| Isuxportal::Proto::Resources::Leaderboard.decode(_) }
+    _cache_sum, cached_lb = Rails.cache.read("leaderboard-v2:#{final}:admin")&.yield_self { |_| Isuxportal::Proto::Resources::Leaderboard.decode(_) }
     render protobuf: Isuxportal::Proto::Services::Admin::DashboardResponse.new(
       leaderboard: cached_lb || Contest.leaderboard(admin: true, team: nil, history: false),
       unanswered_clarification_count: clar_count,
