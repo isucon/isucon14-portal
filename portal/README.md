@@ -79,13 +79,11 @@ bundle exec rails runner 'Griffin::Server.run(port: 4000)'
 
 - `SENTRY_DSN`
 
-## Misc
+## Dev Tips
 
-### protoc
+### Seed
 
-```
-./bin/isuxportal-protoc.sh
-```
+- `bundle exec rails db:seed` to generate dummy team and score data
 
 ### CloudFormationテンプレートについて
 
