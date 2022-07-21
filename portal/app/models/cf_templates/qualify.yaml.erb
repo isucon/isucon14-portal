@@ -88,6 +88,9 @@ Resources:
     Properties:
       SubnetId: !Ref Subnet
       RouteTableId: !Ref RouteTable
+    DependsOn:
+      - Subnet
+      - RouteTable
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
