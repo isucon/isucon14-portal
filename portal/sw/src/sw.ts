@@ -18,7 +18,7 @@ const openDb = () => openDB("isuxportal-swKnownNotifications", 3, {
 
 self.addEventListener('activate', (e) => {
   console.log("SW! activate");
-  if (new Date().getTime() > 1606748400000) { // 2020/12/1
+  if (new Date().getTime() > 1672498800000) { // 2023/1/1 00:00:00 JST
     self.registration.unregister();
     return;
   }
