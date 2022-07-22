@@ -17,9 +17,9 @@
         "{{ tfstate `aws_security_group.internal.id` }}",
       ],
       subnets: [
-        "{{ tfstate `aws_subnet.az-a.id` }}",
-        "{{ tfstate `aws_subnet.az-c.id` }}",
-        "{{ tfstate `aws_subnet.az-d.id` }}",
+        "{{ tfstate `aws_subnet.az-a-benchmarker.id` }}",
+        "{{ tfstate `aws_subnet.az-c-benchmarker.id` }}",
+        "{{ tfstate `aws_subnet.az-d-benchmarker.id` }}",
       ],
     },
   },

@@ -1,8 +1,8 @@
-declare var self: ServiceWorkerGlobalScope; export {};
+declare var self: ServiceWorkerGlobalScope; export { };
 
-import {isuxportal} from "./pb";
-import {skipWaiting, clientsClaim} from "workbox-core";
-import {openDB} from "idb";
+import { isuxportal } from "./pb";
+import { skipWaiting, clientsClaim } from "workbox-core";
+import { openDB } from "idb";
 
 skipWaiting();
 clientsClaim();
@@ -11,7 +11,7 @@ console.log("SW!");
 
 const openDb = () => openDB("isuxportal-swKnownNotifications", 3, {
   upgrade(db) {
-    db.createObjectStore('kv2', {keyPath: 'id'});
+    db.createObjectStore('kv2', { keyPath: 'id' });
   }
 });
 
@@ -46,7 +46,7 @@ const showNotification = async (n: isuxportal.proto.resources.INotification) => 
   console.log("SW showNotification:", tag, n);
 
   const wasKnown = await (async () => {
-    const obj = {id: n.id!.toString(), known: true};
+    const obj = { id: n.id!.toString(), known: true };
     const db = await openDb();
     const txn = await db.transaction('kv2', 'readwrite');
     const store = await txn.objectStore('kv2');
@@ -66,7 +66,7 @@ const showNotification = async (n: isuxportal.proto.resources.INotification) => 
   let promise: Promise<void> | null = null;
 
   if (n.contentTest) {
-    promise = self.registration.showNotification("isuxportal test notification", {body: `test ${n.contentTest.something} ${n.id}`, tag, data: `/contestant`});
+    promise = self.registration.showNotification("isuxportal test notification", { body: `test ${n.contentTest.something} ${n.id}`, tag, data: `/contestant` });
   } else if (n.contentBenchmarkJob) {
     promise = self.registration.showNotification(
       `Benchmark Job Completed`,
@@ -123,11 +123,11 @@ const handleLocalNotifications = async (data: LocalNotificationMessage) => {
 self.addEventListener('message', (e) => {
   console.log("SW message", e);
   const data = e.data;
-  switch(data.kind) {
+  switch (data.kind) {
     case "localNotification":
       e.waitUntil(handleLocalNotifications(data as LocalNotificationMessage));
       break;
-    default: 
+    default:
       console.warn("Unknown message received at sw", data);
       break;
   }
@@ -140,7 +140,7 @@ self.addEventListener('push', (e) => {
   try {
     const wire = Uint8Array.from(atob(e.data.text()), c => c.charCodeAt(0));
     notification = isuxportal.proto.resources.Notification.decode(wire);
-  } catch(e) {
+  } catch (e) {
     console.error("SW push error while decoding", e);
   }
   console.log("SW push notification", notification);

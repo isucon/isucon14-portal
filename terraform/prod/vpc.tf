@@ -64,6 +64,36 @@ resource "aws_subnet" "az-d" {
   }
 }
 
+resource "aws_subnet" "az-a-benchmarker" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.2.8.0/22"
+  map_public_ip_on_launch = true
+  availability_zone       = "ap-northeast-1a"
+  tags = {
+    Name = "${local.env}-${local.project}-az-a-benchmarker"
+  }
+}
+
+resource "aws_subnet" "az-c-benchmarker" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.2.12.0/22"
+  map_public_ip_on_launch = true
+  availability_zone       = "ap-northeast-1c"
+  tags = {
+    Name = "${local.env}-${local.project}-az-c-benchmarker"
+  }
+}
+
+resource "aws_subnet" "az-d-benchmarker" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.2.16.0/22"
+  map_public_ip_on_launch = true
+  availability_zone       = "ap-northeast-1d"
+  tags = {
+    Name = "${local.env}-${local.project}-az-d-benchmarker"
+  }
+}
+
 resource "aws_security_group" "internal" {
   vpc_id = aws_vpc.main.id
   name   = "${local.env}-${local.project}-internal"

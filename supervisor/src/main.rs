@@ -21,19 +21,6 @@ fn main() {
 async fn run(config: Config, command_exec: String, command_args: Vec<String>) {
     let client = api::Client::new(reqwest::Url::parse(&config.endpoint_url).unwrap());
 
-    tokio::time::timeout(
-        std::time::Duration::new(15, 0),
-        client.cancel_owned_benchmark_job(
-            &api::isuxportal::proto::services::bench::CancelOwnedBenchmarkJobRequest {
-                token: config.token.clone(),
-                instance_name: config.instance_name.clone(),
-            },
-        ),
-    )
-    .await
-    .expect("CancelOwnedBenchmarkJob timed out")
-    .expect("CancelOwnedBenchmarkJob failed");
-
     let (shutdown_tx, mut shutdown_rx) = tokio::sync::oneshot::channel();
     tokio::spawn(async {
         let mut sigterm = tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())
