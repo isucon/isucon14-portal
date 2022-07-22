@@ -65,8 +65,7 @@ class BenchmarkJob < ApplicationRecord
 
   # @param [Isuxportal::Proto::Resources::BenchmarkResult] pb
   def submit_result_from_pb!(pb)
-    # XXX benchmarkerが結果を投げてきたときにここで死ぬことがあるので一旦コメントアウト
-    # raise InvalidTransition unless running?
+    raise InvalidTransition unless running?
 
     # TODO: SurveyResponse
     ApplicationRecord.transaction do
