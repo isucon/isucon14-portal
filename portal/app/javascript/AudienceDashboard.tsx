@@ -58,6 +58,15 @@ export const AudienceDashboard: React.FC<Props> = ({ session, client }) => {
     return () => clearInterval(timer);
   }, [refresh, teamPinsMap]);
 
+  React.useEffect(() => {
+    if (!dashboard || !teamPins) return;
+    teamPins.removeUnknownItems(() =>
+      [...(dashboard.leaderboard?.teams ?? []), ...(dashboard.leaderboard?.hiddenTeams ?? [])].map((v) =>
+        v.team!.id!.toString()
+      )
+    );
+  }, [teamPins, dashboard]);
+
   if (!dashboard)
     return (
       <>
@@ -80,7 +89,7 @@ export const AudienceDashboard: React.FC<Props> = ({ session, client }) => {
         </div>
       </section>
       <section className="is-fullwidth py-5 is-hidden-touch">
-        <ScoreGraph teams={pinnedTeamLeaderboardItems} contest={session.contest!} teamPins={teamPinsMap} />
+        <ScoreGraph teams={pinnedTeamLeaderboardItems} contest={session.contest!} />
       </section>
       <div className="columns">
         <div className="column is-12">
@@ -89,7 +98,7 @@ export const AudienceDashboard: React.FC<Props> = ({ session, client }) => {
             <Leaderboard
               leaderboard={dashboard?.leaderboard!}
               teamPins={teamPinsMap}
-              onPin={teamPins.set}
+              onPin={teamPins.setAndEnsureCapacity}
               enableHiddenTeamsMode={false}
             />
           </section>

@@ -91,6 +91,15 @@ export const ContestantDashboard: React.FC<Props> = (props: Props) => {
     return () => clearInterval(timer);
   }, [refreshAll, teamPinsMap]);
 
+  React.useEffect(() => {
+    if (!dashboard || !teamPins) return;
+    teamPins.removeUnknownItems(() =>
+      [...(dashboard.leaderboard?.teams ?? []), ...(dashboard.leaderboard?.hiddenTeams ?? [])].map((v) =>
+        v.team!.id!.toString()
+      )
+    );
+  }, [teamPins, dashboard]);
+
   if (!dashboard || !jobs)
     return (
       <>
@@ -133,12 +142,7 @@ export const ContestantDashboard: React.FC<Props> = (props: Props) => {
         </div>
       </section>
       <section className="is-fullwidth py-5 is-hidden-touch">
-        <ScoreGraph
-          teams={scoreGraphTeams}
-          contest={session.contest!}
-          teamId={session.team!.id!}
-          teamPins={teamPinsMap}
-        />
+        <ScoreGraph teams={scoreGraphTeams} contest={session.contest!} teamId={session.team!.id!} />
       </section>
       <div className="columns">
         <div className="column is-7 px-5">
@@ -148,7 +152,7 @@ export const ContestantDashboard: React.FC<Props> = (props: Props) => {
               leaderboard={dashboard?.leaderboard!}
               teamId={session.team!.id!}
               teamPins={teamPinsMap}
-              onPin={teamPins.set}
+              onPin={teamPins.setAndEnsureCapacity}
               enableHiddenTeamsMode={false}
             />
           </section>
