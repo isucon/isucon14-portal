@@ -63,7 +63,7 @@ export const ContestantContestantInstanceList: React.FC<Props> = ({ session, cli
         <tbody>{(session.contestantInstances || []).map((ci) => renderRow(ci))}</tbody>
       </table>
 
-      {true && (
+      {false && (
         <>
           <header>
             <h1 className="title is-1">CloudFormation テンプレート</h1>
