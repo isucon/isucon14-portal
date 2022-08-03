@@ -43,7 +43,7 @@ deploy: deploy/app deploy/worker
 
 
 deploy/%: verify/% deploy/env
-	ecspresso deploy --config $*.yml
+	ecspresso deploy --config $*.yml --no-wait
 
 deploy/bot: verify/bot
 	ecspresso deploy --config bot.yml
