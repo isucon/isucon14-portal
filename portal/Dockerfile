@@ -32,8 +32,14 @@ FROM sorah/ruby:3.1-focal
 RUN rm /etc/apt/sources.list.d/sorah-ruby.list
 
 RUN apt-get update \
-    && apt-get install -y libmysqlclient21 libsodium23 libsodium-dev \
+    && apt-get install -y libmysqlclient21 libsodium23 libsodium-dev curl unzip \
     && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /tmp
+RUN curl -s "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+    && unzip awscliv2.zip \
+    && ./aws/install \
+    && rm -rf ./aws/ awscliv2.zip
 
 WORKDIR /app
 COPY --from=builder /gems /gems
