@@ -63,6 +63,7 @@ resource "aws_iam_policy" "ecs-task" {
             "ecr:Batch*",
             "s3:Get*",
             "s3:List*",
+            "s3:Put*",
             "ssm:Describe*",
             "ssm:Get*",
             "ssm:List*",
