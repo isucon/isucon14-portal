@@ -84,8 +84,19 @@ class Api::EnvChecksController < Api::ApplicationController
 
   private def require_valid_checker_token
     token = params[:token]
-    return render status: :bad_request, body: "request not have token" unless token
-    @payload = CheckerToken.verify(token)
-    return render status: :unauthorized, body: "invalid token" unless @payload
+    team_id = params[:team_id]
+    if !token.blank?
+      @payload = CheckerToken.verify(token)
+      return render status: :unauthorized, body: "invalid token" unless @payload
+    elsif !team_id.blank?
+      # tokenがない場合は以前のsignature認証
+      expected_signature = OpenSSL::HMAC.hexdigest('sha384', Rails.application.config.x.ssh_key_api.secret, team_id.to_s)
+      unless Rack::Utils.secure_compare(expected_signature, params[:signature])
+        return render status: :bad_request, body: "invalid signature"
+      end
+      @payload = {team_id: team_id.to_i}
+    else
+      return render status: :bad_request, body: "request not have token or signature" unless token
+    end
   end
 end
