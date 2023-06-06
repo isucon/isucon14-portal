@@ -8,6 +8,7 @@ image:
 		build \
 		-f Dockerfile \
 		-t $(ECR)/$(ENV)/benchmarker:supervisor \
+		--no-cache \
 		..
 
 push:
