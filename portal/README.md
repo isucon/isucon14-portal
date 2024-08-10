@@ -11,6 +11,25 @@ docker-compose up -d mysql
 (config/database.yml defaults to randomly exposed port of the mysql container)
 
 ### Dependencies
+- libmysqlclient
+- ruby
+  - 注：OpenSSL >= 3.x なら ruby >= 3.1 が必要
+- gem
+- bundler
+- yarn
+
+
+## Set Platform
+Gemfile.lock に必要な実行環境を追加。
+現状は
+
+- x86_64-linux
+  - WSL2, 本番環境用
+- universal-darwin
+  - macos用
+
+see: `gem help platform`
+https://docs.komagata.org/5926
 
 ```
 yarn
@@ -21,7 +40,8 @@ bundle exec rake db:migrate
 ## Run
 
 ```
-npx webpack --progress --watch
+# NODE_OPTIONS は OpenSSL 3.x 時のみ
+NODE_OPTIONS=--openssl-legacy-provider npx webpack --progress --watch
 bundle exec rails s
 ```
 
