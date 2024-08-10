@@ -69,5 +69,5 @@ services:
       MYSQL_USER: isuxportal_dev
       MYSQL_PASSWORD: dbpass
       MYSQL_DATABASE: isuxportal_dev
-    expose:
-      - '3306'
+    ports:
+      - '3306:3306'
