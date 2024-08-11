@@ -45,10 +45,6 @@ NODE_OPTIONS=--openssl-legacy-provider npx webpack --progress --watch
 bundle exec rails s
 ```
 
-```
-bundle exec rails runner 'Griffin::Server.run(port: 4000)'
-```
-
 ## Environment Variables
 
 `./config/environments`参照
