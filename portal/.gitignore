@@ -36,3 +36,4 @@ node_modules/
 docker-compose-local.yaml
 
 vendor/
+.idea/
