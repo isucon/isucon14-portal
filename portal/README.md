@@ -37,6 +37,12 @@ bundle install
 bundle exec rake db:migrate
 ```
 
+localから実行するときは
+```
+export DATABASE_URL="mysql2://isuxportal_dev:dbpass@127.0.0.1:3306/isuxportal_dev?encoding=utf8mb4&charset=utf8mb4&collation=utf8mb4_general_ci" && bundle exec rake db:migrate
+```
+そのうちどうにかします
+
 ## Run
 
 ```
