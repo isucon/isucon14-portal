@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  AWS CloudFormation for ISUCON12 Environment Checks
+  AWS CloudFormation for ISUCON14 Environment Checks
 Resources:
   GetAvailabilityZoneFunctionExecutionRole:
     Type: AWS::IAM::Role
@@ -149,7 +149,7 @@ Resources:
             VolumeType: gp2
       Tags:
         - Key: Name
-          Value: isucon12-envcheck
+          Value: isucon14-envcheck
       UserData:
         Fn::Base64: |
           #cloud-config

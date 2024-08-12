@@ -8,5 +8,5 @@ timeout: 10m0s
 plugins:
   - name: tfstate
     config:
-      url: "s3://tfstate-{{ must_env `ENV` }}-portal-isucon12/terraform.tfstate"
+      url: "s3://tfstate-{{ must_env `ENV` }}-portal-isucon14/terraform.tfstate"
 filter_command: peco

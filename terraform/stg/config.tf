@@ -35,7 +35,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "tfstate-stg-portal-isucon12"
+    bucket = "tfstate-stg-portal-isucon14"
     key    = "terraform.tfstate"
     region = "ap-northeast-1"
   }

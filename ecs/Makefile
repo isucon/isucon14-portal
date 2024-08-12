@@ -28,7 +28,7 @@ create/%:
 	ecspresso create --config $*.yml
 
 diff/env: $(ENV).env
-	bash -c 'diff -u <(aws s3 cp s3://config-$(ENV)-portal-isucon12/ecs/$(ENV).env -) $(ENV).env' || exit 0
+	bash -c 'diff -u <(aws s3 cp s3://config-$(ENV)-portal-isucon14/ecs/$(ENV).env -) $(ENV).env' || exit 0
 
 diff/%: diff/env
 	ecspresso diff --unified --config $*.yml
@@ -37,7 +37,7 @@ verify/%:
 	ecspresso verify --config $*.yml
 
 deploy/env: diff/env
-	aws s3 cp $(ENV).env s3://config-$(ENV)-portal-isucon12/ecs/$(ENV).env
+	aws s3 cp $(ENV).env s3://config-$(ENV)-portal-isucon14/ecs/$(ENV).env
 
 deploy: deploy/app deploy/worker
 

@@ -21,7 +21,7 @@ export class RegistrationLogin extends React.Component<Props, State> {
       <section className="mt-4">
         <h3 className="title is-3">ログイン</h3>
         <p>
-          ISUCON12 の参加登録には、<a href="https://github.com">GitHub</a> と <a href="https://discord.com">Discord</a>{" "}
+          ISUCON14 の参加登録には、<a href="https://github.com">GitHub</a> と <a href="https://discord.com">Discord</a>{" "}
           のアカウントが必要です。<a href="/terms">参加規約</a>{" "}
           に同意の上、それぞれのアカウントでログインをお願いします。
         </p>
