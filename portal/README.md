@@ -51,6 +51,12 @@ NODE_OPTIONS=--openssl-legacy-provider npx webpack --progress --watch
 bundle exec rails s
 ```
 
+localから実行するときは
+```bash
+export DATABASE_URL="mysql2://isuxportal_dev:dbpass@127.0.0.1:3306/isuxportal_dev?encoding=utf8mb4&charset=utf8mb4&collation=utf8mb4_general_ci" && bundle exec rails s
+```
+そのうちどうにかします
+
 ## Environment Variables
 
 `./config/environments`参照
