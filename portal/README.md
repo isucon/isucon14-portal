@@ -5,7 +5,7 @@
 ### Run MySQL on docker-compose
 
 ```
-docker-compose up -d mysql
+docker compose up -d mysql
 ```
 
 (config/database.yml defaults to randomly exposed port of the mysql container)
@@ -37,6 +37,12 @@ bundle install
 bundle exec rake db:migrate
 ```
 
+localから実行するときは
+```
+export DATABASE_URL="mysql2://isuxportal_dev:dbpass@127.0.0.1:3306/isuxportal_dev?encoding=utf8mb4&charset=utf8mb4&collation=utf8mb4_general_ci" && bundle exec rake db:migrate
+```
+そのうちどうにかします
+
 ## Run
 
 ```
@@ -45,9 +51,11 @@ NODE_OPTIONS=--openssl-legacy-provider npx webpack --progress --watch
 bundle exec rails s
 ```
 
+localから実行するときは
+```bash
+export DATABASE_URL="mysql2://isuxportal_dev:dbpass@127.0.0.1:3306/isuxportal_dev?encoding=utf8mb4&charset=utf8mb4&collation=utf8mb4_general_ci" && bundle exec rails s
 ```
-bundle exec rails runner 'Griffin::Server.run(port: 4000)'
-```
+そのうちどうにかします
 
 ## Environment Variables
 

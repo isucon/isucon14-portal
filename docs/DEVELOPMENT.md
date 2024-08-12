@@ -210,8 +210,6 @@ portal 本体のコードが入っている。
   - Ruby のテストフレームワーク
 - [shoryuken](https://github.com/ruby-shoryuken/shoryuken)
   - AWS SQS と連動した Active Job Worker
-- [griffin](https://github.com/cookpad/griffin)
-  - gRPC Server for ruby
 - [puma](https://github.com/puma/puma)
 ## proto
 
