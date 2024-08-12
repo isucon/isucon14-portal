@@ -5,7 +5,7 @@
 ### Run MySQL on docker-compose
 
 ```
-docker-compose up -d mysql
+docker compose up -d mysql
 ```
 
 (config/database.yml defaults to randomly exposed port of the mysql container)
