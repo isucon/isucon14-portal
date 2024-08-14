@@ -126,12 +126,12 @@ export const Leaderboard: React.FC<Props> = (props: Props) => {
   const prevRanks = new Map(
     (prevFilteredTeams || []).map((t, idx) => {
       return [t.team!.id, idx + 1];
-    })
+    }),
   );
   const prevScores = new Map(
     (prevFilteredTeams || []).map((t) => {
       return [t.team!.id, t.latestScore?.score!];
-    })
+    }),
   );
 
   type TeamStanding = {

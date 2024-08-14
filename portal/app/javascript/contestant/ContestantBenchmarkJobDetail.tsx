@@ -24,10 +24,10 @@ export interface State {
 }
 
 export const ContestantBenchmarkJobDetail = (props: Omit<Props, "id">) => {
-  const { id } = useParams()
-  if (!id) throw new Error("id is required")
-  return <ContestantBenchmarkJobDetailInternal {...props} id={id} />
-}
+  const { id } = useParams();
+  if (!id) throw new Error("id is required");
+  return <ContestantBenchmarkJobDetailInternal {...props} id={id} />;
+};
 
 export class ContestantBenchmarkJobDetailInternal extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -120,8 +120,8 @@ const ContestantBenchmarkReEnqueueForm = ({
   const [requesting, setRequesting] = React.useState<boolean>(false);
   const [error, setError] = React.useState<Error | null>(null);
   const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const jobId = job?.target?.id
-    if (!jobId) return
+    const jobId = job?.target?.id;
+    if (!jobId) return;
 
     try {
       setRequesting(true);
@@ -133,7 +133,7 @@ const ContestantBenchmarkReEnqueueForm = ({
           to={{
             pathname: `/contestant/benchmark_jobs/${encodeURIComponent(resp.job!.id!.toString())}`,
           }}
-        />
+        />,
       );
     } catch (e) {
       setError(e);
@@ -158,11 +158,9 @@ const ContestantBenchmarkReEnqueueForm = ({
             </button>
           </div>
         </div>
-        <p className="is-size-7">
-          同一ベンチ対象サーバーで再度 Enqueue できます。
-        </p>
+        <p className="is-size-7">同一ベンチ対象サーバーで再度 Enqueue できます。</p>
         {error ? <ErrorMessage error={error} /> : null}
       </div>
     </div>
-  )
+  );
 };

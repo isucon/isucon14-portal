@@ -37,7 +37,7 @@ const calculateTargetTeamLegendCacheKey = (targetTeams: isuxportal.proto.resourc
   return JSON.stringify(
     [...targetTeams]
       .sort((a, b) => (a.team!.id as number) - (b.team!.id as number))
-      .map((t) => [t.team!.name, t.team!.id])
+      .map((t) => [t.team!.name, t.team!.id]),
   );
 };
 
@@ -91,14 +91,14 @@ export const ScoreGraph: React.FC<Props> = ({ teams, contest, width, teamId }) =
         show: true,
       },
     }),
-    [width, contest.startsAt!.seconds!, contest.endsAt!.seconds!, calculateTargetTeamLegendCacheKey(targetTeams)]
+    [width, contest.startsAt!.seconds!, contest.endsAt!.seconds!, calculateTargetTeamLegendCacheKey(targetTeams)],
   );
 
   const data = React.useMemo(() => {
     //console.log("ScoreGraph: setData", cacheKey);
     const timestamps: number[] = [
       ...new Set(
-        targetTeams.flatMap((item) => (item.scoreHistory?.scores || []).map((s) => s.markedAt!.seconds! as number))
+        targetTeams.flatMap((item) => (item.scoreHistory?.scores || []).map((s) => s.markedAt!.seconds! as number)),
       ),
     ].sort((a, b) => a - b);
     const d: [number[], ...Array<Array<number | null>>] = [timestamps];
@@ -193,13 +193,13 @@ const ScoreGraphScoreFilter = ({ onChange }: { onChange: (scoreFilter: number | 
       e.preventDefault();
       onChange(scoreFilterForm.length === 0 ? null : parseInt(scoreFilterForm, 10));
     },
-    [onChange, scoreFilterForm]
+    [onChange, scoreFilterForm],
   );
   const onScoreFilterFormChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setScoreFilterForm(e.target.value);
     },
-    [setScoreFilterForm]
+    [setScoreFilterForm],
   );
 
   return (

@@ -95,8 +95,8 @@ export const ContestantDashboard: React.FC<Props> = (props: Props) => {
     if (!dashboard || !teamPins) return;
     teamPins.removeUnknownItems(() =>
       [...(dashboard.leaderboard?.teams ?? []), ...(dashboard.leaderboard?.hiddenTeams ?? [])].map((v) =>
-        v.team!.id!.toString()
-      )
+        v.team!.id!.toString(),
+      ),
     );
   }, [teamPins, dashboard]);
 
@@ -114,7 +114,7 @@ export const ContestantDashboard: React.FC<Props> = (props: Props) => {
     if (contestantTeamLeaderboardItem) scoreGraphTeams.push(contestantTeamLeaderboardItem);
 
     const contestantTeamLeaderboardHiddenItem = dashboard.leaderboard.hiddenTeams?.find(
-      (v) => session.team!.id === v.team!.id
+      (v) => session.team!.id === v.team!.id,
     );
     if (contestantTeamLeaderboardHiddenItem) scoreGraphTeams.push(contestantTeamLeaderboardHiddenItem);
   }

@@ -198,12 +198,12 @@ const BroadcastLeaderboardInner: React.FC<InnerProps> = (props: InnerProps) => {
     const prevRanks = new Map(
       (prevLeaderboard?.teams || []).map((t, idx) => {
         return [t.team!.id, idx + 1];
-      })
+      }),
     );
     const prevScores = new Map(
       (prevLeaderboard?.teams || []).map((t, idx) => {
         return [t.team!.id, t.latestScore?.score!];
-      })
+      }),
     );
 
     // XXX: logic duplicate with chooseTeamList in Leaderboard.tsx

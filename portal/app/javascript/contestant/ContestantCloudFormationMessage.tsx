@@ -12,13 +12,15 @@ type Props = {
 };
 
 export const ContestantCloudFormationMessage = ({ instances }: Props) => {
-  const [closed, setClosed] = useState((window.localStorage.getItem("isuxportal-closed-cloudformation-message") || "false") === "true")
+  const [closed, setClosed] = useState(
+    (window.localStorage.getItem("isuxportal-closed-cloudformation-message") || "false") === "true",
+  );
   const onCloseButtonClick = () => {
-    window.localStorage.setItem("isuxportal-closed-cloudformation-message", "true")
+    window.localStorage.setItem("isuxportal-closed-cloudformation-message", "true");
     setClosed(true);
-  }
+  };
 
-  const isServerListRoute = !!useMatch({ path: '/contestant/contestant_instances', end: true })
+  const isServerListRoute = !!useMatch({ path: "/contestant/contestant_instances", end: true });
 
   if (isServerListRoute) return null;
   if (instances.length > 0) return null;

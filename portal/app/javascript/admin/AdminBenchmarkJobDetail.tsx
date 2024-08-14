@@ -24,10 +24,10 @@ export interface State {
 }
 
 export const AdminBenchmarkJobDetail = (props: Omit<Props, "id">) => {
-  const { id } = useParams()
-  if (!id) throw new Error("id is required")
-  return <AdminBenchmarkJobDetailInternal {...props} id={id} />
-}
+  const { id } = useParams();
+  if (!id) throw new Error("id is required");
+  return <AdminBenchmarkJobDetailInternal {...props} id={id} />;
+};
 
 class AdminBenchmarkJobDetailInternal extends React.Component<Props, State> {
   constructor(props: Props) {

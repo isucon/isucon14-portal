@@ -179,7 +179,7 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
                             v.answered &&
                             v.question !== "Discord Support Channel Log" &&
                             v.answer &&
-                            !v.answer.match(/^既に Clarification /)
+                            !v.answer.match(/^既に Clarification /),
                         )
                         .map((v) => (
                           <ClarQuickButton
@@ -214,10 +214,10 @@ export interface Props {
 }
 
 export const AdminClarificationDetail = (props: Omit<Props, "id">) => {
-  const { id } = useParams()
-  if (!id) throw new Error("id is required")
-  return <AdminClarificationDetailInternal {...props} id={id} />
-}
+  const { id } = useParams();
+  if (!id) throw new Error("id is required");
+  return <AdminClarificationDetailInternal {...props} id={id} />;
+};
 
 const AdminClarificationDetailInternal: React.FC<Props> = (props: Props) => {
   const [error, setError] = React.useState<Error | null>(null);

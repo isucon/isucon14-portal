@@ -89,7 +89,7 @@ export class RegistrationLogin extends React.Component<Props, State> {
       "GitHub",
       this.githubLoginUrl(),
       this.props.registrationSession.githubLogin,
-      this.props.registrationSession.githubAvatarUrl
+      this.props.registrationSession.githubAvatarUrl,
     );
   }
 
@@ -98,7 +98,7 @@ export class RegistrationLogin extends React.Component<Props, State> {
       "Discord",
       this.discordLoginUrl(),
       this.props.registrationSession.discordTag,
-      this.props.registrationSession.discordAvatarUrl
+      this.props.registrationSession.discordAvatarUrl,
     );
   }
 }

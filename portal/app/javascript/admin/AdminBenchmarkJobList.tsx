@@ -41,7 +41,7 @@ const ListFilter: React.FC<ListFilterProps> = (props: ListFilterProps) => {
           pathname: "/admin/benchmark_jobs",
           search: `?${search.toString()}`,
         }}
-      />
+      />,
     );
   });
 
@@ -114,7 +114,7 @@ export interface State {
 }
 
 const parseBenchmarkJobStatus = (
-  statusString: string | null
+  statusString: string | null,
 ): isuxportal.proto.resources.BenchmarkJob.Status | null => {
   if (statusString === null || statusString === "") return null;
 
@@ -174,7 +174,7 @@ class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
         this.props.teamId ? parseInt(this.props.teamId, 10) : null,
         this.props.status ?? undefined,
         this.props.failedOnly,
-        page
+        page,
       );
       const pageCount = list.maxPage as number;
       this.setState({ list, pageCount });

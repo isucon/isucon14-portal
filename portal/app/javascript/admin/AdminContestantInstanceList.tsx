@@ -34,7 +34,7 @@ const ListFilter: React.FC<ListFilterProps> = (props: ListFilterProps) => {
           pathname: "/admin/contestant_instances",
           search: `?${search.toString()}`,
         }}
-      />
+      />,
     );
   });
 
@@ -82,12 +82,7 @@ export interface State {
 
 export const AdminContestantInstanceList = (props: Omit<Props, "teamId">) => {
   const [query] = useSearchParams();
-  return (
-    <AdminContestantInstanceListInternal
-      {...props}
-      teamId={query.get("team_id")}
-    />
-  );
+  return <AdminContestantInstanceListInternal {...props} teamId={query.get("team_id")} />;
 };
 
 class AdminContestantInstanceListInternal extends React.Component<Props, State> {
@@ -110,7 +105,7 @@ class AdminContestantInstanceListInternal extends React.Component<Props, State> 
   async updateList() {
     try {
       const list = await this.props.client.listContestantInstances(
-        this.props.teamId ? parseInt(this.props.teamId, 10) : null
+        this.props.teamId ? parseInt(this.props.teamId, 10) : null,
       );
       this.setState({ list });
     } catch (error) {
@@ -168,7 +163,9 @@ class AdminContestantInstanceListInternal extends React.Component<Props, State> 
       <tr key={id}>
         <td>{id}</td>
         <td>
-          <a href={`https://ap-northeast-1.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-1#InstanceDetails:instanceId=${ci.cloudId}`}>
+          <a
+            href={`https://ap-northeast-1.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-1#InstanceDetails:instanceId=${ci.cloudId}`}
+          >
             {ci.cloudId}
           </a>
         </td>

@@ -278,7 +278,8 @@ export class RegistrationForm extends React.Component<Props, State> {
               name="isStudent"
               checked={this.state.isStudent}
               onChange={this.onChange.bind(this)}
-            /> はい
+            />{" "}
+            はい
           </div>
         </div>
       </>

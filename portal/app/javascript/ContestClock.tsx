@@ -20,7 +20,7 @@ export const ContestClock: React.FC<Props> = ({ contest }) => {
   });
 
   const contestStartsAt = dayjs(
-    (contest.startsAt!.seconds as number) * 1000 + (contest.startsAt!.nanos as number) / 1000000
+    (contest.startsAt!.seconds as number) * 1000 + (contest.startsAt!.nanos as number) / 1000000,
   );
   const contestEndsAt = dayjs((contest.endsAt!.seconds as number) * 1000 + (contest.endsAt!.nanos as number) / 1000000);
 

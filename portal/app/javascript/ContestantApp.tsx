@@ -51,13 +51,13 @@ export class ContestantApp extends React.Component<Props, State> {
   }
 
   getLastClarificationIdSeen() {
-    const str = window.localStorage.getItem('isuxportal-contestantLastClarificationIdSeen');
+    const str = window.localStorage.getItem("isuxportal-contestantLastClarificationIdSeen");
     if (!str) return undefined;
     return parseInt(str, 10);
   }
 
   getLocalNotificationEnabled() {
-    if (!('Notification' in window)) {
+    if (!("Notification" in window)) {
       console.warn("getLocalNotificationEnabled: No notification support");
       this.setLocalNotificationEnabled(false);
       return false;
@@ -67,54 +67,57 @@ export class ContestantApp extends React.Component<Props, State> {
       this.setLocalNotificationEnabled(false);
       return false;
     }
-    return window.localStorage.getItem('isuxportal-contestantLocalNotificationEnabled') === '1';
+    return window.localStorage.getItem("isuxportal-contestantLocalNotificationEnabled") === "1";
   }
 
   setLocalNotificationEnabled(flag: boolean) {
     console.log("setLocalNotificationEnabled:", flag);
     try {
       if (flag) {
-        window.localStorage.setItem('isuxportal-contestantLocalNotificationEnabled', '1');
+        window.localStorage.setItem("isuxportal-contestantLocalNotificationEnabled", "1");
       } else {
-        window.localStorage.removeItem('isuxportal-contestantLocalNotificationEnabled');
+        window.localStorage.removeItem("isuxportal-contestantLocalNotificationEnabled");
       }
-    } catch(e) {
+    } catch (e) {
       console.warn(e);
     }
-    this.setState({localNotificationEnabled: flag});
+    this.setState({ localNotificationEnabled: flag });
   }
 
   componentDidMount() {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then((reg) => {
-        console.log("SW:", reg);
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((reg) => {
+          console.log("SW:", reg);
 
-        const lastServiceWorkerRelease = window.localStorage.getItem('isuxportal-swRelease');
-        if (lastServiceWorkerRelease !== undefined && this.props.release !== lastServiceWorkerRelease) {
-          console.log("Attempt to update sw");
-          reg.update();
-        }
-
-        try {
-          window.localStorage.setItem('isuxportal-swRelease', this.props.release || "");
-        } catch(e) {
-          console.warn(e);
-        }
-
-        this.setState({serviceWorker: reg});
-
-        reg.pushManager.getSubscription().then((s) => {
-          if (!s) {
-            console.log("disabling local notification due to lack of push subscription");
-            this.setLocalNotificationEnabled(false);
+          const lastServiceWorkerRelease = window.localStorage.getItem("isuxportal-swRelease");
+          if (lastServiceWorkerRelease !== undefined && this.props.release !== lastServiceWorkerRelease) {
+            console.log("Attempt to update sw");
+            reg.update();
           }
-        });
 
-        this.state.notificationObserver.start();
-      }).catch((e) => {
-        console.warn("Cannot register SW: ", e);
-        this.state.notificationObserver.start();
-      })
+          try {
+            window.localStorage.setItem("isuxportal-swRelease", this.props.release || "");
+          } catch (e) {
+            console.warn(e);
+          }
+
+          this.setState({ serviceWorker: reg });
+
+          reg.pushManager.getSubscription().then((s) => {
+            if (!s) {
+              console.log("disabling local notification due to lack of push subscription");
+              this.setLocalNotificationEnabled(false);
+            }
+          });
+
+          this.state.notificationObserver.start();
+        })
+        .catch((e) => {
+          console.warn("Cannot register SW: ", e);
+          this.state.notificationObserver.start();
+        });
     } else {
       this.state.notificationObserver.start();
     }
@@ -135,23 +138,23 @@ export class ContestantApp extends React.Component<Props, State> {
   onLastClarificationIdSeenChange(id?: number) {
     try {
       if (id) {
-        window.localStorage.setItem('isuxportal-contestantLastClarificationIdSeen', id.toString());
+        window.localStorage.setItem("isuxportal-contestantLastClarificationIdSeen", id.toString());
       } else {
-        window.localStorage.removeItem('isuxportal-contestantLastClarificationIdSeen');
+        window.localStorage.removeItem("isuxportal-contestantLastClarificationIdSeen");
       }
-    } catch(e) {
+    } catch (e) {
       console.warn(e);
     }
-    this.setState({lastClarificationIdSeen: id});
+    this.setState({ lastClarificationIdSeen: id });
   }
 
   onNewNotifications(notifications: isuxportal.proto.resources.INotification[]) {
-    console.log({localNotificationEnabled: this.state.localNotificationEnabled});
+    console.log({ localNotificationEnabled: this.state.localNotificationEnabled });
     if (!this.state.localNotificationEnabled) return;
     const worker = this.state.serviceWorker?.active;
-    console.log({worker: worker});
+    console.log({ worker: worker });
     if (!worker) return;
-    worker.postMessage({kind: 'localNotification', notifications: notifications});
+    worker.postMessage({ kind: "localNotification", notifications: notifications });
   }
 
   public render() {

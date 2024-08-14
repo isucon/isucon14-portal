@@ -45,7 +45,7 @@ export const ContestantBenchmarkJobForm: React.FC<Props> = (props: Props) => {
           to={{
             pathname: `/contestant/benchmark_jobs/${encodeURIComponent(resp.job!.id!.toString())}`,
           }}
-        />
+        />,
       );
     } catch (e) {
       setError(e);

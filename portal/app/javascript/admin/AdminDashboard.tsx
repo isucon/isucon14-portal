@@ -68,8 +68,8 @@ export const AdminDashboard: React.FC<Props> = ({ session, client }) => {
     if (!dashboard || !teamPins) return;
     teamPins.removeUnknownItems(() =>
       [...(dashboard.leaderboard?.teams ?? []), ...(dashboard.leaderboard?.hiddenTeams ?? [])].map((v) =>
-        v.team!.id!.toString()
-      )
+        v.team!.id!.toString(),
+      ),
     );
   }, [teamPins, dashboard]);
 
@@ -166,7 +166,7 @@ const DumpLeaderboard = ({ client }: { client: AdminApiClient }) => {
         teamName: item.team?.name,
         latestScore: item.latestScore?.score,
         bestScore: item.bestScore?.score,
-      }))
+      })),
     );
     console.log(res.items);
     console.log(JSON.stringify(res.items));

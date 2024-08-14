@@ -78,7 +78,7 @@ const onLeaderboardUpdate = (
   leaderboard: isuxportal.proto.resources.ILeaderboard,
   prevLeaderboard: isuxportal.proto.resources.ILeaderboard | null | undefined,
   limit: number,
-  key: string
+  key: string,
 ) => {
   type TeamStanding = {
     position: number;
@@ -91,12 +91,12 @@ const onLeaderboardUpdate = (
   const prevRanks = new Map(
     (prevLeaderboard?.teams || []).map((t, idx) => {
       return [t.team!.id, idx + 1];
-    })
+    }),
   );
   const prevTeams = new Map(
     (prevLeaderboard?.teams || []).map((t, idx) => {
       return [t.team!.id, t];
-    })
+    }),
   );
 
   //console.log(prevRanks);
@@ -113,7 +113,7 @@ const onLeaderboardUpdate = (
     .filter(
       (team) =>
         (team.lastPosition != team.position && team.lastScore != team.item.latestScore!.score!) ||
-        (team.lastBestScore && team.item.bestScore && team.lastBestScore < team.item.bestScore.score!)
+        (team.lastBestScore && team.item.bestScore && team.lastBestScore < team.item.bestScore.score!),
     );
 
   const renderTeam = (key: string, { item, position, lastPosition, lastScore, lastBestScore }: TeamStanding) => {
@@ -231,8 +231,8 @@ const BroadcastScoreChangesInner: React.FC<InnerProps> = (props: InnerProps) => 
         props.leaderboard,
         prevLeaderboard,
         props.limit,
-        `${props.leaderboard?.generatedAt?.seconds}/${props.leaderboard?.generatedAt?.nanos}`
-      )
+        `${props.leaderboard?.generatedAt?.seconds}/${props.leaderboard?.generatedAt?.nanos}`,
+      ),
     );
     //console.log("setNewChangeItemPages (onLeaderboardUpdate) done", changeItemPages);
   }, [`${props.leaderboard?.generatedAt?.seconds}/${props.leaderboard?.generatedAt?.nanos}`]);

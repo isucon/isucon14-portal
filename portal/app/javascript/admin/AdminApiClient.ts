@@ -22,7 +22,7 @@ export class AdminApiClient {
       `${this.baseUrl}/api/admin/teams/${encodeURIComponent(id.toString())}`,
       "GET",
       null,
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -35,7 +35,7 @@ export class AdminApiClient {
       `${this.baseUrl}/api/admin/teams/${encodeURIComponent(payload.team!.id!.toString())}`,
       "PUT",
       null,
-      payloadMessage
+      payloadMessage,
     );
     return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -44,11 +44,11 @@ export class AdminApiClient {
     const klass = isuxportal.proto.services.admin.GetCloudFormationResponse;
     const resp = await this.request(
       `${this.baseUrl}/api/admin/teams/${encodeURIComponent(id.toString())}/cloud_formation?type=${encodeURIComponent(
-        type
+        type,
       )}`,
       "GET",
       null,
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -59,7 +59,7 @@ export class AdminApiClient {
       `${this.baseUrl}/api/admin/teams/${encodeURIComponent(id.toString())}/env_checks`,
       "GET",
       null,
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -68,7 +68,7 @@ export class AdminApiClient {
     teamId?: number | null,
     status?: isuxportal.proto.resources.BenchmarkJob.Status,
     failedOnly?: boolean,
-    page?: number
+    page?: number,
   ) {
     const klass = isuxportal.proto.services.admin.ListBenchmarkJobsResponse;
     const query: Record<string, string> = {
@@ -96,7 +96,7 @@ export class AdminApiClient {
       `${this.baseUrl}/api/admin/benchmark_jobs/${encodeURIComponent(id.toString())}`,
       "GET",
       null,
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -107,7 +107,7 @@ export class AdminApiClient {
       `${this.baseUrl}/api/admin/benchmark_jobs/${encodeURIComponent(id.toString())}`,
       "DELETE",
       null,
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -120,7 +120,7 @@ export class AdminApiClient {
       }`,
       "GET",
       null,
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -131,7 +131,7 @@ export class AdminApiClient {
       `${this.baseUrl}/api/admin/clarifications/${encodeURIComponent(id.toString())}`,
       "GET",
       null,
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -144,7 +144,7 @@ export class AdminApiClient {
       `${this.baseUrl}/api/admin/clarifications/${encodeURIComponent(payload.id!.toString())}`,
       "PUT",
       null,
-      payloadMessage
+      payloadMessage,
     );
     return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -169,7 +169,7 @@ export class AdminApiClient {
       `${this.baseUrl}/api/admin/dashboard/teams/${encodeURIComponent(id.toString())}`,
       "GET",
       null,
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -180,7 +180,7 @@ export class AdminApiClient {
       `${this.baseUrl}/api/admin/contestant_instances?team_id=${teamId ? teamId.toString() : ""}`,
       "GET",
       null,
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -191,7 +191,7 @@ export class AdminApiClient {
       `${this.baseUrl}/api/admin/dump_leaderboard`,
       "GET",
       { when: typeof date === "string" ? date : date.toISOString() },
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }

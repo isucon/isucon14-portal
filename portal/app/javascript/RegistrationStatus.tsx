@@ -43,13 +43,13 @@ export class RegistrationStatus extends React.Component<Props, State> {
   }
 
   async onActivateCouponButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
-    event?.preventDefault()
+    event?.preventDefault();
     try {
-      const teamId = this.props.registrationSession.team?.id
+      const teamId = this.props.registrationSession.team?.id;
       await this.props.client.activateCoupon({ teamId });
-      document.location.href = '/registration'
+      document.location.href = "/registration";
     } catch (error) {
-      this.setState({ error })
+      this.setState({ error });
     }
   }
 
@@ -60,12 +60,12 @@ export class RegistrationStatus extends React.Component<Props, State> {
   }
 
   onCopyCouponButtonClickIndex(index: number) {
-    const c = this.props.registrationSession.coupon?.code
-    const code = c ? c[index] : '';
+    const c = this.props.registrationSession.coupon?.code;
+    const code = c ? c[index] : "";
     return async (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
       await navigator.clipboard.writeText(code);
-    }
+    };
   }
 
   async onCopyInviteButtonClick(event: React.MouseEvent<HTMLElement>) {
@@ -173,7 +173,7 @@ export class RegistrationStatus extends React.Component<Props, State> {
 
   renderStatus() {
     const isDiscordAndSSHDone = this.props.registrationSession.team!.members!.every(
-      (member) => member.detail!.isSshKeyRegistered && member.detail!.isDiscordGuildMember
+      (member) => member.detail!.isSshKeyRegistered && member.detail!.isDiscordGuildMember,
     );
     const isEnvCheckDone = this.props.registrationSession.envCheckDone;
     const isOk = isDiscordAndSSHDone && isEnvCheckDone;
@@ -207,7 +207,9 @@ export class RegistrationStatus extends React.Component<Props, State> {
                 className="input"
                 type="text"
                 readOnly
-                value={this.props.registrationSession.coupon?.code ? this.props.registrationSession.coupon?.code[0] : ''}
+                value={
+                  this.props.registrationSession.coupon?.code ? this.props.registrationSession.coupon?.code[0] : ""
+                }
                 onClick={this.onCopyTargetInputClick.bind(this)}
               />
             </div>
@@ -226,7 +228,9 @@ export class RegistrationStatus extends React.Component<Props, State> {
                 className="input"
                 type="text"
                 readOnly
-                value={this.props.registrationSession.coupon?.code ? this.props.registrationSession.coupon?.code[1] : ''}
+                value={
+                  this.props.registrationSession.coupon?.code ? this.props.registrationSession.coupon?.code[1] : ""
+                }
                 onClick={this.onCopyTargetInputClick.bind(this)}
               />
             </div>
@@ -237,13 +241,13 @@ export class RegistrationStatus extends React.Component<Props, State> {
             </div>
           </div>
         </div>
-      )
+      );
     } else {
       return (
         <button className="button is-info" onClick={this.onActivateCouponButtonClick.bind(this)}>
           クーポンを獲得
         </button>
-      )
+      );
     }
   }
 
@@ -276,12 +280,12 @@ export class RegistrationStatus extends React.Component<Props, State> {
             {this.renderConditionsBoolean(
               !!member.detail!.isSshKeyRegistered,
               "GitHubにSSH鍵が登録されています",
-              "GitHubにSSH鍵が登録されていません"
+              "GitHubにSSH鍵が登録されていません",
             )}
             {this.renderConditionsBoolean(
               !!member.detail!.isDiscordGuildMember,
               "Discordサーバーに参加しています",
-              "Discordサーバーに参加していません"
+              "Discordサーバーに参加していません",
             )}
           </div>
         </div>
