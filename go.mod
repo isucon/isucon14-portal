@@ -1,6 +1,6 @@
-module github.com/isucon/isucon12-portal
+module github.com/isucon/isucon14-portal
 
-go 1.18
+go 1.22.6
 
 require (
 	github.com/golang/protobuf v1.5.2

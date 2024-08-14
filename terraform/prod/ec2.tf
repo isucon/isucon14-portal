@@ -3,7 +3,7 @@ data "aws_ami" "envcheck" {
   owners      = ["self"]
   filter {
     name   = "tag:Family"
-    values = ["isucon12-envcheck"]
+    values = ["isucon14-envcheck"]
   }
 }
 
@@ -12,6 +12,6 @@ data "aws_ami" "qualify" {
   owners      = ["self"]
   filter {
     name   = "tag:Family"
-    values = ["isucon12-qualify"]
+    values = ["isucon14-qualify"]
   }
 }

@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "logs" {
-  bucket = "logs-${local.env}-${local.project}-isucon12"
+  bucket = "logs-${local.env}-${local.project}-isucon14"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "logs" {
@@ -65,7 +65,7 @@ resource "aws_s3_bucket_policy" "logs" {
 }
 
 resource "aws_s3_bucket" "config" {
-  bucket = "config-${local.env}-${local.project}-isucon12"
+  bucket = "config-${local.env}-${local.project}-isucon14"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "config" {

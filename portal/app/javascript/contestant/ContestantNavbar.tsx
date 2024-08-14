@@ -28,7 +28,7 @@ export class ContestantNavbar extends React.Component<Props, State> {
         <div className="container">
           <div className="navbar-brand">
             <Link className="navbar-item" to="/contestant">
-              ISUCON12 Contest
+              ISUCON14 Contest
             </Link>
           </div>
           <div className="navbar-menu is-active">

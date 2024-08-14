@@ -1,3 +1,4 @@
 .envrc
 .vscode/
 .idea/
+node_modules/

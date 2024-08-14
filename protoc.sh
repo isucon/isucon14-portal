@@ -1,17 +1,5 @@
 #!/bin/bash -xe
 (
-  cd "$(dirname $0)"
-
-  shopt -s globstar
-
-  mkdir -p tmp/protoc-go
-  protoc -I=proto --go_out=tmp/protoc-go --go-grpc_out=tmp/protoc-go proto/**/*.proto
-  rm -rf proto.go
-  mv tmp/protoc-go/github.com/isucon/isucon12-portal/proto.go ./
-  rm -rf tmp/protoc-go
-)
-
-(
   cd "$(dirname $0)/portal"
 
   shopt -s globstar

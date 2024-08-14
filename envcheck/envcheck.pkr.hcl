@@ -4,10 +4,10 @@ variable "revision" {
 }
 
 locals {
-  name = "isucon12-envcheck-${formatdate("YYYYMMDD-hhmm", timestamp())}"
+  name = "isucon14-envcheck-${formatdate("YYYYMMDD-hhmm", timestamp())}"
   ami_tags = {
     Project  = "portal"
-    Family   = "isucon12-envcheck"
+    Family   = "isucon14-envcheck"
     Name     = "${local.name}"
     Revision = "${var.revision}"
     Packer   = "1"
