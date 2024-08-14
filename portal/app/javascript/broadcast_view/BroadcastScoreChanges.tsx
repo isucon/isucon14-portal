@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 
 import { Timestamp } from "../Timestamp";
 import { ErrorMessage } from "../ErrorMessage";
+import { useSearchParams } from "react-router-dom";
 
 interface ChangeItemProps {
   position: number;
@@ -139,14 +140,15 @@ const onLeaderboardUpdate = (
 
 interface Props {
   client: ApiClient;
-  limit: number;
-  showDummy?: boolean;
-  bottom?: boolean;
-  leaderboard?: isuxportal.proto.resources.ILeaderboard;
 }
 
 export const BroadcastScoreChanges: React.FC<Props> = (props: Props) => {
-  const { client, showDummy } = props;
+  const { client } = props;
+
+  const [query] = useSearchParams();
+  const limit = parseInt(query.get("limit") || "6", 10);
+  const showDummy = query.get("dummy") === "1";
+  const bottom = query.get("bottom") === "1";
 
   const [error, setError] = React.useState<Error | null>(null);
   const [requesting, setRequesting] = React.useState(false);
@@ -177,7 +179,7 @@ export const BroadcastScoreChanges: React.FC<Props> = (props: Props) => {
     if (!dashboard && !showDummy) refresh();
   }, []);
   React.useEffect(() => {
-    if (showDummy) return
+    if (showDummy) return;
 
     // TODO: Retry with backoff
     const timer = setInterval(() => refresh(), 2500);
@@ -187,7 +189,13 @@ export const BroadcastScoreChanges: React.FC<Props> = (props: Props) => {
   return (
     <>
       {error ? <ErrorMessage error={error} /> : null}
-      <BroadcastScoreChangesInner {...props} leaderboard={dashboard?.leaderboard!} />
+      <BroadcastScoreChangesInner
+        client={client}
+        limit={limit}
+        leaderboard={dashboard?.leaderboard!}
+        showDummy={showDummy}
+        bottom={bottom}
+      />
     </>
   );
 };
@@ -200,7 +208,15 @@ const usePrevious = function <T>(value: T) {
   return ref.current;
 };
 
-const BroadcastScoreChangesInner: React.FC<Props> = (props: Props) => {
+interface InnerProps {
+  client: ApiClient;
+  limit: number;
+  showDummy?: boolean;
+  bottom?: boolean;
+  leaderboard?: isuxportal.proto.resources.ILeaderboard;
+}
+
+const BroadcastScoreChangesInner: React.FC<InnerProps> = (props: InnerProps) => {
   const prevProps = usePrevious(props);
   const prevLeaderboard = prevProps?.leaderboard;
 

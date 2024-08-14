@@ -3,7 +3,7 @@ import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React, { useState } from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useParams } from "react-router-dom";
 
 import { ErrorMessage } from "../ErrorMessage";
 
@@ -22,7 +22,13 @@ export interface State {
   error: Error | null;
 }
 
-export class AdminTeamDetail extends React.Component<Props, State> {
+export const AdminTeamDetail = (props: Omit<Props, "teamId">) => {
+  const { teamId } = useParams();
+  if (!teamId) throw new Error("teamId is required");
+  return <AdminTeamDetailInternal {...props} teamId={teamId} />;
+};
+
+class AdminTeamDetailInternal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -58,15 +64,21 @@ export class AdminTeamDetail extends React.Component<Props, State> {
   renderContent() {
     if (!this.state.team) return <p>Loading...</p>;
     return (
-      <Switch>
-        <Route exact path="/admin/teams/:id">
-          {this.renderTeam()}
-          {this.renderMembers()}
-        </Route>
-        <Route exact path="/admin/teams/:id/edit">
-          <AdminTeamEdit session={this.props.session} client={this.props.client} team={this.state.team} />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route
+          path="/admin/teams/:id"
+          element={
+            <>
+              {this.renderTeam()}
+              {this.renderMembers()}
+            </>
+          }
+        />
+        <Route
+          path="/admin/teams/:id/edit"
+          element={<AdminTeamEdit session={this.props.session} client={this.props.client} team={this.state.team} />}
+        />
+      </Routes>
     );
   }
 

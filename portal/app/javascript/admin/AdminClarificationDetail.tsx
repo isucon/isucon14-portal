@@ -3,7 +3,7 @@ import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { Clarification } from "../Clarification";
@@ -213,7 +213,13 @@ export interface Props {
   id: string;
 }
 
-export const AdminClarificationDetail: React.FC<Props> = (props: Props) => {
+export const AdminClarificationDetail = (props: Omit<Props, "id">) => {
+  const { id } = useParams()
+  if (!id) throw new Error("id is required")
+  return <AdminClarificationDetailInternal {...props} id={id} />
+}
+
+const AdminClarificationDetailInternal: React.FC<Props> = (props: Props) => {
   const [error, setError] = React.useState<Error | null>(null);
   const [clar, setClar] = React.useState<isuxportal.proto.resources.IClarification | null>(null);
 

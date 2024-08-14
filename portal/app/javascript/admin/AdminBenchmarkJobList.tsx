@@ -3,8 +3,7 @@ import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
-import { Redirect } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, Navigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { ErrorMessage } from "../ErrorMessage";
@@ -37,8 +36,7 @@ const ListFilter: React.FC<ListFilterProps> = (props: ListFilterProps) => {
     search.set("status", data.status ?? "");
     search.set("failed_only", data.failedOnly ? "1" : "0");
     setRedirect(
-      <Redirect
-        push={true}
+      <Navigate
         to={{
           pathname: "/admin/benchmark_jobs",
           search: `?${search.toString()}`,
@@ -115,8 +113,43 @@ export interface State {
   currentPage: number;
 }
 
+const parseBenchmarkJobStatus = (
+  statusString: string | null
+): isuxportal.proto.resources.BenchmarkJob.Status | null => {
+  if (statusString === null || statusString === "") return null;
+
+  const status = +statusString;
+
+  switch (status) {
+    case isuxportal.proto.resources.BenchmarkJob.Status.PENDING:
+      return isuxportal.proto.resources.BenchmarkJob.Status.PENDING;
+    case isuxportal.proto.resources.BenchmarkJob.Status.RUNNING:
+      return isuxportal.proto.resources.BenchmarkJob.Status.RUNNING;
+    case isuxportal.proto.resources.BenchmarkJob.Status.ERRORED:
+      return isuxportal.proto.resources.BenchmarkJob.Status.ERRORED;
+    case isuxportal.proto.resources.BenchmarkJob.Status.CANCELLED:
+      return isuxportal.proto.resources.BenchmarkJob.Status.CANCELLED;
+    case isuxportal.proto.resources.BenchmarkJob.Status.FINISHED:
+      return isuxportal.proto.resources.BenchmarkJob.Status.FINISHED;
+  }
+  console.warn("Unexpected status", status);
+  return null;
+};
+
+export const AdminBenchmarkJobList = (props: Omit<Props, "teamId" | "status" | "failedOnly">) => {
+  const [query] = useSearchParams();
+  return (
+    <AdminBenchmarkJobListInternal
+      {...props}
+      teamId={query.get("team_id")}
+      status={parseBenchmarkJobStatus(query.get("status"))}
+      failedOnly={query.get("failed_only") === "1"}
+    />
+  );
+};
+
 const ItemCountPerPage = 15;
-export class AdminBenchmarkJobList extends React.Component<Props, State> {
+class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -153,20 +186,25 @@ export class AdminBenchmarkJobList extends React.Component<Props, State> {
   public render() {
     return (
       <>
-        <Switch>
-          <Route exact path="/admin/benchmark_jobs">
-            <header>
-              <h1 className="title is-1">Benchmark Jobs</h1>
-            </header>
-            <main>
-              {this.renderForm()}
-              {this.renderFilter()}
-              {this.renderError()}
-              {this.renderList()}
-              {this.renderPaginate()}
-            </main>
-          </Route>
-        </Switch>
+        <Routes>
+          <Route
+            path="/admin/benchmark_jobs"
+            element={
+              <>
+                <header>
+                  <h1 className="title is-1">Benchmark Jobs</h1>
+                </header>
+                <main>
+                  {this.renderForm()}
+                  {this.renderFilter()}
+                  {this.renderError()}
+                  {this.renderList()}
+                  {this.renderPaginate()}
+                </main>
+              </>
+            }
+          ></Route>
+        </Routes>
       </>
     );
   }

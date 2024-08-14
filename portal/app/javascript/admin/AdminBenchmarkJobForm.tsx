@@ -3,8 +3,7 @@ import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
-import { Redirect } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { ErrorMessage } from "../ErrorMessage";
@@ -38,8 +37,7 @@ export const AdminBenchmarkJobForm: React.FC<Props> = (props: Props) => {
         targetId: data.targetId ? parseInt(data.targetId, 10) : 0,
       });
       setRedirect(
-        <Redirect
-          push={true}
+        <Navigate
           to={{
             pathname: `/admin/benchmark_jobs/${encodeURIComponent(resp.job!.id!.toString())}`,
           }}

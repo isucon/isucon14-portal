@@ -3,7 +3,7 @@ import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { ErrorMessage } from "../ErrorMessage";
 import { AdminTeamTagList } from "./AdminTeamTagList";

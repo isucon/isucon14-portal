@@ -2,7 +2,6 @@ import { isuxportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 
 import { ErrorMessage } from "./ErrorMessage";
 

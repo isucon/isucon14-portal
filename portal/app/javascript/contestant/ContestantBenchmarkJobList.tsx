@@ -2,8 +2,7 @@ import { isuxportal } from "../pb";
 import { ApiError, ApiClient } from "../ApiClient";
 
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
-import { Redirect } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { ErrorMessage } from "../ErrorMessage";
@@ -47,18 +46,23 @@ export class ContestantBenchmarkJobList extends React.Component<Props, State> {
   public render() {
     return (
       <>
-        <Switch>
-          <Route exact path="/contestant/benchmark_jobs">
-            <header>
-              <h1 className="title is-1">Benchmark Jobs</h1>
-            </header>
-            <main>
-              {this.renderForm()}
-              {this.renderError()}
-              {this.renderList()}
-            </main>
-          </Route>
-        </Switch>
+        <Routes>
+          <Route
+            path="/contestant/benchmark_jobs"
+            element={
+              <>
+                <header>
+                  <h1 className="title is-1">Benchmark Jobs</h1>
+                </header>
+                <main>
+                  {this.renderForm()}
+                  {this.renderError()}
+                  {this.renderList()}
+                </main>
+              </>
+            }
+          />
+        </Routes>
       </>
     );
   }

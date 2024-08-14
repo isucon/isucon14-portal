@@ -3,7 +3,7 @@ import { ApiError, ApiClient } from "./ApiClient";
 import { AdminApiClient } from "./admin/AdminApiClient";
 
 import React from "react";
-import { BrowserRouter, Switch, Route, Link, NavLink } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, NavLink } from "react-router-dom";
 
 import { ErrorMessage } from "./ErrorMessage";
 import { AdminNavbar } from "./admin/AdminNavbar";
@@ -46,17 +46,17 @@ export class AdminApp extends React.Component<Props, State> {
                 <p className="menu-label">Contest</p>
                 <ul className="menu-list">
                   <li>
-                    <NavLink exact to="/admin" activeClassName="is-active">
+                    <NavLink end to="/admin" className={({ isActive }) => (isActive ? "is-active" : "")}>
                       Dashboard
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/admin/benchmark_jobs" activeClassName="is-active">
+                    <NavLink to="/admin/benchmark_jobs" className={({ isActive }) => (isActive ? "is-active" : "")}>
                       Benchmark Jobs
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/admin/clarifications" activeClassName="is-active">
+                    <NavLink to="/admin/clarifications" className={({ isActive }) => (isActive ? "is-active" : "")}>
                       Clarifications
                     </NavLink>
                   </li>
@@ -64,7 +64,10 @@ export class AdminApp extends React.Component<Props, State> {
                 <p className="menu-label">DCIM</p>
                 <ul className="menu-list">
                   <li>
-                    <NavLink to="/admin/contestant_instances" activeClassName="is-active">
+                    <NavLink
+                      to="/admin/contestant_instances"
+                      className={({ isActive }) => (isActive ? "is-active" : "")}
+                    >
                       Contestant Instances
                     </NavLink>
                   </li>
@@ -73,7 +76,7 @@ export class AdminApp extends React.Component<Props, State> {
                 <p className="menu-label">Registration</p>
                 <ul className="menu-list">
                   <li>
-                    <NavLink to="/admin/teams" activeClassName="is-active">
+                    <NavLink to="/admin/teams" className={({ isActive }) => (isActive ? "is-active" : "")}>
                       Teams
                     </NavLink>
                   </li>
@@ -83,104 +86,42 @@ export class AdminApp extends React.Component<Props, State> {
 
             <div className="column is-9">
               <main>
-                <Switch>
+                <Routes>
                   <Route
-                    exact
                     path="/admin"
-                    render={({ match }) => {
-                      return <AdminDashboard session={this.props.session} client={this.state.adminClient} />;
-                    }}
+                    element={<AdminDashboard session={this.props.session} client={this.state.adminClient} />}
                   />
                   <Route
-                    exact
                     path="/admin/teams"
-                    render={({ match }) => {
-                      return <AdminTeamList session={this.props.session} client={this.state.adminClient} />;
-                    }}
+                    element={<AdminTeamList session={this.props.session} client={this.state.adminClient} />}
                   />
                   <Route
                     path="/admin/teams/:id"
-                    render={({ match }) => {
-                      return (
-                        <AdminTeamDetail
-                          session={this.props.session}
-                          client={this.state.adminClient}
-                          teamId={match.params.id}
-                        />
-                      );
-                    }}
+                    element={<AdminTeamDetail session={this.props.session} client={this.state.adminClient} />}
                   />
                   <Route
-                    exact
                     path="/admin/benchmark_jobs"
-                    render={({ match, location }) => {
-                      const query = new URLSearchParams(location.search);
-                      return (
-                        <AdminBenchmarkJobList
-                          session={this.props.session}
-                          client={this.state.adminClient}
-                          teamId={query.get("team_id")}
-                          status={parseBenchmarkJobStatus(query.get("status"))}
-                          failedOnly={query.get("failed_only") === "1"}
-                        />
-                      );
-                    }}
+                    element={<AdminBenchmarkJobList session={this.props.session} client={this.state.adminClient} />}
                   />
                   <Route
                     path="/admin/benchmark_jobs/:id"
-                    render={({ match }) => {
-                      return (
-                        <AdminBenchmarkJobDetail
-                          session={this.props.session}
-                          client={this.state.adminClient}
-                          id={match.params.id}
-                        />
-                      );
-                    }}
+                    element={<AdminBenchmarkJobDetail session={this.props.session} client={this.state.adminClient} />}
                   />
                   <Route
-                    exact
                     path="/admin/clarifications"
-                    render={({ location }) => {
-                      const query = new URLSearchParams(location.search);
-                      return (
-                        <AdminClarificationList
-                          session={this.props.session}
-                          client={this.state.adminClient}
-                          teamId={query.get("team_id")}
-                          unansweredOnly={query.get("unanswered_only") === "1"}
-                        />
-                      );
-                    }}
+                    element={<AdminClarificationList session={this.props.session} client={this.state.adminClient} />}
                   />
                   <Route
-                    exact
                     path="/admin/clarifications/:id"
-                    render={({ match }) => {
-                      return (
-                        <AdminClarificationDetail
-                          session={this.props.session}
-                          client={this.state.adminClient}
-                          id={match.params.id}
-                        />
-                      );
-                    }}
+                    element={<AdminClarificationDetail session={this.props.session} client={this.state.adminClient} />}
                   />
                   <Route
-                    exact
                     path="/admin/contestant_instances"
-                    render={({ match, location }) => {
-                      const query = new URLSearchParams(location.search);
-                      return (
-                        <AdminContestantInstanceList
-                          session={this.props.session}
-                          client={this.state.adminClient}
-                          teamId={query.get("team_id")}
-                        />
-                      );
-                    }}
+                    element={
+                      <AdminContestantInstanceList session={this.props.session} client={this.state.adminClient} />
+                    }
                   />
-                </Switch>
+                </Routes>
               </main>
             </div>
           </div>
@@ -188,20 +129,4 @@ export class AdminApp extends React.Component<Props, State> {
       </BrowserRouter>
     );
   }
-}
-
-const parseBenchmarkJobStatus = (statusString: string | null): isuxportal.proto.resources.BenchmarkJob.Status | null => {
-  if (statusString === null || statusString === '') return null
-
-  const status = +statusString
-
-  switch(status) {
-  case isuxportal.proto.resources.BenchmarkJob.Status.PENDING: return isuxportal.proto.resources.BenchmarkJob.Status.PENDING
-  case isuxportal.proto.resources.BenchmarkJob.Status.RUNNING: return isuxportal.proto.resources.BenchmarkJob.Status.RUNNING
-  case isuxportal.proto.resources.BenchmarkJob.Status.ERRORED: return isuxportal.proto.resources.BenchmarkJob.Status.ERRORED
-  case isuxportal.proto.resources.BenchmarkJob.Status.CANCELLED: return isuxportal.proto.resources.BenchmarkJob.Status.CANCELLED
-  case isuxportal.proto.resources.BenchmarkJob.Status.FINISHED: return isuxportal.proto.resources.BenchmarkJob.Status.FINISHED
-  }
-  console.warn('Unexpected status', status)
-  return null
 }

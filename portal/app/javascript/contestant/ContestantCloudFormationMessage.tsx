@@ -3,7 +3,7 @@ import { ApiError, ApiClient } from "../ApiClient";
 import * as Rails from "@rails/ujs";
 
 import React, { useState } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useMatch } from "react-router-dom";
 
 import { ErrorMessage } from "../ErrorMessage";
 
@@ -18,7 +18,7 @@ export const ContestantCloudFormationMessage = ({ instances }: Props) => {
     setClosed(true);
   }
 
-  const isServerListRoute = !!useRouteMatch({ path: '/contestant/contestant_instances', exact: true })
+  const isServerListRoute = !!useMatch({ path: '/contestant/contestant_instances', end: true })
 
   if (isServerListRoute) return null;
   if (instances.length > 0) return null;

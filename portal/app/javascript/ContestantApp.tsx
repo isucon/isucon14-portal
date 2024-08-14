@@ -2,7 +2,7 @@ import { isuxportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import { ErrorMessage } from "./ErrorMessage";
 
@@ -157,60 +157,58 @@ export class ContestantApp extends React.Component<Props, State> {
   public render() {
     return (
       <BrowserRouter>
-        <ContestantNavbar session={this.props.session} client={this.props.client} unreadNotificationExists={this.state.lastAnsweredClarificationIdObserved && this.state.lastClarificationIdSeen !== this.state.lastAnsweredClarificationId} />
+        <ContestantNavbar
+          session={this.props.session}
+          client={this.props.client}
+          unreadNotificationExists={
+            this.state.lastAnsweredClarificationIdObserved &&
+            this.state.lastClarificationIdSeen !== this.state.lastAnsweredClarificationId
+          }
+        />
 
         <div className="container px-5 py-5">
-          { false && <ContestantCloudFormationMessage instances={this.props.session.contestantInstances} /> }
+          {false && <ContestantCloudFormationMessage instances={this.props.session.contestantInstances} />}
 
-          <Switch>
+          <Routes>
             <Route
-              exact
               path="/contestant"
-              render={({ match }) => {
-                return <ContestantDashboard session={this.props.session} client={this.props.client}  serviceWorker={this.state.serviceWorker} localNotificationEnabled={this.state.localNotificationEnabled} setLocalNotificationEnabled={this.setLocalNotificationEnabled.bind(this)} />;
-              }}
+              element={
+                <ContestantDashboard
+                  session={this.props.session}
+                  client={this.props.client}
+                  serviceWorker={this.state.serviceWorker}
+                  localNotificationEnabled={this.state.localNotificationEnabled}
+                  setLocalNotificationEnabled={this.setLocalNotificationEnabled.bind(this)}
+                />
+              }
             />
             <Route
-              exact
               path="/contestant/benchmark_jobs"
-              render={({ match }) => {
-                return <ContestantBenchmarkJobList session={this.props.session} client={this.props.client} />;
-              }}
+              element={<ContestantBenchmarkJobList session={this.props.session} client={this.props.client} />}
             />
             <Route
               path="/contestant/benchmark_jobs/:id"
-              render={({ match }) => {
-                return (
-                  <ContestantBenchmarkJobDetail
-                    session={this.props.session}
-                    client={this.props.client}
-                    id={match.params.id}
-                  />
-                );
-              }}
+              element={<ContestantBenchmarkJobDetail session={this.props.session} client={this.props.client} />}
             />
             <Route
-              exact
               path="/contestant/clarifications"
-              render={({ match }) => {
-                return <ContestantClarificationList session={this.props.session} client={this.props.client} onLastClarificationIdSeenChange={this.onLastClarificationIdSeenChange.bind(this)} />;
-              }}
+              element={
+                <ContestantClarificationList
+                  session={this.props.session}
+                  client={this.props.client}
+                  onLastClarificationIdSeenChange={this.onLastClarificationIdSeenChange.bind(this)}
+                />
+              }
             />
             <Route
-              exact
               path="/contestant/contestant_instances"
-              render={({ match }) => {
-                return <ContestantContestantInstanceList session={this.props.session} client={this.props.client} />;
-              }}
+              element={<ContestantContestantInstanceList session={this.props.session} client={this.props.client} />}
             />
             <Route
-              exact
               path="/contestant/discord"
-              render={({ match }) => {
-                return <ContestantDiscordPage session={this.props.session} client={this.props.client} />;
-              }}
+              element={<ContestantDiscordPage session={this.props.session} client={this.props.client} />}
             />
-          </Switch>
+          </Routes>
         </div>
       </BrowserRouter>
     );
