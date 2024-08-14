@@ -219,10 +219,7 @@ export class ApiClient {
 
   // contestant getDashboard API returns only informations of a team logged in, so need to combine with getAudienceDashboard and merge them at a client side.
   public async getContestantMergedDashboard(id: number) {
-    const [contestantBoard, audienceBoard] = await Promise.all<
-      isuxportal.proto.services.contestant.IDashboardResponse,
-      isuxportal.proto.services.audience.IDashboardResponse
-    >([this.getDashboard(), this.getAudienceDashboard()]);
+    const [contestantBoard, audienceBoard] = await Promise.all([this.getDashboard(), this.getAudienceDashboard()]);
 
     const contestantLeaderboardItem = contestantBoard.leaderboardItem!;
 

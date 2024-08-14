@@ -117,8 +117,9 @@ export const ScoreGraph: React.FC<Props> = ({ teams, contest, width, teamId }) =
 
         //console.log({team: item.team!.id!, tsPtr: tsPtr, scorePtr: scorePtr, now: ts, cur: scores[scorePtr]?.markedAt?.seconds!, next: scoreNext?.markedAt?.seconds! });
 
-        if (!score || (score && ts >= score.markedAt!.seconds!)) {
-          if (scoreNext && ts >= scoreNext.markedAt!.seconds!) {
+        const markedAt = score.markedAt!.seconds! as number;
+        if (!score || (score && ts >= markedAt)) {
+          if (scoreNext && ts >= markedAt) {
             scorePtr++;
           }
         }
