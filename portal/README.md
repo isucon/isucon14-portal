@@ -117,3 +117,23 @@ export DATABASE_URL="mysql2://isuxportal_dev:dbpass@127.0.0.1:3306/isuxportal_de
 
 CloudFormationのテンプレートは`/app/models/cf_templates`に存在
 チェッカーでのAMI IDのチェックに使われる値は`/app/controllers/api/env_checks_controller`に別で記載されているので、テンプレートの変更時はそこも変更することが必要
+
+### Discord
+
+- サーバー
+  - テンプレートを利用
+  - サーバーウィジェットを有効化すること
+- アプリ
+  - https://discord.com/developers/applications から作成
+  - OAuth2 > Redirectsは`{host}/auth/discord/callback`
+  - BOT
+    1. OAuth2 > OAuth2 URL Generator > SCOPESで`bot`を選択 + 下のBOT PERMISSIONSで`Administrator`を選択
+    2. URLをコピーしてアクセス
+    3. BOTをサーバーに追加できる
+
+### GitHub App
+
+- Callback URLは`{host}/auth/github/callback`
+- Expire user authorization tokensは無効
+- Webhookは無効でOK
+- 権限は「Account permissions > Git SSH keysをRead-only」のみ
