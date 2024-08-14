@@ -2,12 +2,17 @@ import { ApiClient } from "../ApiClient";
 import { updateNavBarSession } from "../NavbarSession";
 import { AudienceApp } from "../AudienceApp";
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 (async function () {
   const client = new ApiClient();
   const session = await client.getCurrentSession();
   updateNavBarSession(session);
-  const elem = document.getElementById("app");
-  ReactDOM.render(<AudienceApp session={session} client={client} />, elem);
+  const elem = document.getElementById("app")!;
+  const root = createRoot(elem);
+  root.render(
+    <React.StrictMode>
+      <AudienceApp session={session} client={client} />
+    </React.StrictMode>
+  );
 })();
