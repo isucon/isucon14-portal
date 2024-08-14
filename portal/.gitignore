@@ -33,7 +33,7 @@ node_modules/
 /public/sw.js.map
 /REVISION
 
-docker-compose-local.yaml
-
 vendor/
 .idea/
+
+compose.yaml

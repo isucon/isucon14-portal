@@ -200,7 +200,7 @@ portal 本体のコードが入っている。
 - `types/rails__ujs`
   - https://github.com/rails/rails-ujs 
     - すでに public archive になってる・・・
-    - というかRails 5.1.0 から公式になってるので外せそう
+    - というか Rails 5.1.0 から公式になってるので外せそう
 
 #### 技術スタック
 - rails
