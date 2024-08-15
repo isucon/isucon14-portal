@@ -2,7 +2,7 @@ import { isuxportal } from "../pb";
 import { ApiError, ApiClient } from "../ApiClient";
 
 import React from "react";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { ErrorMessage } from "../ErrorMessage";
@@ -41,12 +41,11 @@ export const ContestantBenchmarkJobForm: React.FC<Props> = (props: Props) => {
         console.warn(e);
       }
       setRedirect(
-        <Redirect
-          push={true}
+        <Navigate
           to={{
             pathname: `/contestant/benchmark_jobs/${encodeURIComponent(resp.job!.id!.toString())}`,
           }}
-        />
+        />,
       );
     } catch (e) {
       setError(e);

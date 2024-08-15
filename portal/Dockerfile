@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:16 as assets-builder
+FROM --platform=linux/amd64 node:20 as assets-builder
 
 RUN mkdir /app
 WORKDIR /app

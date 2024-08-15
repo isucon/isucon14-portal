@@ -3,7 +3,7 @@ import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
-import { Link, Redirect, useLocation, useHistory } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { Clarification } from "../Clarification";
@@ -14,7 +14,7 @@ type ListFilterProps = {
   unansweredOnly: boolean;
 };
 const ListFilter: React.FC<ListFilterProps> = (props: ListFilterProps) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -28,7 +28,7 @@ const ListFilter: React.FC<ListFilterProps> = (props: ListFilterProps) => {
     const search = new URLSearchParams();
     search.set("team_id", data.teamId || "");
     search.set("unanswered_only", data.unansweredOnly ? "1" : "0");
-    history.push("/admin/clarifications?" + search.toString());
+    navigate("/admin/clarifications?" + search.toString());
   });
 
   return (
@@ -200,7 +200,18 @@ export interface Props {
   unansweredOnly: boolean;
 }
 
-export const AdminClarificationList: React.FC<Props> = (props: Props) => {
+export const AdminClarificationList = (props: Omit<Props, "teamId" | "unansweredOnly">) => {
+  const [query] = useSearchParams();
+  return (
+    <AdminClarificationListInternal
+      {...props}
+      teamId={query.get("team_id")}
+      unansweredOnly={query.get("unanswered_only") === "1"}
+    />
+  );
+};
+
+const AdminClarificationListInternal: React.FC<Props> = (props: Props) => {
   const { teamId, unansweredOnly } = props;
   const [error, setError] = React.useState<Error | null>(null);
   const [list, setList] = React.useState<isuxportal.proto.resources.IClarification[] | null>(null);

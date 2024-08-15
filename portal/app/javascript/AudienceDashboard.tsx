@@ -62,8 +62,8 @@ export const AudienceDashboard: React.FC<Props> = ({ session, client }) => {
     if (!dashboard || !teamPins) return;
     teamPins.removeUnknownItems(() =>
       [...(dashboard.leaderboard?.teams ?? []), ...(dashboard.leaderboard?.hiddenTeams ?? [])].map((v) =>
-        v.team!.id!.toString()
-      )
+        v.team!.id!.toString(),
+      ),
     );
   }, [teamPins, dashboard]);
 

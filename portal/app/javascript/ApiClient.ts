@@ -103,7 +103,7 @@ export class ApiClient {
       `${this.baseUrl}/api/contestant/benchmark_jobs?limit=${limit?.toString() || "0"}`,
       "GET",
       null,
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -122,7 +122,7 @@ export class ApiClient {
       `${this.baseUrl}/api/contestant/benchmark_jobs/${encodeURIComponent(id.toString())}`,
       "GET",
       null,
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -145,7 +145,7 @@ export class ApiClient {
       `${this.baseUrl}/api/audience/dashboard/teams/${encodeURIComponent(id.toString())}`,
       "GET",
       null,
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -170,7 +170,7 @@ export class ApiClient {
       `${this.baseUrl}/api/contestant/notifications?after=${after ? encodeURIComponent(after.toString()) : ""}`,
       "GET",
       null,
-      null
+      null,
     );
     return klass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -185,7 +185,7 @@ export class ApiClient {
           endpoint: subscription.endpoint,
           p256dh: b64(subscription.getKey("p256dh")),
           auth: b64(subscription.getKey("auth")),
-        })
+        }),
       )
       .finish();
     const resp = await this.request(`${this.baseUrl}/api/contestant/push_subscriptions`, "POST", null, payloadMessage);
@@ -199,14 +199,14 @@ export class ApiClient {
       .encode(
         payloadClass.fromObject({
           endpoint: subscription.endpoint,
-        })
+        }),
       )
       .finish();
     const resp = await this.request(
       `${this.baseUrl}/api/contestant/push_subscriptions`,
       "DELETE",
       null,
-      payloadMessage
+      payloadMessage,
     );
     return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
   }
@@ -219,10 +219,7 @@ export class ApiClient {
 
   // contestant getDashboard API returns only informations of a team logged in, so need to combine with getAudienceDashboard and merge them at a client side.
   public async getContestantMergedDashboard(id: number) {
-    const [contestantBoard, audienceBoard] = await Promise.all<
-      isuxportal.proto.services.contestant.IDashboardResponse,
-      isuxportal.proto.services.audience.IDashboardResponse
-    >([this.getDashboard(), this.getAudienceDashboard()]);
+    const [contestantBoard, audienceBoard] = await Promise.all([this.getDashboard(), this.getAudienceDashboard()]);
 
     const contestantLeaderboardItem = contestantBoard.leaderboardItem!;
 

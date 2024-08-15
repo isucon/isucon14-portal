@@ -3,8 +3,7 @@ import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { ErrorMessage } from "../ErrorMessage";
@@ -20,7 +19,7 @@ export interface State {
 }
 
 export const AdminTeamEdit: React.FC<Props> = (props: Props) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [requestError, setRequestError] = React.useState<Error | null>(null);
   const [requesting, setRequesting] = React.useState<boolean>(false);
   const {
@@ -42,7 +41,7 @@ export const AdminTeamEdit: React.FC<Props> = (props: Props) => {
     setRequesting(true);
     try {
       const resp = await props.client.updateTeam(data);
-      history.push(`/admin/teams/${encodeURIComponent(props.team.id!.toString())}`);
+      navigate(`/admin/teams/${encodeURIComponent(props.team.id!.toString())}`);
     } catch (e) {
       setRequesting(false);
       setRequestError(e);

@@ -20,10 +20,10 @@ export const BroadcastClock: React.FC<Props> = ({ contest }) => {
   });
 
   const contestStartsAt = dayjs(
-    (contest.startsAt!.seconds as number) * 1000 + (contest.startsAt!.nanos as number) / 1000000
+    (contest.startsAt!.seconds as number) * 1000 + (contest.startsAt!.nanos as number) / 1000000,
   );
   const contestFreezesAt = dayjs(
-    (contest.freezesAt!.seconds as number) * 1000 + (contest.freezesAt!.nanos as number) / 1000000
+    (contest.freezesAt!.seconds as number) * 1000 + (contest.freezesAt!.nanos as number) / 1000000,
   );
   const contestEndsAt = dayjs((contest.endsAt!.seconds as number) * 1000 + (contest.endsAt!.nanos as number) / 1000000);
 
@@ -41,18 +41,14 @@ export const BroadcastClock: React.FC<Props> = ({ contest }) => {
       {digits(remaining.hours())}:{digits(remaining.minutes())}:{digits(remaining.seconds())}
     </p>
   );
-  let progress = (
-    <progress max={100} value={100 - (untilEnd / duration) * 100}></progress>
-  );
+  let progress = <progress max={100} value={100 - (untilEnd / duration) * 100}></progress>;
   if (untilEnd <= 0) {
     status = "end";
     text = <p>00:00:00</p>;
     progress = <progress className="frozen" max={100} value={100}></progress>;
   } else if (untilFreeze <= 0) {
     status = "frozen";
-    progress = (
-      <progress className="frozen" max={100} value={100 - (untilEnd / duration) * 100}></progress>
-    );
+    progress = <progress className="frozen" max={100} value={100 - (untilEnd / duration) * 100}></progress>;
   } else if (untilStart > 0) {
     status = "before";
     text = <p>--:--:--</p>;
@@ -66,10 +62,10 @@ export const BroadcastClock: React.FC<Props> = ({ contest }) => {
       </div>
       <div className="columns">
         <div className="column is-12">
-            <div className="isux-broadcast-clock-progress">
-              {progress}
-              <div className="overlay"></div>
-            </div>
+          <div className="isux-broadcast-clock-progress">
+            {progress}
+            <div className="overlay"></div>
+          </div>
         </div>
       </div>
     </div>

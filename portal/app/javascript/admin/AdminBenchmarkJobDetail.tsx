@@ -8,6 +8,7 @@ import { BenchmarkJobDetail } from "../BenchmarkJobDetail";
 
 import { ErrorMessage } from "../ErrorMessage";
 import { ReloadButton } from "../ReloadButton";
+import { useParams } from "react-router-dom";
 
 export interface Props {
   session: isuxportal.proto.services.common.GetCurrentSessionResponse;
@@ -22,7 +23,13 @@ export interface State {
   timer: number | null;
 }
 
-export class AdminBenchmarkJobDetail extends React.Component<Props, State> {
+export const AdminBenchmarkJobDetail = (props: Omit<Props, "id">) => {
+  const { id } = useParams();
+  if (!id) throw new Error("id is required");
+  return <AdminBenchmarkJobDetailInternal {...props} id={id} />;
+};
+
+class AdminBenchmarkJobDetailInternal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {

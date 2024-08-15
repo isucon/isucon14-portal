@@ -4,6 +4,7 @@ import React from "react";
 
 import { Timestamp } from "../Timestamp";
 import { ErrorMessage } from "../ErrorMessage";
+import { useSearchParams } from "react-router-dom";
 
 interface TeamItemProps {
   position: number;
@@ -61,15 +62,16 @@ type Mode = "all" | "general" | "students" | "hidden";
 
 interface Props {
   client: ApiClient;
-  limit: number;
-  showDummy?: boolean;
-  mode?: string;
-  bottom?: boolean;
-  leaderboard?: isuxportal.proto.resources.ILeaderboard;
 }
 
 export const BroadcastLeaderboard: React.FC<Props> = (props: Props) => {
-  const { client, limit, showDummy, mode } = props;
+  const { client } = props;
+
+  const [query] = useSearchParams();
+  const limit = parseInt(query.get("limit") || "15", 10);
+  const showDummy = query.get("dummy") === "1";
+  const mode = query.get("mode") || "all";
+  const bottom = query.get("bottom") === "1";
 
   const [error, setError] = React.useState<Error | null>(null);
   const [requesting, setRequesting] = React.useState(false);
@@ -103,7 +105,14 @@ export const BroadcastLeaderboard: React.FC<Props> = (props: Props) => {
   return (
     <>
       {error ? <ErrorMessage error={error} /> : null}
-      <BroadcastLeaderboardInner {...props} leaderboard={dashboard?.leaderboard!} />
+      <BroadcastLeaderboardInner
+        client={client}
+        leaderboard={dashboard?.leaderboard!}
+        limit={limit}
+        showDummy={showDummy}
+        mode={mode}
+        bottom={bottom}
+      />
     </>
   );
 };
@@ -116,7 +125,16 @@ const usePrevious = function <T>(value: T) {
   return ref.current;
 };
 
-const BroadcastLeaderboardInner: React.FC<Props> = (props: Props) => {
+interface InnerProps {
+  client: ApiClient;
+  limit: number;
+  showDummy?: boolean;
+  mode?: string;
+  bottom?: boolean;
+  leaderboard?: isuxportal.proto.resources.ILeaderboard;
+}
+
+const BroadcastLeaderboardInner: React.FC<InnerProps> = (props: InnerProps) => {
   const { leaderboard, mode, showDummy, limit } = props;
   const prevProps = usePrevious(props);
   const prevLeaderboard = prevProps?.leaderboard;
@@ -180,12 +198,12 @@ const BroadcastLeaderboardInner: React.FC<Props> = (props: Props) => {
     const prevRanks = new Map(
       (prevLeaderboard?.teams || []).map((t, idx) => {
         return [t.team!.id, idx + 1];
-      })
+      }),
     );
     const prevScores = new Map(
       (prevLeaderboard?.teams || []).map((t, idx) => {
         return [t.team!.id, t.latestScore?.score!];
-      })
+      }),
     );
 
     // XXX: logic duplicate with chooseTeamList in Leaderboard.tsx

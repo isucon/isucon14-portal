@@ -3,8 +3,7 @@ import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
-import { Redirect } from "react-router-dom";
+import { BrowserRouter, Navigate, Link, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { ErrorMessage } from "../ErrorMessage";
@@ -30,13 +29,12 @@ const ListFilter: React.FC<ListFilterProps> = (props: ListFilterProps) => {
     const search = new URLSearchParams();
     search.set("team_id", data.teamId || "");
     setRedirect(
-      <Redirect
-        push={true}
+      <Navigate
         to={{
           pathname: "/admin/contestant_instances",
           search: `?${search.toString()}`,
         }}
-      />
+      />,
     );
   });
 
@@ -82,7 +80,12 @@ export interface State {
   error: Error | null;
 }
 
-export class AdminContestantInstanceList extends React.Component<Props, State> {
+export const AdminContestantInstanceList = (props: Omit<Props, "teamId">) => {
+  const [query] = useSearchParams();
+  return <AdminContestantInstanceListInternal {...props} teamId={query.get("team_id")} />;
+};
+
+class AdminContestantInstanceListInternal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -102,7 +105,7 @@ export class AdminContestantInstanceList extends React.Component<Props, State> {
   async updateList() {
     try {
       const list = await this.props.client.listContestantInstances(
-        this.props.teamId ? parseInt(this.props.teamId, 10) : null
+        this.props.teamId ? parseInt(this.props.teamId, 10) : null,
       );
       this.setState({ list });
     } catch (error) {
@@ -160,7 +163,9 @@ export class AdminContestantInstanceList extends React.Component<Props, State> {
       <tr key={id}>
         <td>{id}</td>
         <td>
-          <a href={`https://ap-northeast-1.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-1#InstanceDetails:instanceId=${ci.cloudId}`}>
+          <a
+            href={`https://ap-northeast-1.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-1#InstanceDetails:instanceId=${ci.cloudId}`}
+          >
             {ci.cloudId}
           </a>
         </td>
