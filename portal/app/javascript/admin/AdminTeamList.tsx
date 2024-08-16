@@ -1,5 +1,3 @@
-import { isuxportal } from "../pb_admin";
-import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
@@ -7,14 +5,16 @@ import { Link } from "react-router-dom";
 
 import { ErrorMessage } from "../ErrorMessage";
 import { AdminTeamTagList } from "./AdminTeamTagList";
+import type { ListTeamsResponse, ListTeamsResponse_TeamListItem } from "../../../proto/isuxportal/services/admin/teams_pb";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: AdminApiClient;
 }
 
 export interface State {
-  teamList: isuxportal.proto.services.admin.ListTeamsResponse | null;
+  teamList: ListTeamsResponse | null;
   error: Error | null;
 }
 
@@ -75,12 +75,12 @@ export class AdminTeamList extends React.Component<Props, State> {
     );
   }
 
-  renderTeam(team: isuxportal.proto.services.admin.ListTeamsResponse.ITeamListItem, i: number) {
+  renderTeam(team: ListTeamsResponse_TeamListItem, i: number) {
     return (
-      <tr key={team.teamId as number}>
+      <tr key={Number(team.teamId)}>
         <td>{team.teamId}</td>
         <td>
-          <Link to={`/admin/teams/${encodeURIComponent(team.teamId!.toString())}`}>{team.name}</Link>
+          <Link to={`/admin/teams/${encodeURIComponent(team.teamId.toString())}`}>{team.name}</Link>
         </td>
         <td>
           {team.memberNames!.map((name, j) => (

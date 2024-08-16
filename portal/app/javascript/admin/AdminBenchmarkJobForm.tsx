@@ -1,5 +1,3 @@
-import { isuxportal } from "../pb_admin";
-import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
@@ -7,9 +5,12 @@ import { BrowserRouter, Navigate, Route, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { ErrorMessage } from "../ErrorMessage";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
+import { create } from "@bufbuild/protobuf";
+import { EnqueueBenchmarkJobRequestSchema } from "../../../proto/isuxportal/services/admin/benchmark_pb";
 
 type Props = {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: AdminApiClient;
 };
 
@@ -32,14 +33,16 @@ export const AdminBenchmarkJobForm: React.FC<Props> = (props: Props) => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setRequesting(true);
-      const resp = await props.client.enqueueBenchmarkJob({
-        teamId: parseInt(data.teamId, 10),
-        targetId: data.targetId ? parseInt(data.targetId, 10) : 0,
-      });
+      const resp = await props.client.enqueueBenchmarkJob(
+        create(EnqueueBenchmarkJobRequestSchema, {
+          teamId: BigInt(data.teamId),
+          targetId: data.targetId ? BigInt(data.targetId) : 0n,
+        }),
+      );
       setRedirect(
         <Navigate
           to={{
-            pathname: `/admin/benchmark_jobs/${encodeURIComponent(resp.job!.id!.toString())}`,
+            pathname: `/admin/benchmark_jobs/${encodeURIComponent(resp.job!.id.toString())}`,
           }}
         />,
       );

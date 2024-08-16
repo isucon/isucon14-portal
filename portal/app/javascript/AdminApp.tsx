@@ -1,4 +1,4 @@
-import { isuxportal } from "./pb_admin";
+import { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
 import { ApiError, ApiClient } from "./ApiClient";
 import { AdminApiClient } from "./admin/AdminApiClient";
 
@@ -18,7 +18,7 @@ import { AdminContestantInstanceList } from "./admin/AdminContestantInstanceList
 import { AdminDashboard } from "./admin/AdminDashboard";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 }
 

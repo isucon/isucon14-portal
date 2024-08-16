@@ -1,9 +1,10 @@
-import { isuxportal } from "./pb";
 import { ApiClient } from "./ApiClient";
 import React from "react";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
+import { Contest_Status } from "../../proto/isuxportal/resources/contest_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 }
 
@@ -45,7 +46,7 @@ export class Landing extends React.Component<Props, State> {
       );
     }
 
-    if (this.props.session.contest?.status === isuxportal.proto.resources.Contest.Status.REGISTRATION) {
+    if (this.props.session.contest?.status === Contest_Status.REGISTRATION) {
       return (
         <main>
           <p className="block">参加登録は右上から行えます</p>

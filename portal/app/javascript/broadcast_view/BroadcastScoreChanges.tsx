@@ -1,25 +1,31 @@
-import type { isuxportal } from "../pb";
-import { ApiClient } from "../ApiClient";
+import type { ApiClient } from "../ApiClient";
 import React from "react";
 import ReactDOM from "react-dom";
 
 import { Timestamp } from "../Timestamp";
 import { ErrorMessage } from "../ErrorMessage";
 import { useSearchParams } from "react-router-dom";
+import {
+  LeaderboardItemSchema,
+  type Leaderboard,
+  type LeaderboardItem,
+} from "../../../proto/isuxportal/resources/leaderboard_pb";
+import type { DashboardResponse } from "../../../proto/isuxportal/services/audience/dashboard_pb";
+import { create } from "@bufbuild/protobuf";
 
 interface ChangeItemProps {
   position: number;
   lastPosition: number;
-  lastScore: number;
-  lastBestScore: number;
-  item: isuxportal.proto.resources.ILeaderboardItem;
+  lastScore: bigint | undefined;
+  lastBestScore: bigint | undefined;
+  item: LeaderboardItem;
 }
 
 type ChangeDirection = "up" | "down" | undefined;
 
 const ChangeItem: React.FC<ChangeItemProps> = ({ position, lastPosition, lastScore, lastBestScore, item }) => {
-  const score = item.latestScore!.score as number;
-  const bestScore = (item.bestScore?.score as number) || 0;
+  const score = item.latestScore!.score;
+  const bestScore = item.bestScore?.score || 0n;
   if (
     lastScore === null ||
     lastScore === undefined ||
@@ -46,7 +52,7 @@ const ChangeItem: React.FC<ChangeItemProps> = ({ position, lastPosition, lastSco
   }
   classNames.push(`isux-broadcast-scorechanges-item--${direction}`);
 
-  const scoreDiff = score - lastScore;
+  const scoreDiff = Number(score - lastScore);
 
   return (
     <div className={classNames.join(" ")}>
@@ -75,17 +81,17 @@ const ChangeItem: React.FC<ChangeItemProps> = ({ position, lastPosition, lastSco
 };
 
 const onLeaderboardUpdate = (
-  leaderboard: isuxportal.proto.resources.ILeaderboard,
-  prevLeaderboard: isuxportal.proto.resources.ILeaderboard | null | undefined,
+  leaderboard: Leaderboard,
+  prevLeaderboard: Leaderboard | null | undefined,
   limit: number,
   key: string,
 ) => {
   type TeamStanding = {
     position: number;
-    item: isuxportal.proto.resources.ILeaderboardItem;
+    item: LeaderboardItem;
     lastPosition?: number;
-    lastScore?: number | Long;
-    lastBestScore?: number | Long;
+    lastScore?: bigint;
+    lastBestScore?: bigint;
   };
 
   const prevRanks = new Map(
@@ -122,8 +128,8 @@ const onLeaderboardUpdate = (
         item={item}
         position={position}
         lastPosition={lastPosition!}
-        lastScore={lastScore! as number}
-        lastBestScore={lastBestScore! as number}
+        lastScore={lastScore}
+        lastBestScore={lastBestScore}
         key={`${key}-${item.team!.id!.toString()}`}
       />
     );
@@ -152,7 +158,7 @@ export const BroadcastScoreChanges: React.FC<Props> = (props: Props) => {
 
   const [error, setError] = React.useState<Error | null>(null);
   const [requesting, setRequesting] = React.useState(false);
-  const [dashboard, setDashboard] = React.useState<isuxportal.proto.services.audience.DashboardResponse | null>(null);
+  const [dashboard, setDashboard] = React.useState<DashboardResponse | null>(null);
 
   const refresh = () => {
     if (requesting) return;
@@ -213,7 +219,7 @@ interface InnerProps {
   limit: number;
   showDummy?: boolean;
   bottom?: boolean;
-  leaderboard?: isuxportal.proto.resources.ILeaderboard;
+  leaderboard?: Leaderboard;
 }
 
 const BroadcastScoreChangesInner: React.FC<InnerProps> = (props: InnerProps) => {
@@ -257,34 +263,37 @@ const BroadcastScoreChangesInner: React.FC<InnerProps> = (props: InnerProps) => 
   const dummies = props.showDummy
     ? [
         <ChangeItem
-          item={{
-            latestScore: { score: 10000 },
-            team: { id: 424242, name: "あいうあいうあいう", student: { status: true } },
-          }}
-          lastBestScore={10000000}
-          lastScore={50000}
+          item={create(LeaderboardItemSchema, {
+            latestScore: { score: 10000n },
+            team: { id: 424242n, name: "あいうあいうあいう", student: { status: true } },
+          })}
+          lastBestScore={10000000n}
+          lastScore={50000n}
           lastPosition={123}
           position={523}
           key="dummy1"
         />,
         <ChangeItem
-          item={{ latestScore: { score: 20000 }, team: { id: 424243, name: "なにぬなにぬなにぬ" } }}
-          lastBestScore={10000000}
-          lastScore={10000}
+          item={create(LeaderboardItemSchema, {
+            latestScore: { score: 20000n },
+            team: { id: 424243n, name: "なにぬなにぬなにぬ" },
+          })}
+          lastBestScore={10000000n}
+          lastScore={10000n}
           lastPosition={542}
           position={142}
           key="dummy2"
         />,
         <ChangeItem
-          item={{
-            latestScore: { score: 87654321 },
+          item={create(LeaderboardItemSchema, {
+            latestScore: { score: 87654321n },
             team: {
-              id: 400000,
+              id: 400000n,
               name: "railsへの執着はもはや煩悩の域であり、開発者一同は瞑想したほうがいいと思います。",
             },
-          }}
-          lastBestScore={10000000}
-          lastScore={12345678}
+          })}
+          lastBestScore={10000000n}
+          lastScore={12345678n}
           lastPosition={542}
           position={142}
           key="dummy3"

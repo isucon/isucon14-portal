@@ -1,4 +1,3 @@
-import { isuxportal } from "../pb";
 import { ApiError, ApiClient } from "../ApiClient";
 import * as Rails from "@rails/ujs";
 
@@ -6,9 +5,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { ErrorMessage } from "../ErrorMessage";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 
   unreadNotificationExists: boolean;

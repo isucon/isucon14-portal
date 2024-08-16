@@ -1,4 +1,3 @@
-import { isuxportal } from "../pb_admin";
 import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
@@ -10,6 +9,9 @@ import { ErrorMessage } from "../ErrorMessage";
 import { TimeDuration } from "../TimeDuration";
 import { Timestamp } from "../Timestamp";
 import { ContestantInstanceStatus } from "../ContestantInstanceStatus";
+import type { ListContestantInstancesResponse } from "../../../proto/isuxportal/services/admin/contestant_instances_pb";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
+import type { ContestantInstance } from "../../../proto/isuxportal/resources/contestant_instance_pb";
 
 type ListFilterProps = {
   teamId: string | null;
@@ -70,13 +72,13 @@ const ListFilter: React.FC<ListFilterProps> = (props: ListFilterProps) => {
 };
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: AdminApiClient;
   teamId: string | null;
 }
 
 export interface State {
-  list: isuxportal.proto.services.admin.ListContestantInstancesResponse | null;
+  list: ListContestantInstancesResponse | null;
   error: Error | null;
 }
 
@@ -105,7 +107,7 @@ class AdminContestantInstanceListInternal extends React.Component<Props, State> 
   async updateList() {
     try {
       const list = await this.props.client.listContestantInstances(
-        this.props.teamId ? parseInt(this.props.teamId, 10) : null,
+        this.props.teamId ? BigInt(this.props.teamId) : null,
       );
       this.setState({ list });
     } catch (error) {
@@ -157,7 +159,7 @@ class AdminContestantInstanceListInternal extends React.Component<Props, State> 
     );
   }
 
-  renderContestantInstance(ci: isuxportal.proto.resources.IContestantInstance, i: number) {
+  renderContestantInstance(ci: ContestantInstance, i: number) {
     const id = ci.id!.toString();
     return (
       <tr key={id}>

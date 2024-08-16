@@ -1,4 +1,3 @@
-import { isuxportal } from "../pb_admin";
 import { ApiError, ApiClient } from "../ApiClient";
 
 import React from "react";
@@ -9,15 +8,19 @@ import { ErrorMessage } from "../ErrorMessage";
 import { ReloadButton } from "../ReloadButton";
 import { ContestantBenchmarkJobForm } from "./ContestantBenchmarkJobForm";
 import { Navigate, useParams } from "react-router-dom";
+import type { BenchmarkJob } from "../../../proto/isuxportal/resources/benchmark_job_pb";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
+import { EnqueueBenchmarkJobRequestSchema } from "../../../proto/isuxportal/services/contestant/benchmark_pb";
+import { create } from "@bufbuild/protobuf";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
-  id: number | string;
+  id: bigint;
 }
 
 export interface State {
-  job: isuxportal.proto.resources.IBenchmarkJob | null;
+  job: BenchmarkJob | null;
   error: Error | null;
   requesting: boolean;
   timer: number | null;
@@ -26,7 +29,7 @@ export interface State {
 export const ContestantBenchmarkJobDetail = (props: Omit<Props, "id">) => {
   const { id } = useParams();
   if (!id) throw new Error("id is required");
-  return <ContestantBenchmarkJobDetailInternal {...props} id={id} />;
+  return <ContestantBenchmarkJobDetailInternal {...props} id={BigInt(id)} />;
 };
 
 export class ContestantBenchmarkJobDetailInternal extends React.Component<Props, State> {
@@ -109,13 +112,7 @@ export class ContestantBenchmarkJobDetailInternal extends React.Component<Props,
   }
 }
 
-const ContestantBenchmarkReEnqueueForm = ({
-  job,
-  client,
-}: {
-  job: isuxportal.proto.resources.IBenchmarkJob | null;
-  client: ApiClient;
-}) => {
+const ContestantBenchmarkReEnqueueForm = ({ job, client }: { job: BenchmarkJob | null; client: ApiClient }) => {
   const [redirect, setRedirect] = React.useState<JSX.Element | null>(null);
   const [requesting, setRequesting] = React.useState<boolean>(false);
   const [error, setError] = React.useState<Error | null>(null);
@@ -125,9 +122,11 @@ const ContestantBenchmarkReEnqueueForm = ({
 
     try {
       setRequesting(true);
-      const resp = await client.enqueueBenchmarkJob({
-        targetId: jobId,
-      });
+      const resp = await client.enqueueBenchmarkJob(
+        create(EnqueueBenchmarkJobRequestSchema, {
+          targetId: jobId,
+        }),
+      );
       setRedirect(
         <Navigate
           to={{

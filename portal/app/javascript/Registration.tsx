@@ -1,4 +1,3 @@
-import { isuxportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 
 import React from "react";
@@ -9,17 +8,24 @@ import { Navbar } from "./Navbar";
 import { RegistrationLogin } from "./RegistrationLogin";
 import { RegistrationForm } from "./RegistrationForm";
 import { RegistrationStatus } from "./RegistrationStatus";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
+import {
+  GetRegistrationSessionQuerySchema,
+  GetRegistrationSessionResponse_Status,
+  type GetRegistrationSessionResponse,
+} from "../../proto/isuxportal/services/registration/session_pb";
+import { create } from "@bufbuild/protobuf";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 }
 
 export interface State {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
-  registrationSession: isuxportal.proto.services.registration.GetRegistrationSessionResponse | null;
-  teamId: number | null;
-  inviteToken: string | null;
+  session: GetCurrentSessionResponse;
+  registrationSession: GetRegistrationSessionResponse | null;
+  teamId: bigint | undefined;
+  inviteToken: string | undefined;
   edit: boolean;
   error: Error | null;
 }
@@ -31,8 +37,8 @@ export class Registration extends React.Component<Props, State> {
     this.state = {
       session: this.props.session,
       registrationSession: null,
-      teamId: parseInt(params.get("team_id") || "0", 10),
-      inviteToken: params.get("invite_token"),
+      teamId: BigInt(params.get("team_id") || "0"),
+      inviteToken: params.get("invite_token") || undefined,
       edit: false,
       error: null,
     };
@@ -44,10 +50,12 @@ export class Registration extends React.Component<Props, State> {
 
   async updateRegistrationSession() {
     try {
-      const registrationSession = await this.props.client.getRegistrationSession({
-        teamId: this.state.teamId,
-        inviteToken: this.state.inviteToken,
-      });
+      const registrationSession = await this.props.client.getRegistrationSession(
+        create(GetRegistrationSessionQuerySchema, {
+          teamId: this.state.teamId,
+          inviteToken: this.state.inviteToken,
+        }),
+      );
       let session = this.state.session;
       if (this.state.registrationSession) {
         // XXX: Contestant name might be updated inside the registration page, and it is only included in GetCurrentSession response, not available in GetRegistrationSession.
@@ -95,10 +103,10 @@ export class Registration extends React.Component<Props, State> {
         </>
       );
       switch (this.state.registrationSession.status) {
-        case isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.NOT_LOGGED_IN:
+        case GetRegistrationSessionResponse_Status.NOT_LOGGED_IN:
           return login;
           break;
-        case isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.CLOSED:
+        case GetRegistrationSessionResponse_Status.CLOSED:
           return (
             <>
               <div className="message is-danger">
@@ -110,7 +118,7 @@ export class Registration extends React.Component<Props, State> {
             </>
           );
           break;
-        case isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.NOT_JOINABLE:
+        case GetRegistrationSessionResponse_Status.NOT_JOINABLE:
           return (
             <>
               <div className="message is-danger">
@@ -122,8 +130,8 @@ export class Registration extends React.Component<Props, State> {
             </>
           );
           break;
-        case isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.CREATABLE:
-        case isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.JOINABLE:
+        case GetRegistrationSessionResponse_Status.CREATABLE:
+        case GetRegistrationSessionResponse_Status.JOINABLE:
           return (
             <>
               {login}
@@ -137,13 +145,13 @@ export class Registration extends React.Component<Props, State> {
             </>
           );
           break;
-        case isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.JOINED:
+        case GetRegistrationSessionResponse_Status.JOINED:
           if (this.state.edit) {
             return (
               <RegistrationForm
                 client={this.props.client}
                 session={this.state.session}
-                inviteToken={null}
+                inviteToken={undefined}
                 registrationSession={this.state.registrationSession}
                 updateRegistrationSession={this.updateRegistrationSession.bind(this)}
               />
@@ -159,7 +167,7 @@ export class Registration extends React.Component<Props, State> {
             />
           );
           break;
-        case isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.DISQUALIFIED:
+        case GetRegistrationSessionResponse_Status.DISQUALIFIED:
           return (
             <>
               <div className="message is-danger">

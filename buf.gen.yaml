@@ -12,3 +12,6 @@ plugins:
     out: proto.go
     opt:
       - paths=source_relative
+  - remote: buf.build/bufbuild/es:v2.0.0
+    out: portal/proto
+    include_imports: true

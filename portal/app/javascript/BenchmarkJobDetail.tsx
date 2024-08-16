@@ -1,17 +1,17 @@
-import { isuxportal } from "./pb";
-
 import React from "react";
 import { Link } from "react-router-dom";
 
 import { BenchmarkJobStatus } from "./BenchmarkJobStatus";
 import { Timestamp } from "./Timestamp";
+import type { BenchmarkJob } from "../../proto/isuxportal/resources/benchmark_job_pb";
+import type { Team } from "../../proto/isuxportal/resources/team_pb";
 
 export interface Props {
-  job: isuxportal.proto.resources.IBenchmarkJob;
+  job: BenchmarkJob;
   admin?: boolean;
 }
 
-const renderJobSummary = (job: isuxportal.proto.resources.IBenchmarkJob, admin: boolean) => {
+const renderJobSummary = (job: BenchmarkJob, admin: boolean) => {
   return (
     <div className="card mt-5">
       <header className="card-header">
@@ -45,7 +45,7 @@ const renderJobSummary = (job: isuxportal.proto.resources.IBenchmarkJob, admin: 
   );
 };
 
-const renderTeam = (team: isuxportal.proto.resources.ITeam) => {
+const renderTeam = (team: Team) => {
   return (
     <div className="card mt-5">
       <header className="card-header">
@@ -62,7 +62,7 @@ const renderTeam = (team: isuxportal.proto.resources.ITeam) => {
   );
 };
 
-const renderJobResult = (job: isuxportal.proto.resources.IBenchmarkJob) => {
+const renderJobResult = (job: BenchmarkJob) => {
   if (!job.result) return;
   const { result } = job;
   return (
@@ -101,7 +101,7 @@ const renderJobResult = (job: isuxportal.proto.resources.IBenchmarkJob) => {
   );
 };
 
-const renderJobExecution = (job: isuxportal.proto.resources.IBenchmarkJob, admin: boolean) => {
+const renderJobExecution = (job: BenchmarkJob, admin: boolean) => {
   if (!job.result) return;
   if (!job.result.execution) return;
   const { execution } = job.result;

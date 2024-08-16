@@ -1,12 +1,13 @@
-import type { isuxportal } from "../pb";
 import { ApiError, ApiClient } from "../ApiClient";
 
 import React, { useEffect, useState } from "react";
 
 import { ContestantInstanceStatus } from "../ContestantInstanceStatus";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
+import type { ContestantInstance } from "../../../proto/isuxportal/resources/contestant_instance_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 }
 
@@ -21,7 +22,7 @@ export const ContestantContestantInstanceList: React.FC<Props> = ({ session, cli
 
   const templateBase64 = `data:text/plain,${encodeURIComponent(template)}`;
 
-  const renderRow = (ci: isuxportal.proto.resources.IContestantInstance) => {
+  const renderRow = (ci: ContestantInstance) => {
     return (
       <tr>
         <td>{ci.number}</td>

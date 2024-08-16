@@ -1,14 +1,12 @@
-import type { isuxportal } from "./pb";
-import { ApiError, ApiClient } from "./ApiClient";
-
 import React from "react";
 import { Link } from "react-router-dom";
 
 import { Timestamp } from "./Timestamp";
 import { TimeDuration } from "./TimeDuration";
+import type { Clarification as ClarificationType } from "../../proto/isuxportal/resources/clarification_pb";
 
 export interface Props {
-  clarification: isuxportal.proto.resources.IClarification;
+  clarification: ClarificationType;
   admin: boolean;
 }
 

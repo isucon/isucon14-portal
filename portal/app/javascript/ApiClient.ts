@@ -1,11 +1,63 @@
-import { isuxportal } from "./pb";
 import * as Rails from "@rails/ujs";
+import { ErrorSchema, type Error as RemoteError } from "../../proto/isuxportal/error_pb";
+import { create, fromBinary, toBinary } from "@bufbuild/protobuf";
+import { ListTeamsResponseSchema } from "../../proto/isuxportal/services/audience/team_list_pb";
+import { GetCurrentSessionResponseSchema } from "../../proto/isuxportal/services/common/me_pb";
+import {
+  DeleteRegistrationResponseSchema,
+  GetRegistrationSessionQuerySchema,
+  GetRegistrationSessionResponseSchema,
+  UpdateRegistrationRequestSchema,
+  UpdateRegistrationResponseSchema,
+  type GetRegistrationSessionQuery,
+  type UpdateRegistrationRequest,
+} from "../../proto/isuxportal/services/registration/session_pb";
+import {
+  CreateTeamRequestSchema,
+  CreateTeamResponseSchema,
+  type CreateTeamRequest,
+} from "../../proto/isuxportal/services/registration/create_team_pb";
+import {
+  JoinTeamRequestSchema,
+  JoinTeamResponseSchema,
+  type JoinTeamRequest,
+} from "../../proto/isuxportal/services/registration/join_pb";
+import { GetEnvCheckInformationResponseSchema } from "../../proto/isuxportal/services/registration/env_check_pb";
+import {
+  ActivateCouponRequestSchema,
+  ActivateCouponResponseSchema,
+  type ActivateCouponRequest,
+} from "../../proto/isuxportal/services/registration/activate_coupon_pb";
+import {
+  EnqueueBenchmarkJobRequestSchema,
+  EnqueueBenchmarkJobResponseSchema,
+  GetBenchmarkJobResponseSchema,
+  ListBenchmarkJobsResponseSchema,
+  type EnqueueBenchmarkJobRequest,
+} from "../../proto/isuxportal/services/contestant/benchmark_pb";
+import {
+  ListNotificationsResponseSchema,
+  SubscribeNotificationRequestSchema,
+  SubscribeNotificationResponseSchema,
+  UnsubscribeNotificationRequestSchema,
+  UnsubscribeNotificationResponseSchema,
+} from "../../proto/isuxportal/services/contestant/notifications_pb";
+import { SoloDashboardResponseSchema } from "../../proto/isuxportal/services/audience/dashboard_pb";
+import {
+  ListClarificationsResponseSchema,
+  RequestClarificationRequestSchema,
+  RequestClarificationResponseSchema,
+  type RequestClarificationRequest,
+} from "../../proto/isuxportal/services/contestant/clarifications_pb";
+import { DashboardResponseSchema } from "../../proto/isuxportal/services/contestant/dashboard_pb";
+import { DashboardResponseSchema as AudienceDashboardResponseSchema } from "../../proto/isuxportal/services/audience/dashboard_pb";
+import { GetCloudFormationResponseSchema } from "../../proto/isuxportal/services/contestant/cloud_formation_pb";
 
 export class ApiError extends Error {
   public localError: Error;
-  public remoteError: isuxportal.proto.Error | null;
+  public remoteError: RemoteError | null;
 
-  constructor(localError: Error, remoteError: isuxportal.proto.Error | null, ...params: any[]) {
+  constructor(localError: Error, remoteError: RemoteError | null, ...params: any[]) {
     super(...params);
 
     if (Error.captureStackTrace) {
@@ -33,192 +85,157 @@ export class ApiClient {
   }
 
   public async listTeams() {
-    const klass = isuxportal.proto.services.audience.ListTeamsResponse;
     const resp = await this.request(`${this.baseUrl}/api/audience/teams`, "GET", null, null);
-    return klass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(ListTeamsResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public async getCurrentSession() {
-    const klass = isuxportal.proto.services.common.GetCurrentSessionResponse;
-    // const pb = payload ? klass.encode(klass.fromObject(payload)).finish() : null;
     const resp = await this.request(`${this.baseUrl}/api/session`, "GET", null, null);
-    return klass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(GetCurrentSessionResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async getRegistrationSession(query?: isuxportal.proto.services.registration.IGetRegistrationSessionQuery) {
-    const responseClass = isuxportal.proto.services.registration.GetRegistrationSessionResponse;
-    const queryClass = isuxportal.proto.services.registration.GetRegistrationSessionQuery;
-    const queryMessage = query ? queryClass.fromObject(query) : null;
+  public async getRegistrationSession(query: GetRegistrationSessionQuery) {
+    const queryMessage = toBinary(GetRegistrationSessionQuerySchema, query);
     const resp = await this.request(`${this.baseUrl}/api/registration/session`, "GET", queryMessage, null);
-    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(GetRegistrationSessionResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async createTeam(payload: isuxportal.proto.services.registration.ICreateTeamRequest) {
-    const responseClass = isuxportal.proto.services.registration.CreateTeamResponse;
-    const payloadClass = isuxportal.proto.services.registration.CreateTeamRequest;
-    const payloadMessage = payload ? payloadClass.encode(payloadClass.fromObject(payload)).finish() : null;
+  public async createTeam(payload: CreateTeamRequest) {
+    const payloadMessage = toBinary(CreateTeamRequestSchema, payload);
     const resp = await this.request(`${this.baseUrl}/api/registration/team`, "POST", null, payloadMessage);
-    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(CreateTeamResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async joinTeam(payload: isuxportal.proto.services.registration.IJoinTeamRequest) {
-    const responseClass = isuxportal.proto.services.registration.JoinTeamResponse;
-    const payloadClass = isuxportal.proto.services.registration.JoinTeamRequest;
-    const payloadMessage = payload ? payloadClass.encode(payloadClass.fromObject(payload)).finish() : null;
+  public async joinTeam(payload: JoinTeamRequest) {
+    const payloadMessage = toBinary(JoinTeamRequestSchema, payload);
     const resp = await this.request(`${this.baseUrl}/api/registration/contestant`, "POST", null, payloadMessage);
-    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(JoinTeamResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async updateRegistration(payload: isuxportal.proto.services.registration.IUpdateRegistrationRequest) {
-    const responseClass = isuxportal.proto.services.registration.UpdateRegistrationResponse;
-    const payloadClass = isuxportal.proto.services.registration.UpdateRegistrationRequest;
-    const payloadMessage = payload ? payloadClass.encode(payloadClass.fromObject(payload)).finish() : null;
+  public async updateRegistration(payload: UpdateRegistrationRequest) {
+    const payloadMessage = toBinary(UpdateRegistrationRequestSchema, payload);
     const resp = await this.request(`${this.baseUrl}/api/registration`, "PUT", null, payloadMessage);
-    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(UpdateRegistrationResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public async deleteRegistration() {
-    const responseClass = isuxportal.proto.services.registration.DeleteRegistrationResponse;
     const resp = await this.request(`${this.baseUrl}/api/registration`, "DELETE", null, null);
-    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(DeleteRegistrationResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public async getEnvCheckInformation() {
-    const responseClass = isuxportal.proto.services.registration.GetEnvCheckInformationResponse;
     const resp = await this.request(`${this.baseUrl}/api/registration/env_check`, "GET", null, null);
-    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(GetEnvCheckInformationResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async activateCoupon(payload: isuxportal.proto.services.registration.IActivateCouponRequest) {
-    const responseClass = isuxportal.proto.services.registration.ActivateCouponResponse;
-    const payloadClass = isuxportal.proto.services.registration.UpdateRegistrationRequest;
-    const payloadMessage = payload ? payloadClass.encode(payloadClass.fromObject(payload)).finish() : null;
+  public async activateCoupon(payload: ActivateCouponRequest) {
+    const payloadMessage = toBinary(ActivateCouponRequestSchema, payload);
     const resp = await this.request(`${this.baseUrl}/api/registration/coupon`, "PUT", null, payloadMessage);
-    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(ActivateCouponResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public async listBenchmarkJobs(limit?: number) {
-    const klass = isuxportal.proto.services.contestant.ListBenchmarkJobsResponse;
     const resp = await this.request(
       `${this.baseUrl}/api/contestant/benchmark_jobs?limit=${limit?.toString() || "0"}`,
       "GET",
       null,
       null,
     );
-    return klass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(ListBenchmarkJobsResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async enqueueBenchmarkJob(payload: isuxportal.proto.services.contestant.IEnqueueBenchmarkJobRequest) {
-    const responseClass = isuxportal.proto.services.contestant.EnqueueBenchmarkJobResponse;
-    const payloadClass = isuxportal.proto.services.contestant.EnqueueBenchmarkJobRequest;
-    const payloadMessage = payload ? payloadClass.encode(payloadClass.fromObject(payload)).finish() : null;
+  public async enqueueBenchmarkJob(payload: EnqueueBenchmarkJobRequest) {
+    const payloadMessage = toBinary(EnqueueBenchmarkJobRequestSchema, payload);
     const resp = await this.request(`${this.baseUrl}/api/contestant/benchmark_jobs`, "POST", null, payloadMessage);
-    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(EnqueueBenchmarkJobResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async getBenchmarkJob(id: number | string) {
-    const klass = isuxportal.proto.services.contestant.GetBenchmarkJobResponse;
+  public async getBenchmarkJob(id: bigint) {
     const resp = await this.request(
       `${this.baseUrl}/api/contestant/benchmark_jobs/${encodeURIComponent(id.toString())}`,
       "GET",
       null,
       null,
     );
-    return klass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(GetBenchmarkJobResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public async getDashboard() {
-    const klass = isuxportal.proto.services.contestant.DashboardResponse;
     const resp = await this.request(`${this.baseUrl}/api/contestant/dashboard`, "GET", null, null);
-    return klass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(DashboardResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public async getAudienceDashboard() {
-    const klass = isuxportal.proto.services.audience.DashboardResponse;
     const resp = await this.request(`${this.baseUrl}/api/audience/dashboard`, "GET", null, null);
-    return klass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(AudienceDashboardResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async getAudienceDashboardSolo(id: number | string) {
-    const klass = isuxportal.proto.services.audience.SoloDashboardResponse;
+  public async getAudienceDashboardSolo(id: bigint) {
     const resp = await this.request(
       `${this.baseUrl}/api/audience/dashboard/teams/${encodeURIComponent(id.toString())}`,
       "GET",
       null,
       null,
     );
-    return klass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(SoloDashboardResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public async listClarifications() {
-    const klass = isuxportal.proto.services.contestant.ListClarificationsResponse;
     const resp = await this.request(`${this.baseUrl}/api/contestant/clarifications`, "GET", null, null);
-    return klass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(ListClarificationsResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async requestClarification(payload: isuxportal.proto.services.contestant.IRequestClarificationRequest) {
-    const responseClass = isuxportal.proto.services.contestant.RequestClarificationResponse;
-    const payloadClass = isuxportal.proto.services.contestant.RequestClarificationRequest;
-    const payloadMessage = payload ? payloadClass.encode(payloadClass.fromObject(payload)).finish() : null;
+  public async requestClarification(payload: RequestClarificationRequest) {
+    const payloadMessage = toBinary(RequestClarificationRequestSchema, payload);
     const resp = await this.request(`${this.baseUrl}/api/contestant/clarifications`, "POST", null, payloadMessage);
-    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(RequestClarificationResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async listNotifications(after?: number) {
-    const klass = isuxportal.proto.services.contestant.ListNotificationsResponse;
+  public async listNotifications(after?: bigint) {
     const resp = await this.request(
       `${this.baseUrl}/api/contestant/notifications?after=${after ? encodeURIComponent(after.toString()) : ""}`,
       "GET",
       null,
       null,
     );
-    return klass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(ListNotificationsResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public async subscribeNotification(subscription: PushSubscription) {
-    const responseClass = isuxportal.proto.services.contestant.SubscribeNotificationResponse;
-    const payloadClass = isuxportal.proto.services.contestant.SubscribeNotificationRequest;
     const b64 = (buf: ArrayBuffer | null) => (buf ? btoa(String.fromCharCode(...new Uint8Array(buf))) : null);
-    const payloadMessage = payloadClass
-      .encode(
-        payloadClass.fromObject({
-          endpoint: subscription.endpoint,
-          p256dh: b64(subscription.getKey("p256dh")),
-          auth: b64(subscription.getKey("auth")),
-        }),
-      )
-      .finish();
+    const payloadMessage = toBinary(
+      SubscribeNotificationRequestSchema,
+      create(SubscribeNotificationRequestSchema, {
+        endpoint: subscription.endpoint,
+        p256dh: b64(subscription.getKey("p256dh")) ?? undefined,
+        auth: b64(subscription.getKey("auth")) ?? undefined,
+      }),
+    );
     const resp = await this.request(`${this.baseUrl}/api/contestant/push_subscriptions`, "POST", null, payloadMessage);
-    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(SubscribeNotificationResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public async unsubscribeNotification(subscription: PushSubscription) {
-    const responseClass = isuxportal.proto.services.contestant.UnsubscribeNotificationResponse;
-    const payloadClass = isuxportal.proto.services.contestant.UnsubscribeNotificationRequest;
-    const payloadMessage = payloadClass
-      .encode(
-        payloadClass.fromObject({
-          endpoint: subscription.endpoint,
-        }),
-      )
-      .finish();
+    const payloadMessage = toBinary(
+      UnsubscribeNotificationRequestSchema,
+      create(UnsubscribeNotificationRequestSchema, { endpoint: subscription.endpoint }),
+    );
     const resp = await this.request(
       `${this.baseUrl}/api/contestant/push_subscriptions`,
       "DELETE",
       null,
       payloadMessage,
     );
-    return responseClass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(UnsubscribeNotificationResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public async getCloudFormation() {
-    const klass = isuxportal.proto.services.contestant.GetCloudFormationResponse;
     const resp = await this.request(`${this.baseUrl}/api/contestant/cloud_formation`, "GET", null, null);
-    return klass.decode(new Uint8Array(await resp.arrayBuffer()));
+    return fromBinary(GetCloudFormationResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   // contestant getDashboard API returns only informations of a team logged in, so need to combine with getAudienceDashboard and merge them at a client side.
-  public async getContestantMergedDashboard(id: number) {
+  public async getContestantMergedDashboard(id: bigint) {
     const [contestantBoard, audienceBoard] = await Promise.all([this.getDashboard(), this.getAudienceDashboard()]);
 
     const contestantLeaderboardItem = contestantBoard.leaderboardItem!;
@@ -235,18 +252,18 @@ export class ApiClient {
     }
 
     dest.sort((a, b) => {
-      const as = (a.latestScore?.score ?? 0) as number;
-      const bs = (b.latestScore?.score ?? 0) as number;
+      const as = a.latestScore?.score ?? 0n;
+      const bs = b.latestScore?.score ?? 0n;
       const scoreComparision = bs - as;
-      if (scoreComparision !== 0) return scoreComparision;
+      if (scoreComparision !== 0n) return Number(scoreComparision);
 
-      const ats = (a.latestScore?.markedAt?.seconds! ?? 0) as number;
-      const bts = (b.latestScore?.markedAt?.seconds! ?? 0) as number;
+      const ats = a.latestScore?.markedAt?.seconds ?? 0n;
+      const bts = b.latestScore?.markedAt?.seconds ?? 0n;
       const timeSecondsComparison = bts - ats;
-      if (timeSecondsComparison !== 0) return timeSecondsComparison;
+      if (timeSecondsComparison !== 0n) return Number(timeSecondsComparison);
 
-      const atn = (a.latestScore?.markedAt?.nanos! ?? 0) as number;
-      const btn = (b.latestScore?.markedAt?.nanos! ?? 0) as number;
+      const atn = a.latestScore?.markedAt?.nanos ?? 0;
+      const btn = b.latestScore?.markedAt?.nanos ?? 0;
       const timeNanosComparison = btn - atn;
       if (timeNanosComparison !== 0) return timeNanosComparison;
 
@@ -257,7 +274,7 @@ export class ApiClient {
   }
 
   // retrieve audience solo leaderboard items (where contains score history) for specified list of team IDs.
-  public async getAudienceLeaderboardItems(ids: number[] | string[]) {
+  public async getAudienceLeaderboardItems(ids: bigint[]) {
     const result = [];
     for (let i = 0; i < ids.length; i++) {
       try {
@@ -303,7 +320,7 @@ export class ApiClient {
         contentType &&
         contentType.match(/^application\/(vnd\.google\.)?protobuf(; proto=isuxportal\.proto\.Error|; charset=.*)?$/)
       ) {
-        const pbError = isuxportal.proto.Error.decode(new Uint8Array(await resp.arrayBuffer()));
+        const pbError = fromBinary(ErrorSchema, new Uint8Array(await resp.arrayBuffer()));
         err = new ApiError(new Error(`${path} returned error ${resp.status}`), pbError);
       } else {
         err = new ApiError(new Error(`${path} returned error ${resp.status}: ${await resp.text()}`), null);

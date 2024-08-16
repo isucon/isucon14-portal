@@ -1,4 +1,4 @@
-import { isuxportal } from "../pb_admin";
+import { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
 import { AdminApiClient } from "./AdminApiClient";
 import { TeamPinsMap, TeamPins } from "../TeamPins";
 import dayjs from "dayjs";
@@ -17,20 +17,20 @@ import { ReloadButton } from "../ReloadButton";
 import { ContestClock } from "../ContestClock";
 import { ScoreGraph } from "../ScoreGraph";
 import { Leaderboard } from "../Leaderboard";
+import type { LeaderboardItem } from "../../../proto/isuxportal/resources/leaderboard_pb";
+import type { DashboardResponse } from "../../../proto/isuxportal/services/admin/dashboard_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: AdminApiClient;
 }
 
 export const AdminDashboard: React.FC<Props> = ({ session, client }) => {
   const [requesting, setRequesting] = React.useState(false);
-  const [dashboard, setDashboard] = React.useState<isuxportal.proto.services.admin.DashboardResponse | null>(null);
+  const [dashboard, setDashboard] = React.useState<DashboardResponse | null>(null);
   const [error, setError] = React.useState<Error | null>(null);
 
-  const [pinnedTeamLeaderboardItems, setPinnedTeamLeaderboardItems] = React.useState<
-    isuxportal.proto.resources.ILeaderboardItem[]
-  >([]);
+  const [pinnedTeamLeaderboardItems, setPinnedTeamLeaderboardItems] = React.useState<LeaderboardItem[]>([]);
 
   const [teamPins, setTeamPins] = React.useState(new TeamPins());
   const [teamPinsMap, setTeamPinsMap] = React.useState(teamPins.all());
@@ -44,7 +44,7 @@ export const AdminDashboard: React.FC<Props> = ({ session, client }) => {
       const db = await client.getDashboard();
       setDashboard(db);
 
-      const items = await client.getLeaderboardItems(Array.from(teamPinsMap.keys()));
+      const items = await client.getLeaderboardItems(Array.from(teamPinsMap.keys(), (v) => BigInt(v)));
       setPinnedTeamLeaderboardItems(items);
 
       setError(null);
@@ -169,7 +169,7 @@ const DumpLeaderboard = ({ client }: { client: AdminApiClient }) => {
       })),
     );
     console.log(res.items);
-    console.log(JSON.stringify(res.items));
+    console.log(JSON.stringify(res.items, (_, v) => (typeof v === "bigint" ? v.toString() : v)));
   };
 
   return (

@@ -1,4 +1,3 @@
-import { isuxportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 
 import React from "react";
@@ -12,9 +11,11 @@ import { AudienceDashboard } from "./AudienceDashboard";
 import { Landing } from "./Landing";
 import { Registration } from "./Registration";
 import { EnvCheck } from "./EnvCheck";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
+import { Contest_Status } from "../../proto/isuxportal/resources/contest_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 }
 
@@ -37,8 +38,8 @@ export class AudienceApp extends React.Component<Props, State> {
               path="/"
               element={
                 <>
-                  {this.props.session.contest!.status == isuxportal.proto.resources.Contest.Status.FINISHED ||
-                  this.props.session.contest!.status == isuxportal.proto.resources.Contest.Status.STARTED ? (
+                  {this.props.session.contest!.status == Contest_Status.FINISHED ||
+                  this.props.session.contest!.status == Contest_Status.STARTED ? (
                     <AudienceDashboard session={this.props.session} client={this.props.client} />
                   ) : (
                     <Landing session={this.props.session} client={this.props.client} />

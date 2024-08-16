@@ -1,4 +1,3 @@
-import type { isuxportal } from "../pb";
 import { ApiError, ApiClient } from "../ApiClient";
 
 import React from "react";
@@ -7,11 +6,15 @@ import { useForm } from "react-hook-form";
 
 import { Clarification } from "../Clarification";
 import { ErrorMessage } from "../ErrorMessage";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
+import type { Clarification as ClarificationType } from "../../../proto/isuxportal/resources/clarification_pb";
+import { create } from "@bufbuild/protobuf";
+import { RequestClarificationRequestSchema } from "../../../proto/isuxportal/services/contestant/clarifications_pb";
 
 interface FormProps {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
-  onSubmit: (clar: isuxportal.proto.resources.IClarification) => any;
+  onSubmit: (clar: ClarificationType) => any;
 }
 
 const ClarForm: React.FC<FormProps> = (props: FormProps) => {
@@ -36,9 +39,11 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
   const onSubmit = handleSubmit(async (data, e) => {
     try {
       setRequesting(true);
-      const resp = await props.client.requestClarification({
-        question: data.question,
-      });
+      const resp = await props.client.requestClarification(
+        create(RequestClarificationRequestSchema, {
+          question: data.question,
+        }),
+      );
       props.onSubmit(resp.clarification!);
       e!.target.reset();
       setRequesting(false);
@@ -84,14 +89,14 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
 };
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
-  onLastClarificationIdSeenChange: (id?: number) => any;
+  onLastClarificationIdSeenChange: (id?: bigint) => any;
 }
 
 export const ContestantClarificationList: React.FC<Props> = (props: Props) => {
   const [error, setError] = React.useState<Error | null>(null);
-  const [list, setList] = React.useState<isuxportal.proto.resources.IClarification[] | null>(null);
+  const [list, setList] = React.useState<ClarificationType[] | null>(null);
 
   React.useEffect(() => {
     props.client
@@ -99,14 +104,14 @@ export const ContestantClarificationList: React.FC<Props> = (props: Props) => {
       .then((resp) => setList(resp.clarifications))
       .catch((e) => setError(e));
   }, []);
-  const onClarSubmit = (clar: isuxportal.proto.resources.IClarification) => {
+  const onClarSubmit = (clar: ClarificationType) => {
     setList(list ? [clar, ...list] : [clar]);
   };
 
   React.useEffect(() => {
     if (!list) return;
     const clar = list.find((clar) => clar.answered);
-    props.onLastClarificationIdSeenChange((clar?.id! as number) ?? undefined);
+    props.onLastClarificationIdSeenChange(clar?.id);
   }, [list]);
 
   const renderList = () => {

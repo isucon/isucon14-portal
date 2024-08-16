@@ -1,15 +1,15 @@
-import type { isuxportal } from "./pb";
-
 import React from "react";
 import uPlot from "uplot";
 
 import { COLORS } from "./ScoreGraphColors";
+import type { LeaderboardItem } from "../../proto/isuxportal/resources/leaderboard_pb";
+import type { Contest } from "../../proto/isuxportal/resources/contest_pb";
 
 interface Props {
-  teams: isuxportal.proto.resources.ILeaderboardItem[];
-  contest: isuxportal.proto.resources.IContest;
+  teams: LeaderboardItem[];
+  contest: Contest;
   width?: number;
-  teamId?: number | Long;
+  teamId?: bigint;
 }
 
 const usePrevious = <T extends unknown>(value: T) => {
@@ -20,24 +20,22 @@ const usePrevious = <T extends unknown>(value: T) => {
   return ref.current;
 };
 
-const calculateGraphCacheKey = (teams: isuxportal.proto.resources.ILeaderboardItem[]) => {
+const calculateGraphCacheKey = (teams: LeaderboardItem[]) => {
   let numTeams = teams.length;
   let numScores = teams.map((item) => (item.scoreHistory?.scores || []).length).reduce((a, b) => a + b, 0);
-  let latestTimestamp = 0;
+  let latestTimestamp = 0n;
   teams.forEach((item) => {
     (item.scoreHistory?.scores || []).forEach((score) => {
-      const ts = score.markedAt!.seconds! as number;
+      const ts = score.markedAt!.seconds;
       if (latestTimestamp < ts) latestTimestamp = ts;
     });
   });
-  return JSON.stringify([numTeams, numScores, latestTimestamp]);
+  return JSON.stringify([numTeams, numScores, latestTimestamp.toString()]);
 };
 
-const calculateTargetTeamLegendCacheKey = (targetTeams: isuxportal.proto.resources.ILeaderboardItem[]) => {
+const calculateTargetTeamLegendCacheKey = (targetTeams: LeaderboardItem[]) => {
   return JSON.stringify(
-    [...targetTeams]
-      .sort((a, b) => (a.team!.id as number) - (b.team!.id as number))
-      .map((t) => [t.team!.name, t.team!.id]),
+    [...targetTeams].sort((a, b) => Number(a.team!.id - b.team!.id)).map((t) => [t.team!.name, t.team!.id.toString()]),
   );
 };
 
@@ -49,7 +47,7 @@ export const ScoreGraph: React.FC<Props> = ({ teams, contest, width, teamId }) =
 
   const targetTeams = React.useMemo(() => {
     let t = teams;
-    if (scoreFilter) t = t.filter((item) => ((item.bestScore?.score! as number) ?? 0) >= scoreFilter);
+    if (scoreFilter) t = t.filter((item) => (item.bestScore?.score ?? 0) >= scoreFilter);
     return t;
   }, [calculateGraphCacheKey(teams), teamId, scoreFilter]);
 
@@ -60,7 +58,7 @@ export const ScoreGraph: React.FC<Props> = ({ teams, contest, width, teamId }) =
       scales: {
         x: {
           auto: false,
-          range: (min, max) => [contest.startsAt!.seconds! as number, (contest.endsAt!.seconds! as number) + 3600],
+          range: (min, max) => [Number(contest.startsAt!.seconds), Number(contest.endsAt!.seconds + 3600n)],
         },
         pt: {
           auto: true,
@@ -73,7 +71,7 @@ export const ScoreGraph: React.FC<Props> = ({ teams, contest, width, teamId }) =
         ...targetTeams.map((item) => {
           return {
             label: item.team!.name!,
-            stroke: COLORS[(item.team!.id! as number) % COLORS.length],
+            stroke: COLORS[Number(item.team!.id % BigInt(COLORS.length))],
             scale: "pt",
             id: 0,
           };
@@ -98,7 +96,7 @@ export const ScoreGraph: React.FC<Props> = ({ teams, contest, width, teamId }) =
     //console.log("ScoreGraph: setData", cacheKey);
     const timestamps: number[] = [
       ...new Set(
-        targetTeams.flatMap((item) => (item.scoreHistory?.scores || []).map((s) => s.markedAt!.seconds! as number)),
+        targetTeams.flatMap((item) => (item.scoreHistory?.scores || []).map((s) => Number(s.markedAt!.seconds))),
       ),
     ].sort((a, b) => a - b);
     const d: [number[], ...Array<Array<number | null>>] = [timestamps];
@@ -117,7 +115,7 @@ export const ScoreGraph: React.FC<Props> = ({ teams, contest, width, teamId }) =
 
         //console.log({team: item.team!.id!, tsPtr: tsPtr, scorePtr: scorePtr, now: ts, cur: scores[scorePtr]?.markedAt?.seconds!, next: scoreNext?.markedAt?.seconds! });
 
-        const markedAt = score.markedAt!.seconds! as number;
+        const markedAt = score.markedAt!.seconds;
         if (!score || (score && ts >= markedAt)) {
           if (scoreNext && ts >= markedAt) {
             scorePtr++;
@@ -128,7 +126,7 @@ export const ScoreGraph: React.FC<Props> = ({ teams, contest, width, teamId }) =
         //  series.push(null);
         //} else {
         if (scorePtr >= 0) {
-          series.push(scores[scorePtr].score! as number);
+          series.push(Number(scores[scorePtr].score));
         } else {
           series.push(0);
         }

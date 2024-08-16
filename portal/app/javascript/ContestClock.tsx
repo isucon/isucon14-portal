@@ -1,13 +1,13 @@
-import type { isuxportal } from "./pb";
 import React from "react";
 import dayjs from "dayjs";
 import durationPlugin from "dayjs/plugin/duration";
 import relativeTimePlugin from "dayjs/plugin/relativeTime";
+import type { Contest } from "../../proto/isuxportal/resources/contest_pb";
 dayjs.extend(durationPlugin);
 dayjs.extend(relativeTimePlugin);
 
 export interface Props {
-  contest: isuxportal.proto.resources.IContest;
+  contest: Contest;
 }
 
 export const ContestClock: React.FC<Props> = ({ contest }) => {
@@ -19,10 +19,8 @@ export const ContestClock: React.FC<Props> = ({ contest }) => {
     return () => clearInterval(timer);
   });
 
-  const contestStartsAt = dayjs(
-    (contest.startsAt!.seconds as number) * 1000 + (contest.startsAt!.nanos as number) / 1000000,
-  );
-  const contestEndsAt = dayjs((contest.endsAt!.seconds as number) * 1000 + (contest.endsAt!.nanos as number) / 1000000);
+  const contestStartsAt = dayjs(Number(contest.startsAt!.seconds * 1000n + BigInt(contest.startsAt!.nanos) / 1000000n));
+  const contestEndsAt = dayjs(Number(contest.endsAt!.seconds * 1000n + BigInt(contest.endsAt!.nanos) / 1000000n));
 
   const duration = contestEndsAt.diff(contestStartsAt);
   const untilEnd = contestEndsAt.diff(now);

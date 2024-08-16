@@ -1,8 +1,9 @@
 declare var self: ServiceWorkerGlobalScope; export { };
 
-import { isuxportal } from "./pb";
 import { skipWaiting, clientsClaim } from "workbox-core";
 import { openDB } from "idb";
+import { Notification, NotificationSchema } from "../../proto/isuxportal/resources/notification_pb";
+import { fromBinary } from "@bufbuild/protobuf";
 
 skipWaiting();
 clientsClaim();
@@ -41,7 +42,7 @@ const openUrl = (event: ExtendableEvent, path: string) => {
   event.waitUntil(promise);
 }
 
-const showNotification = async (n: isuxportal.proto.resources.INotification) => {
+const showNotification = async (n: Notification) => {
   const tag = `isuxportal-pushtag-${n.id}`;
   console.log("SW showNotification:", tag, n);
 
@@ -65,19 +66,19 @@ const showNotification = async (n: isuxportal.proto.resources.INotification) => 
 
   let promise: Promise<void> | null = null;
 
-  if (n.contentTest) {
-    promise = self.registration.showNotification("isuxportal test notification", { body: `test ${n.contentTest.something} ${n.id}`, tag, data: `/contestant` });
-  } else if (n.contentBenchmarkJob) {
+  if (n.content.case === "contentTest") {
+    promise = self.registration.showNotification("isuxportal test notification", { body: `test ${n.content.value.something} ${n.id}`, tag, data: `/contestant` });
+  } else if (n.content.case === "contentBenchmarkJob") {
     promise = self.registration.showNotification(
       `Benchmark Job Completed`,
       {
-        body: `Benchmark Job #${n.contentBenchmarkJob.benchmarkJobId!} has finished.`,
-        data: `/contestant/benchmark_jobs/${n.contentBenchmarkJob.benchmarkJobId!}`,
+        body: `Benchmark Job #${n.content.value.benchmarkJobId!} has finished.`,
+        data: `/contestant/benchmark_jobs/${n.content.value.benchmarkJobId!}`,
         tag,
       },
     );
-  } else if (n.contentClarification) {
-    const c = n.contentClarification;
+  } else if (n.content.case === "contentClarification") {
+    const c = n.content.value;
     let title = "Clarification updated";
     if (!c.owned && !c.admin && !c.updated) {
       title = "新しい質問と回答が公開されました";
@@ -111,7 +112,7 @@ const showNotification = async (n: isuxportal.proto.resources.INotification) => 
 
 interface LocalNotificationMessage {
   kind: "localNotification";
-  notifications: isuxportal.proto.resources.INotification[],
+  notifications: Notification[],
 }
 
 const handleLocalNotifications = async (data: LocalNotificationMessage) => {
@@ -125,7 +126,7 @@ self.addEventListener('message', (e) => {
   const data = e.data;
   switch (data.kind) {
     case "localNotification":
-      e.waitUntil(handleLocalNotifications(data as LocalNotificationMessage));
+      e.waitUntil(handleLocalNotifications(data));
       break;
     default:
       console.warn("Unknown message received at sw", data);
@@ -136,10 +137,10 @@ self.addEventListener('message', (e) => {
 self.addEventListener('push', (e) => {
   console.log("SW push", e);
   if (!e.data) return;
-  let notification: isuxportal.proto.resources.Notification | null = null;
+  let notification: Notification | null = null;
   try {
     const wire = Uint8Array.from(atob(e.data.text()), c => c.charCodeAt(0));
-    notification = isuxportal.proto.resources.Notification.decode(wire);
+    notification = fromBinary(NotificationSchema, wire);
   } catch (e) {
     console.error("SW push error while decoding", e);
   }

@@ -1,5 +1,3 @@
-import { isuxportal } from "../pb_admin";
-import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React, { useState } from "react";
@@ -10,22 +8,25 @@ import { ErrorMessage } from "../ErrorMessage";
 import { AdminTeamEdit } from "./AdminTeamEdit";
 import { Timestamp } from "../Timestamp";
 import { AdminTeamTagList } from "./AdminTeamTagList";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
+import type { Team } from "../../../proto/isuxportal/resources/team_pb";
+import type { Contestant } from "../../../proto/isuxportal/resources/contestant_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: AdminApiClient;
-  teamId: string;
+  teamId: bigint;
 }
 
 export interface State {
-  team: isuxportal.proto.resources.ITeam | null;
+  team: Team | null;
   error: Error | null;
 }
 
 export const AdminTeamDetail = (props: Omit<Props, "teamId">) => {
   const { id: teamId } = useParams();
   if (!teamId) throw new Error("teamId is required");
-  return <AdminTeamDetailInternal {...props} teamId={teamId} />;
+  return <AdminTeamDetailInternal {...props} teamId={BigInt(teamId)} />;
 };
 
 class AdminTeamDetailInternal extends React.Component<Props, State> {
@@ -43,7 +44,7 @@ class AdminTeamDetailInternal extends React.Component<Props, State> {
 
   async updateTeamInfo() {
     try {
-      const resp = await this.props.client.getTeam(parseInt(this.props.teamId, 10));
+      const resp = await this.props.client.getTeam(this.props.teamId);
       this.setState({ team: resp.team! });
     } catch (error) {
       this.setState({ error });
@@ -132,9 +133,9 @@ class AdminTeamDetailInternal extends React.Component<Props, State> {
     return this.state.team.members!.map((v) => this.renderMember(v));
   }
 
-  renderMember(member: isuxportal.proto.resources.IContestant) {
+  renderMember(member: Contestant) {
     return (
-      <div className="card mt-4" key={member.id as number}>
+      <div className="card mt-4" key={Number(member.id)}>
         <div className="card-content">
           <div className="media">
             <div className="media-left">
