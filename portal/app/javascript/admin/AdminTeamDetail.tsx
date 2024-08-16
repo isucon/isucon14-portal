@@ -23,7 +23,7 @@ export interface State {
 }
 
 export const AdminTeamDetail = (props: Omit<Props, "teamId">) => {
-  const { teamId } = useParams();
+  const { id: teamId } = useParams();
   if (!teamId) throw new Error("teamId is required");
   return <AdminTeamDetailInternal {...props} teamId={teamId} />;
 };
@@ -66,7 +66,7 @@ class AdminTeamDetailInternal extends React.Component<Props, State> {
     return (
       <Routes>
         <Route
-          path="/admin/teams/:id"
+          path=""
           element={
             <>
               {this.renderTeam()}
@@ -75,7 +75,7 @@ class AdminTeamDetailInternal extends React.Component<Props, State> {
           }
         />
         <Route
-          path="/admin/teams/:id/edit"
+          path="/edit"
           element={<AdminTeamEdit session={this.props.session} client={this.props.client} team={this.state.team} />}
         />
       </Routes>

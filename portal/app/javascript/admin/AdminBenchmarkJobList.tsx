@@ -186,25 +186,16 @@ class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
   public render() {
     return (
       <>
-        <Routes>
-          <Route
-            path="/admin/benchmark_jobs"
-            element={
-              <>
-                <header>
-                  <h1 className="title is-1">Benchmark Jobs</h1>
-                </header>
-                <main>
-                  {this.renderForm()}
-                  {this.renderFilter()}
-                  {this.renderError()}
-                  {this.renderList()}
-                  {this.renderPaginate()}
-                </main>
-              </>
-            }
-          ></Route>
-        </Routes>
+        <header>
+          <h1 className="title is-1">Benchmark Jobs</h1>
+        </header>
+        <main>
+          {this.renderForm()}
+          {this.renderFilter()}
+          {this.renderError()}
+          {this.renderList()}
+          {this.renderPaginate()}
+        </main>
       </>
     );
   }

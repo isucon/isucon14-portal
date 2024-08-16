@@ -96,7 +96,7 @@ export class AdminApp extends React.Component<Props, State> {
                     element={<AdminTeamList session={this.props.session} client={this.state.adminClient} />}
                   />
                   <Route
-                    path="/admin/teams/:id"
+                    path="/admin/teams/:id/*"
                     element={<AdminTeamDetail session={this.props.session} client={this.state.adminClient} />}
                   />
                   <Route
