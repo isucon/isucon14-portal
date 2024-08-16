@@ -20,6 +20,7 @@ export const ContestantDiscordPage: React.FC<Props> = ({ session }) => {
         width="350"
         height="500"
         frameBorder={0}
+        sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
       ></iframe>
     </div>
   );
