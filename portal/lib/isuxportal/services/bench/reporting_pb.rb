@@ -4,7 +4,6 @@
 require 'google/protobuf'
 
 require 'isuxportal/resources/benchmark_result_pb'
-
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("isuxportal/services/bench/reporting.proto", :syntax => :proto3) do
     add_message "isuxportal.proto.services.bench.ReportBenchmarkResultRequest" do
