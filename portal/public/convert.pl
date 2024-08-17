@@ -12,7 +12,7 @@ while (my $filename = <>) {
 			say "Skipping $filename";
 			next;
 		}
-		my @cmd = ('convert',  '-geometry', "${w}x${h}", "../../materials/12-150x150.png", $filename);
+		my @cmd = ('magick', "../../materials/14-150x150.png", '-geometry', "${w}x${h}" , $filename);
 		say "@cmd";
 		system @cmd;
 	}
