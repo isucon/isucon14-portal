@@ -56,7 +56,12 @@ class SessionsController < ApplicationController
   def discord_callback
     auth = request.env['omniauth.auth']
 
-    tag = "#{auth['extra']['raw_info']['username']}##{auth['extra']['raw_info']['discriminator']}"
+    discriminator = auth['extra']['raw_info']['discriminator']
+    tag = "#{auth['extra']['raw_info']['username']}"
+    if discriminator != '0' # discriminatorのなくなったアカウントは0になっている
+      tag += "##{discriminator}"
+    end
+
     session[:discord_login] = {id: auth['uid'], tag: tag, token: auth['credentials']['token'], avatar_url: auth['info']['image']}
     contestant = Contestant.include_disqualified.find_by(discord_id: auth['uid'])
 
