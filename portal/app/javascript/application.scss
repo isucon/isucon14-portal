@@ -140,11 +140,11 @@ body.isux-session-guest .isux-visibility-guest {
     }
     .level .level-left {
       min-width: 0;
+      white-space: nowrap;
+      word-break: keep-all;
       @media screen and (min-width: 1024px) {
         max-width: 130px;
       }
-      white-space: nowrap;
-      word-break: keep-all;
     }
     .level .level-right {
       text-align: right;
@@ -215,6 +215,8 @@ body.isux-session-guest .isux-visibility-guest {
 }
 
 .pagination {
+  width: fit-content;
+
   .pagination-nextprevious-disabled {
     background-color: #dbdbdb;
     border-color: #dbdbdb;
@@ -226,8 +228,6 @@ body.isux-session-guest .isux-visibility-guest {
   .pagination-nextprevious-disabled a {
     color: gray;
   }
-
-  width: fit-content;
 }
 
 $fPrimary: #19935c;

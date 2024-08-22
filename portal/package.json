@@ -27,7 +27,7 @@
     "@bufbuild/protobuf": "^2.0.0",
     "@rails/ujs": "^6.1.6",
     "@sentry/browser": "^8.26.0",
-    "bulma": "^0.9.4",
+    "bulma": "^1.0.2",
     "dayjs": "^1.11.12",
     "idb": "^8.0.0",
     "protobufjs": "~6.9.0",
