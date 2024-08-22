@@ -59,7 +59,7 @@ const TeamItem: React.FC<TeamItemProps> = (props: TeamItemProps) => {
             className={`isux-pin-button is-small ${
               pinned ? "material-icons has-text-danger" : "material-icons-outlined has-text-grey-light"
             }`}
-            onClick={() => onPin(item.team!.id!.toString(), !pinned)}
+            onClick={() => onPin(item.team!.id.toString(), !pinned)}
           >
             push_pin
           </i>
@@ -67,10 +67,10 @@ const TeamItem: React.FC<TeamItemProps> = (props: TeamItemProps) => {
       </th>
       <th className="has-text-right">{position}</th>
       <td>
-        {item.team!.id}: {item.team!.name}
+        {item.team!.id.toString()}: {item.team!.name}
       </td>
-      <td className="has-text-right">{item.bestScore?.score || 0}</td>
-      <td className="has-text-weight-semibold has-text-right">{item.latestScore?.score || 0}</td>
+      <td className="has-text-right">{(item.bestScore?.score || 0n).toString()}</td>
+      <td className="has-text-weight-semibold has-text-right">{(item.latestScore?.score || 0n).toString()}</td>
       <td>{item.latestScore ? <Timestamp timestamp={item.latestScore.markedAt!} short /> : "N/A"}</td>
       <td>{studentStatus}</td>
     </tr>

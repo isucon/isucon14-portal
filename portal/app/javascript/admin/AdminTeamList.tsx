@@ -5,7 +5,10 @@ import { Link } from "react-router-dom";
 
 import { ErrorMessage } from "../ErrorMessage";
 import { AdminTeamTagList } from "./AdminTeamTagList";
-import type { ListTeamsResponse, ListTeamsResponse_TeamListItem } from "../../../proto/isuxportal/services/admin/teams_pb";
+import type {
+  ListTeamsResponse,
+  ListTeamsResponse_TeamListItem,
+} from "../../../proto/isuxportal/services/admin/teams_pb";
 import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
 
 export interface Props {
@@ -77,8 +80,8 @@ export class AdminTeamList extends React.Component<Props, State> {
 
   renderTeam(team: ListTeamsResponse_TeamListItem, i: number) {
     return (
-      <tr key={Number(team.teamId)}>
-        <td>{team.teamId}</td>
+      <tr key={team.teamId.toString()}>
+        <td>{team.teamId.toString()}</td>
         <td>
           <Link to={`/admin/teams/${encodeURIComponent(team.teamId.toString())}`}>{team.name}</Link>
         </td>

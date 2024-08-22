@@ -102,7 +102,7 @@ export const AdminDashboard: React.FC<Props> = ({ session, client }) => {
           <div className="level-item has-text-centered">
             <div>
               <p className="heading">Unanswered clars</p>
-              <p className="title">{dashboard.unansweredClarificationCount}</p>
+              <p className="title">{dashboard.unansweredClarificationCount.toString()}</p>
             </div>
           </div>
           <div className="level-item has-text-centered">

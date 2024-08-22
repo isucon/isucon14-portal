@@ -68,8 +68,8 @@ export const ContestantBenchmarkJobForm: React.FC<Props> = (props: Props) => {
                 <select {...register("targetId")}>
                   {(props.session.contestantInstances || []).map((ci) => {
                     return (
-                      <option key={ci.id!.toString()} value={ci.id!.toString()}>
-                        {ci.number}: {ci.privateIpv4Address} ({ci.publicIpv4Address})
+                      <option key={ci.id.toString()} value={ci.id.toString()}>
+                        {ci.number.toString()}: {ci.privateIpv4Address} ({ci.publicIpv4Address})
                       </option>
                     );
                   })}

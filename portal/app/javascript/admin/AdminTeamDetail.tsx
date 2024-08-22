@@ -104,7 +104,7 @@ class AdminTeamDetailInternal extends React.Component<Props, State> {
             </p>
 
             <div className="content">
-              <p>ID: {this.state.team.id}</p>
+              <p>ID: {this.state.team.id.toString()}</p>
               <p>
                 代表者メールアドレス:{" "}
                 <a href={`mailto:${this.state.team.detail!.emailAddress}`}>{this.state.team.detail!.emailAddress}</a>
@@ -135,7 +135,7 @@ class AdminTeamDetailInternal extends React.Component<Props, State> {
 
   renderMember(member: Contestant) {
     return (
-      <div className="card mt-4" key={Number(member.id)}>
+      <div className="card mt-4" key={member.id.toString()}>
         <div className="card-content">
           <div className="media">
             <div className="media-left">

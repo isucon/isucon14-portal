@@ -18,9 +18,9 @@ export const BenchmarkJobList: React.FC<Props> = (props: Props) => {
         <td>
           <Link to={`/contestant/benchmark_jobs/${encodeURIComponent(id)}`}>#{id}</Link>
         </td>
-        <td className="has-text-right">{job.score}</td>
+        <td className="has-text-right">{job.score.toString()}</td>
         <td>
-          <BenchmarkJobStatus status={job.status!} />
+          <BenchmarkJobStatus status={job.status} />
         </td>
         <td>
           <Timestamp timestamp={job.createdAt!} />

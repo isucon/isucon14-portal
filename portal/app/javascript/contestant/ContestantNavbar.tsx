@@ -92,14 +92,14 @@ export class ContestantNavbar extends React.Component<Props, State> {
                 <div className="media isux-navbar-contestant">
                   <div className="media-left">
                     <p className="image">
-                      <img src={this.props.session.contestant!.detail!.avatarUrl!} height={32} width={32} />
+                      <img src={this.props.session.contestant!.detail!.avatarUrl} height={32} width={32} />
                     </p>
                   </div>
                   <div className="media-content">
                     <p className="">{this.props.session.contestant!.name}</p>
                     <div className="level is-size-7 is-mobile">
                       <div className="level-left">{this.props.session.team!.name}</div>
-                      <div className="level-right">(チームID: {this.props.session.team!.id})</div>
+                      <div className="level-right">(チームID: {this.props.session.team!.id.toString()})</div>
                     </div>
                   </div>
                 </div>

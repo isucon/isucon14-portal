@@ -172,11 +172,11 @@ class AdminContestantInstanceListInternal extends React.Component<Props, State> 
           </a>
         </td>
         <td>
-          <Link to={`/admin/teams/${ci.team!.id!.toString()}`}>
-            {ci.team!.name} (#{ci.team!.id})
+          <Link to={`/admin/teams/${ci.team!.id}`}>
+            {ci.team!.name} (#{ci.team!.id.toString()})
           </Link>
         </td>
-        <td>{ci.number}</td>
+        <td>{ci.number.toString()}</td>
         <td>{ci.privateIpv4Address}</td>
         <td>{ci.publicIpv4Address}</td>
         <td>

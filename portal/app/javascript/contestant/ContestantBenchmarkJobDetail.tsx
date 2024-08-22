@@ -73,7 +73,7 @@ export class ContestantBenchmarkJobDetailInternal extends React.Component<Props,
         <header className="block">
           <div className="level">
             <div className="level-left">
-              <h1 className="title is-1">Job #{this.props.id}</h1>
+              <h1 className="title is-1">Job #{this.props.id.toString()}</h1>
             </div>
             <div className="level-right">
               <ReloadButton requesting={this.state.requesting} onClick={this.updateJob.bind(this)} />

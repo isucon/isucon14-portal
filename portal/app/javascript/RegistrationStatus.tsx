@@ -262,7 +262,7 @@ export class RegistrationStatus extends React.Component<Props, State> {
 
   renderTeamMember(member: Contestant) {
     return (
-      <div className="card mt-2 isux-registration-member-card" key={member.id!.toString()}>
+      <div className="card mt-2 isux-registration-member-card" key={member.id.toString()}>
         <div className="card-content">
           <div className="media">
             <div className="media-left">

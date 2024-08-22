@@ -130,7 +130,7 @@ const onLeaderboardUpdate = (
         lastPosition={lastPosition!}
         lastScore={lastScore}
         lastBestScore={lastBestScore}
-        key={`${key}-${item.team!.id!.toString()}`}
+        key={`${key}-${item.team!.id}`}
       />
     );
   };

@@ -117,7 +117,7 @@ export const ContestantClarificationList: React.FC<Props> = (props: Props) => {
   const renderList = () => {
     if (!list) return null;
     return list.map((clar) => {
-      return <Clarification clarification={clar} admin={false} key={clar.id!.toString()} />;
+      return <Clarification clarification={clar} admin={false} key={clar.id.toString()} />;
     });
   };
 

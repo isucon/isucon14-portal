@@ -187,13 +187,13 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
                         )
                         .map((v) => (
                           <ClarQuickButton
-                            id={v.id!.toString()}
+                            id={v.id.toString()}
                             body={`${
-                              v.disclosed ? `既に Clarification #${v.id!} で回答されている内容です(再掲します)\n\n` : ""
+                              v.disclosed ? `既に Clarification #${v.id} で回答されている内容です(再掲します)\n\n` : ""
                             }${v.answer!}`}
                             caption={v.answer!.slice(0, 25)}
                             onClick={onQuickButton}
-                            key={v.id!.toString()}
+                            key={v.id.toString()}
                           />
                         ))}
                     </div>

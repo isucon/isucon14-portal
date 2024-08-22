@@ -19,11 +19,11 @@ const renderJobSummary = (job: BenchmarkJob, admin: boolean) => {
       </header>
       <div className="card-content">
         <p>
-          <b>ID:</b> {job.id}
+          <b>ID:</b> {job.id.toString()}
         </p>
         <p>
-          <b>Target:</b> #{job.target!.number}: {job.target!.privateIpv4Address} ({job.target!.publicIpv4Address}){" "}
-          {admin ? `(#${job.target!.id}, ${job.target!.cloudId})` : null}
+          <b>Target:</b> #{job.target!.number.toString()}: {job.target!.privateIpv4Address} (
+          {job.target!.publicIpv4Address}) {admin ? `(#${job.target!.id.toString()}, ${job.target!.cloudId})` : null}
         </p>
         <p>
           <b>Status:</b> <BenchmarkJobStatus status={job.status!} />
@@ -89,11 +89,12 @@ const renderJobResult = (job: BenchmarkJob) => {
           <b>Marked At:</b> <Timestamp timestamp={result.markedAt!} />
         </p>
         <p>
-          <b>Score:</b> {result.score}
+          <b>Score:</b> {result.score.toString()}
         </p>
         {result.scoreBreakdown ? (
           <p>
-            <b>Score Breakdown:</b> base={result.scoreBreakdown.raw}, deduction={result.scoreBreakdown.deduction}
+            <b>Score Breakdown:</b> base={result.scoreBreakdown.raw.toString()}, deduction=
+            {result.scoreBreakdown.deduction.toString()}
           </p>
         ) : null}
       </div>

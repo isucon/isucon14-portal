@@ -58,7 +58,7 @@ const TeamItem: React.FC<TeamItemProps> = ({ position, lastPosition, changed, it
       </div>
       <div className="column isux-broadcast-leaderboard-item-student">{studentStatus}</div>
       <div className="column has-text-right isux-broadcast-leaderboard-item-score">
-        <p>{item.latestScore?.score || 0}</p>
+        <p>{(item.latestScore?.score || 0n).toString()}</p>
       </div>
     </div>
   );
