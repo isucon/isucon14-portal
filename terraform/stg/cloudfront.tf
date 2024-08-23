@@ -2,7 +2,10 @@ resource "aws_cloudfront_distribution" "portal" {
   enabled         = true
   is_ipv6_enabled = true
   comment         = "${local.env}-portal"
-  aliases         = ["portal.${aws_route53_zone.xii.name}"]
+
+  aliases = [
+    aws_route53_zone.portal.name // APEX
+  ]
 
   viewer_certificate {
     acm_certificate_arn      = aws_acm_certificate.wildcard-use1.arn

@@ -4,7 +4,9 @@ locals {
 }
 
 provider "aws" {
-  region = "ap-northeast-1"
+  profile = "portal-prod"
+  region  = "ap-northeast-1"
+
   default_tags {
     tags = {
       Project = local.project
@@ -14,8 +16,10 @@ provider "aws" {
 }
 
 provider "aws" {
-  region = "us-east-1"
-  alias  = "us-east-1"
+  profile = "portal-prod"
+  region  = "us-east-1"
+  alias   = "us-east-1"
+
   default_tags {
     tags = {
       Project = local.project
@@ -25,18 +29,11 @@ provider "aws" {
 }
 
 terraform {
-  required_version = "= 1.1.9"
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "= 4.14.0"
-    }
-  }
-
   backend "s3" {
-    bucket = "tfstate-prod-portal-isucon14"
+    profile = "portal-prod"
+    region  = "ap-northeast-1"
+
+    bucket = "tfstate-isucon14-portal-prod"
     key    = "terraform.tfstate"
-    region = "ap-northeast-1"
   }
 }
