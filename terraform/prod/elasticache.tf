@@ -26,7 +26,7 @@ resource "aws_elasticache_replication_group" "main" {
   num_cache_clusters   = 1
   port                 = 6379
   parameter_group_name = aws_elasticache_parameter_group.redis6x.name
-  availability_zones = [
+  preferred_cache_cluster_azs = [
     "ap-northeast-1c",
   ]
   automatic_failover_enabled = false
