@@ -2,17 +2,24 @@ resource "aws_s3_bucket" "logs" {
   bucket = "logs-${local.env}-${local.project}-isucon14"
 }
 
+// CloudFront の Access Logs は ACL が有効でないといけないのでACLを有効に
+resource "aws_s3_bucket_ownership_controls" "logs" {
+  bucket = aws_s3_bucket.logs.bucket
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
 resource "aws_s3_bucket_server_side_encryption_configuration" "logs" {
   bucket = aws_s3_bucket.logs.bucket
   rule {
     apply_server_side_encryption_by_default {
-      kms_master_key_id = aws_kms_key.main.arn
-      sse_algorithm     = "aws:kms"
+      sse_algorithm = "AES256"
     }
   }
 }
 
-resource "aws_s3_bucket_acl" "example_bucket_acl" {
+resource "aws_s3_bucket_acl" "logs_bucket_acl" {
   bucket = aws_s3_bucket.logs.id
   acl    = "private"
 }
@@ -72,17 +79,10 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "config" {
   bucket = aws_s3_bucket.config.bucket
   rule {
     apply_server_side_encryption_by_default {
-      kms_master_key_id = aws_kms_key.main.arn
-      sse_algorithm     = "aws:kms"
+      sse_algorithm = "AES256"
     }
   }
 }
-
-resource "aws_s3_bucket_acl" "config" {
-  bucket = aws_s3_bucket.config.id
-  acl    = "private"
-}
-
 resource "aws_s3_bucket_public_access_block" "config" {
   bucket              = aws_s3_bucket.config.id
   block_public_acls   = true

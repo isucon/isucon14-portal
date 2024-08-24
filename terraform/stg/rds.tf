@@ -86,11 +86,11 @@ resource "aws_db_subnet_group" "main" {
 }
 
 resource "aws_rds_cluster" "main" {
-  cluster_identifier = "${local.env}-${local.project}"
-  engine             = "aurora-mysql"
-  engine_version     = "8.0.mysql_aurora.3.02.0"
-  master_username    = "root"
-  master_password    = "dummydummy" // apply後に変更する
+  cluster_identifier          = "${local.env}-${local.project}"
+  engine                      = "aurora-mysql"
+  engine_version              = "8.0.mysql_aurora.3.07.1"
+  master_username             = "root"
+  manage_master_user_password = true
 
   preferred_backup_window         = "16:28-16:58"
   preferred_maintenance_window    = "wed:18:30-wed:19:00"
@@ -111,11 +111,6 @@ resource "aws_rds_cluster" "main" {
     min_capacity = 0.5
   }
 
-  lifecycle {
-    ignore_changes = [
-      master_password,
-    ]
-  }
 }
 
 resource "aws_rds_cluster_instance" "main-1" {
