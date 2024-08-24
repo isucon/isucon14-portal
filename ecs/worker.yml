@@ -1,4 +1,4 @@
-required_version: ">= 1.7.10, < 2.0.0"
+required_version: ">= 2.0.0"
 region: ap-northeast-1
 cluster: "{{ must_env `ENV` }}-portal"
 service: worker
@@ -9,4 +9,3 @@ plugins:
   - name: tfstate
     config:
       url: "s3://tfstate-{{ must_env `ENV` }}-portal-isucon14/terraform.tfstate"
-filter_command: peco

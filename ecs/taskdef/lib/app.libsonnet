@@ -5,14 +5,14 @@
       name: 'ISUXPORTAL_SHORYUKEN_QUEUE',
       value: '{{ tfstate `aws_sqs_queue.activejob.name` }}',
     },
-    {
-      name: 'ISUXPORTAL_TEST_AMI_ID',
-      value: '{{ tfstate `data.aws_ami.envcheck.id` }}',
-    },
-    {
-      name: 'ISUXPORTAL_QUALIFY_AMI_ID',
-      value: '{{ tfstate `data.aws_ami.qualify.id` }}',
-    },
+      // {
+      //   name: 'ISUXPORTAL_TEST_AMI_ID',
+      //   value: '{{ tfstate `data.aws_ami.envcheck.id` }}',
+      // },
+      // {
+      //   name: 'ISUXPORTAL_QUALIFY_AMI_ID',
+      //   value: '{{ tfstate `data.aws_ami.qualify.id` }}',
+      // },
   ],
   environmentFiles: [
     {
