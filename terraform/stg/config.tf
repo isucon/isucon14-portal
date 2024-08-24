@@ -1,7 +1,11 @@
+
+data "aws_caller_identity" "current" {}
 locals {
-  env     = "stg"
-  project = "portal"
+  env           = "stg"
+  project       = "portal"
+  root_user_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
 }
+
 
 provider "aws" {
   profile = "portal-stg"

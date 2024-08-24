@@ -1,5 +1,5 @@
 data "aws_iam_role" "admin" {
-  name = "AdminRole"
+  name = "AWSReservedSSO_AdministratorAccess_71a4d573abfa63cc"
 }
 
 resource "aws_iam_role" "rds-monitoring" {
