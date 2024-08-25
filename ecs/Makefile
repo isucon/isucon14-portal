@@ -1,37 +1,34 @@
 export ENV?=stg
 export TAG?=$(shell git log -1 --format=%H)
 export ECR?=$(shell jq -r '.credHelpers | keys | .[0]' .docker/config.json)
-export KMS=arn:aws:kms:ap-northeast-1:497146501771:alias/$(ENV)-portal
-
+export SOPS_KMS_ARN?=arn:aws:kms:ap-northeast-1:692859926955:alias/$(ENV)-portal
+DOCKER_CMD=docker --config .docker
 build/app:
 	cd ../portal && \
-	docker --config .docker \
-		build \
+	$(DOCKER_CMD) build \
 		--build-arg ENV=$(ENV) \
 		-t $(ECR)/$(ENV)/portal/app:$(TAG) .
 
 build/nginx:
 	cd nginx && \
-	docker --config .docker \
-		build \
+	$(DOCKER_CMD) build \
 		-t $(ECR)/$(ENV)/portal/nginx:$(TAG) .
 
 push/%:
-	docker --config .docker \
-		push $(ECR)/$(ENV)/portal/$*:$(TAG)
+	$(DOCKER_CMD) push $(ECR)/$(ENV)/portal/$*:$(TAG)
 
 build: build/app build/nginx
 
 push: push/app push/nginx
 
 create/%:
-	ecspresso create --config $*.yml
+	ecspresso deploy --config $*.yml
 
 diff/env: $(ENV).env
 	bash -c 'diff -u <(aws s3 cp s3://config-$(ENV)-portal-isucon14/ecs/$(ENV).env -) $(ENV).env' || exit 0
 
 diff/%: diff/env
-	ecspresso diff --unified --config $*.yml
+	ecspresso diff --config $*.yml
 
 verify/%:
 	ecspresso verify --config $*.yml
@@ -49,7 +46,7 @@ deploy/bot: verify/bot
 	ecspresso deploy --config bot.yml
 
 rollback/%:
-	ecspresso rollback --deregister-task-definition --config $*.yml
+	ecspresso rollback --config $*.yml
 
 scale/%:
 	ecspresso scale --tasks=$(TASKS) --config $*.yml
