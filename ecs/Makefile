@@ -1,7 +1,7 @@
 export ENV?=stg
 export TAG?=$(shell git log -1 --format=%H)
 export ECR?=$(shell jq -r '.credHelpers | keys | .[0]' .docker/config.json)
-export SOPS_KMS_ARN?=arn:aws:kms:ap-northeast-1:692859926955:alias/stg-portal
+export SOPS_KMS_ARN?=arn:aws:kms:ap-northeast-1:692859926955:alias/$(ENV)-portal
 DOCKER_CMD=docker --config .docker
 build/app:
 	cd ../portal && \
