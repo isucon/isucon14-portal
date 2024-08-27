@@ -2,8 +2,8 @@
 require_relative '../config/environment'
 $stdout.sync = true
 
-require 'webpush'
+require 'web-push'
 require 'json'
 
-k = Webpush.generate_key
+k = WebPush.generate_key
 puts k.curve.to_pem.to_json

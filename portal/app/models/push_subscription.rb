@@ -9,13 +9,13 @@ class PushSubscription < ApplicationRecord
   validate :validate_endpoint_is_url
 
   private def validate_p256dh
-    _point = OpenSSL::PKey::EC::Point.new(OpenSSL::PKey::EC::Group.new('prime256v1'), OpenSSL::BN.new(Webpush.decode64(p256dh), 2))
+    _point = OpenSSL::PKey::EC::Point.new(OpenSSL::PKey::EC::Group.new('prime256v1'), OpenSSL::BN.new(WebPush.decode64(p256dh), 2))
   rescue ArgumentError, OpenSSL::PKey::EC::Point::Error
     errors.add :p256dh, "must be valid"
   end
 
   private def validate_auth
-    Webpush.decode64(auth)
+    WebPush.decode64(auth)
   rescue ArgumentError
     errors.add :auth, "must be valid"
   end

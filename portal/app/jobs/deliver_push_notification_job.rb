@@ -12,7 +12,7 @@ class DeliverPushNotificationJob < ApplicationJob
     Rails.logger.info "notification_id=#{notification.id} contestant_id=#{notification.contestant_id} subscription_id=#{subscription.id}"
 
     pb = notification.to_pb
-    Webpush.payload_send(
+    WebPush.payload_send(
       message: [pb.class.encode(pb)].pack("m0"),
       endpoint: subscription.endpoint,
       p256dh: subscription.p256dh,
@@ -21,7 +21,7 @@ class DeliverPushNotificationJob < ApplicationJob
         key.to_h.merge(subject: Rails.application.config.x.webpush.subject)
       end,
     )
-  rescue Webpush::ExpiredSubscription, Webpush::InvalidSubscription => e
+  rescue WebPush::ExpiredSubscription, WebPush::InvalidSubscription => e
     Rails.logger.warn "notification_id=#{notification.id} contestant_id=#{notification.contestant_id} subscription_id=#{subscription.id} #{e.inspect}"
     subscription.destroy
   end
