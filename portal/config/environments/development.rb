@@ -117,7 +117,7 @@ Rails.application.configure do
   config.x.rules_url = ENV.fetch('ISUXPORTAL_RULES_URL', 'https://isucon.net/archives/55854734.html')
   config.x.docs_url = ENV.fetch('ISUXPORTAL_DOCS_URL', 'https://gist.github.com/progfay/25edb2a9ede4ca478cb3e2422f1f12f6')
 
-  config.x.webpush.vapid_key = ENV['ISUXPORTAL_VAPID_PRIVATE_KEY']&.yield_self { |_| Webpush::VapidKey.from_pem(JSON.parse(_)) }
+  config.x.webpush.vapid_key = ENV['ISUXPORTAL_VAPID_PRIVATE_KEY']&.yield_self { |_| WebPush::VapidKey.from_pem(JSON.parse(_)) }
   config.x.webpush.vapid_key_public = config.x.webpush.vapid_key&.public_key_for_push_header
   config.x.webpush.subject = ENV['ISUXPORTAL_VAPID_SUBJECT'] || 'isucon10@googlegroups.com'
 

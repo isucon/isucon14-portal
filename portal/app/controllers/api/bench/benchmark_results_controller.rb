@@ -1,3 +1,6 @@
+
+require 'isuxportal/services/bench/reporting_pb'
+require 'isuxportal/services/bench/reporting_services_pb'
 class Api::Bench::BenchmarkResultsController < Api::Bench::ApplicationController
   pb :create, Isuxportal::Proto::Services::Bench::ReportBenchmarkResultRequest
   def create

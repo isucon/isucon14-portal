@@ -1,3 +1,5 @@
+require 'isuxportal/services/bench/receiving_pb'
+require 'isuxportal/services/bench/receiving_services_pb'
 class Api::Bench::QueueController < Api::Bench::ApplicationController
   before_action :validate_token
 
