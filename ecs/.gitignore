@@ -1,3 +1,4 @@
 stg.env
 prod.env
 *.backup
+*.pem
