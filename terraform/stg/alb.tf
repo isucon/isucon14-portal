@@ -43,6 +43,7 @@ resource "aws_lb_listener" "https" {
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
   certificate_arn   = aws_acm_certificate.wildcard.arn
+
   default_action {
     type = "fixed-response"
 
@@ -77,6 +78,19 @@ resource "aws_lb_target_group" "app" {
 resource "aws_lb_listener_rule" "app" {
   listener_arn = aws_lb_listener.https.arn
   priority     = 10
+
+  action {
+    type = "authenticate-cognito"
+
+    authenticate_cognito {
+      user_pool_arn              = aws_cognito_user_pool.developers.arn
+      user_pool_client_id        = aws_cognito_user_pool_client.client.id
+      user_pool_domain           = aws_cognito_user_pool_domain.domain.domain
+      on_unauthenticated_request = "authenticate"
+      session_timeout            = "86400"
+      session_cookie_name        = "AWSELBAuthSessionCookie"
+    }
+  }
 
   action {
     type             = "forward"

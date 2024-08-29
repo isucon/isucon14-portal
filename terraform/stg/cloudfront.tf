@@ -43,12 +43,13 @@ resource "aws_cloudfront_distribution" "portal" {
       query_string = false
       headers      = ["Host"]
       cookies {
-        forward = "none"
+        forward           = "whitelist"
+        whitelisted_names = ["AWSALBAuthNonce", "AWSELBAuthSessionCookie*"]
       }
     }
     min_ttl                = 0
-    default_ttl            = 31536000
-    max_ttl                = 31536000
+    default_ttl            = 86400 // NOTE: stgで認証を書けているので認証切れた後にキャッシュされないようにしている
+    max_ttl                = 86400
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
   }
@@ -62,7 +63,8 @@ resource "aws_cloudfront_distribution" "portal" {
       query_string = true
       headers      = ["Host", "Accept"]
       cookies {
-        forward = "none"
+        forward           = "whitelist"
+        whitelisted_names = ["AWSALBAuthNonce", "AWSELBAuthSessionCookie*"]
       }
 
     }
@@ -83,7 +85,7 @@ resource "aws_cloudfront_distribution" "portal" {
       headers      = ["Host", "Accept", "X-Csrf-Token", "User-Agent"]
       cookies {
         forward           = "whitelist"
-        whitelisted_names = ["__Host-isuxportal_sess"]
+        whitelisted_names = ["__Host-isuxportal_sess", "AWSALBAuthNonce", "AWSELBAuthSessionCookie*"]
       }
     }
     min_ttl                = 0
@@ -103,7 +105,7 @@ resource "aws_cloudfront_distribution" "portal" {
       headers      = ["Host", "Accept", "X-Csrf-Token", "User-Agent"]
       cookies {
         forward           = "whitelist"
-        whitelisted_names = ["__Host-isuxportal_sess"]
+        whitelisted_names = ["__Host-isuxportal_sess", "AWSALBAuthNonce", "AWSELBAuthSessionCookie*"]
       }
     }
     min_ttl                = 0
@@ -123,7 +125,7 @@ resource "aws_cloudfront_distribution" "portal" {
       headers      = ["Host", "Accept", "X-Csrf-Token", "User-Agent"]
       cookies {
         forward           = "whitelist"
-        whitelisted_names = ["__Host-isuxportal_sess"]
+        whitelisted_names = ["__Host-isuxportal_sess", "AWSALBAuthNonce", "AWSELBAuthSessionCookie*"]
       }
     }
     min_ttl                = 0
