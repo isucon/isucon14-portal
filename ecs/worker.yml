@@ -8,4 +8,4 @@ timeout: 10m0s
 plugins:
   - name: tfstate
     config:
-      url: "s3://tfstate-{{ must_env `ENV` }}-portal-isucon14/terraform.tfstate"
+      url: "s3://tfstate-isucon14-portal-{{ must_env `ENV` }}/terraform.tfstate"
