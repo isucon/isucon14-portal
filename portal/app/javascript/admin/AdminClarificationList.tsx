@@ -222,7 +222,7 @@ const AdminClarificationListInternal: React.FC<Props> = (props: Props) => {
 
   React.useEffect(() => {
     props.client
-      .listClarifications(teamId ? BigInt(teamId) : 0n, unansweredOnly)
+      .listClarifications(teamId ? BigInt(teamId) : undefined, unansweredOnly)
       .then((resp) => setList(resp.clarifications))
       .catch((e) => setError(e));
   }, [location.search]);
