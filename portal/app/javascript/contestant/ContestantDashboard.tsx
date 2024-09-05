@@ -1,4 +1,3 @@
-import { isuxportal } from "../pb";
 import { ApiError, ApiClient } from "../ApiClient";
 import { TeamPinsMap, TeamPins } from "../TeamPins";
 
@@ -14,9 +13,13 @@ import { BenchmarkJobList } from "../BenchmarkJobList";
 import { ContestantBenchmarkJobForm } from "./ContestantBenchmarkJobForm";
 import { Leaderboard } from "../Leaderboard";
 import { ContestantNotificationSubscriptionPanel } from "./ContestantNotificationSubscriptionPanel";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
+import type { DashboardResponse } from "../../../proto/isuxportal/services/audience/dashboard_pb";
+import type { BenchmarkJob } from "../../../proto/isuxportal/resources/benchmark_job_pb";
+import type { LeaderboardItem } from "../../../proto/isuxportal/resources/leaderboard_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 
   serviceWorker: ServiceWorkerRegistration | null;
@@ -28,13 +31,11 @@ export const ContestantDashboard: React.FC<Props> = (props: Props) => {
   const { session, client } = props;
   const [requestingDashboard, setRequestingDashboard] = React.useState(false);
   const [requestingJobs, setRequestingJobs] = React.useState(false);
-  const [dashboard, setDashboard] = React.useState<isuxportal.proto.services.audience.IDashboardResponse | null>(null);
-  const [jobs, setJobs] = React.useState<isuxportal.proto.resources.IBenchmarkJob[] | null>(null);
+  const [dashboard, setDashboard] = React.useState<DashboardResponse | null>(null);
+  const [jobs, setJobs] = React.useState<BenchmarkJob[] | null>(null);
   const [error, setError] = React.useState<Error | null>(null);
 
-  const [pinnedTeamLeaderboardItems, setPinnedTeamLeaderboardItems] = React.useState<
-    isuxportal.proto.resources.ILeaderboardItem[]
-  >([]);
+  const [pinnedTeamLeaderboardItems, setPinnedTeamLeaderboardItems] = React.useState<LeaderboardItem[]>([]);
 
   const [teamPins, setTeamPins] = React.useState(new TeamPins());
   const [teamPinsMap, setTeamPinsMap] = React.useState(teamPins.all());
@@ -45,10 +46,10 @@ export const ContestantDashboard: React.FC<Props> = (props: Props) => {
     setRequestingDashboard(true);
 
     try {
-      const db = await client.getContestantMergedDashboard(session.team!.id! as number);
+      const db = await client.getContestantMergedDashboard(session.team!.id);
       setDashboard(db);
 
-      const items = await client.getAudienceLeaderboardItems(Array.from(teamPinsMap.keys()));
+      const items = await client.getAudienceLeaderboardItems(Array.from(teamPinsMap.keys(), (v) => BigInt(v)));
       setPinnedTeamLeaderboardItems(items);
 
       setError(null);
@@ -142,7 +143,7 @@ export const ContestantDashboard: React.FC<Props> = (props: Props) => {
         </div>
       </section>
       <section className="is-fullwidth py-5 is-hidden-touch">
-        <ScoreGraph teams={scoreGraphTeams} contest={session.contest!} teamId={session.team!.id!} />
+        <ScoreGraph teams={scoreGraphTeams} contest={session.contest!} teamId={session.team!.id} />
       </section>
       <div className="columns">
         <div className="column is-7 px-5">

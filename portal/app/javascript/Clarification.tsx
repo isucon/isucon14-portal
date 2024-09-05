@@ -1,14 +1,12 @@
-import type { isuxportal } from "./pb";
-import { ApiError, ApiClient } from "./ApiClient";
-
 import React from "react";
 import { Link } from "react-router-dom";
 
 import { Timestamp } from "./Timestamp";
 import { TimeDuration } from "./TimeDuration";
+import type { Clarification as ClarificationType } from "../../proto/isuxportal/resources/clarification_pb";
 
 export interface Props {
-  clarification: isuxportal.proto.resources.IClarification;
+  clarification: ClarificationType;
   admin: boolean;
 }
 
@@ -29,7 +27,7 @@ export const Clarification: React.FC<Props> = (props: Props) => {
     const text = [
       ` ${clar.originalQuestion}`,
       `  ${clar.answer}`,
-      `  ${location.origin}/admin/clarifications/${encodeURIComponent(clar.id!.toString())}`,
+      `  ${location.origin}/admin/clarifications/${encodeURIComponent(clar.id.toString())}`,
     ];
     await navigator.clipboard.writeText(text.join("\n"));
   };
@@ -37,7 +35,7 @@ export const Clarification: React.FC<Props> = (props: Props) => {
   return (
     <article className="message mt-5">
       <div className="message-header">
-        <h4 className="is-4 message-header-title">Clarification #{clar.id!.toString()}</h4>
+        <h4 className="is-4 message-header-title">Clarification #{clar.id.toString()}</h4>
         {props.admin && (
           <button className="button" onClick={onClarCopyClick}>
             Copy
@@ -85,16 +83,16 @@ export const Clarification: React.FC<Props> = (props: Props) => {
                 <>
                   {props.admin ? (
                     <>
-                      <Link to={`/admin/teams/${encodeURIComponent(clar.team!.id!.toString())}`}>
-                        {clar.team.name} (#{clar.team.id!.toString()})
+                      <Link to={`/admin/teams/${encodeURIComponent(clar.team!.id.toString())}`}>
+                        {clar.team.name} (#{clar.team.id.toString()})
                       </Link>
-                      <Link to={`/admin/clarifications?team_id=${encodeURIComponent(clar.team!.id!.toString())}`}>
+                      <Link to={`/admin/clarifications?team_id=${encodeURIComponent(clar.team!.id.toString())}`}>
                         <i className="material-icons-outlined">question_answer</i>
                       </Link>
                     </>
                   ) : (
                     <>
-                      {clar.team.name} (#{clar.team.id!.toString()})
+                      {clar.team.name} (#{clar.team.id.toString()})
                     </>
                   )}
                 </>
@@ -138,7 +136,7 @@ export const Clarification: React.FC<Props> = (props: Props) => {
         <p>
           {props.admin ? (
             <Link
-              to={`/admin/clarifications/${encodeURIComponent(clar.id!.toString())}`}
+              to={`/admin/clarifications/${encodeURIComponent(clar.id.toString())}`}
               className="button is-small is-info mr-2"
             >
               回答/編集

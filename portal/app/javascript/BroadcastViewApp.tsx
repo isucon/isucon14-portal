@@ -1,4 +1,3 @@
-import { isuxportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 
 import React from "react";
@@ -8,9 +7,10 @@ import { ErrorMessage } from "./ErrorMessage";
 import { BroadcastClock } from "./broadcast_view/BroadcastClock";
 import { BroadcastLeaderboard } from "./broadcast_view/BroadcastLeaderboard";
 import { BroadcastScoreChanges } from "./broadcast_view/BroadcastScoreChanges";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 }
 

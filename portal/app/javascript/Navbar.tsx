@@ -1,4 +1,3 @@
-import { isuxportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 import * as Rails from "@rails/ujs";
 
@@ -6,9 +5,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { ErrorMessage } from "./ErrorMessage";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
+import { Contest_Status } from "../../proto/isuxportal/resources/contest_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 }
 
@@ -67,8 +68,8 @@ export class Navbar extends React.Component<Props, State> {
   public renderNavbarContestButton() {
     if (this.props.session.contestant) {
       switch (this.props.session.contest?.status) {
-        case isuxportal.proto.resources.Contest.Status.REGISTRATION:
-        case isuxportal.proto.resources.Contest.Status.STANDBY:
+        case Contest_Status.REGISTRATION:
+        case Contest_Status.STANDBY:
           return (
             <>
               <Link className="button is-light" to="/registration">
@@ -76,8 +77,8 @@ export class Navbar extends React.Component<Props, State> {
               </Link>
             </>
           );
-        case isuxportal.proto.resources.Contest.Status.STARTED:
-        case isuxportal.proto.resources.Contest.Status.FINISHED:
+        case Contest_Status.STARTED:
+        case Contest_Status.FINISHED:
           return (
             <a className="button is-light" href="/contestant">
               選手向けページ
@@ -85,7 +86,7 @@ export class Navbar extends React.Component<Props, State> {
           );
       }
     } else {
-      if (this.props.session.contest?.status === isuxportal.proto.resources.Contest.Status.REGISTRATION) {
+      if (this.props.session.contest?.status === Contest_Status.REGISTRATION) {
         return (
           <Link className="button is-light" to="/registration">
             参加登録

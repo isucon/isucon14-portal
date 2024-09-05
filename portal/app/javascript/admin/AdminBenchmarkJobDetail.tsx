@@ -1,5 +1,3 @@
-import { isuxportal } from "../pb_admin";
-import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
@@ -9,15 +7,17 @@ import { BenchmarkJobDetail } from "../BenchmarkJobDetail";
 import { ErrorMessage } from "../ErrorMessage";
 import { ReloadButton } from "../ReloadButton";
 import { useParams } from "react-router-dom";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
+import { BenchmarkJob_Status, type BenchmarkJob } from "../../../proto/isuxportal/resources/benchmark_job_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: AdminApiClient;
-  id: number | string;
+  id: bigint;
 }
 
 export interface State {
-  job: isuxportal.proto.resources.IBenchmarkJob | null;
+  job: BenchmarkJob | null;
   error: Error | null;
   requesting: boolean;
   timer: number | null;
@@ -26,7 +26,7 @@ export interface State {
 export const AdminBenchmarkJobDetail = (props: Omit<Props, "id">) => {
   const { id } = useParams();
   if (!id) throw new Error("id is required");
-  return <AdminBenchmarkJobDetailInternal {...props} id={id} />;
+  return <AdminBenchmarkJobDetailInternal {...props} id={BigInt(id)} />;
 };
 
 class AdminBenchmarkJobDetailInternal extends React.Component<Props, State> {
@@ -70,7 +70,7 @@ class AdminBenchmarkJobDetailInternal extends React.Component<Props, State> {
         <header>
           <div className="level">
             <div className="level-left">
-              <h1 className="title is-1">Job #{this.props.id}</h1>
+              <h1 className="title is-1">Job #{this.props.id.toString()}</h1>
             </div>
             <div className="level-right">
               <ReloadButton requesting={this.state.requesting} onClick={this.updateJob.bind(this)} />
@@ -114,8 +114,7 @@ class AdminBenchmarkJobDetailInternal extends React.Component<Props, State> {
     if (!this.state.job) return undefined;
     return (
       !this.state.requesting &&
-      (this.state.job.status == isuxportal.proto.resources.BenchmarkJob.Status.PENDING ||
-        this.state.job.status == isuxportal.proto.resources.BenchmarkJob.Status.RUNNING)
+      (this.state.job.status == BenchmarkJob_Status.PENDING || this.state.job.status == BenchmarkJob_Status.RUNNING)
     );
   }
 
@@ -125,7 +124,7 @@ class AdminBenchmarkJobDetailInternal extends React.Component<Props, State> {
     if (this.state.requesting) return;
     try {
       this.setState({ requesting: true });
-      const resp = await this.props.client.cancelBenchmarkJob(this.state.job.id! as number);
+      const resp = await this.props.client.cancelBenchmarkJob(this.state.job.id);
       this.setState({ requesting: false, error: null, job: resp.job! });
     } catch (e) {
       this.setState({ requesting: false, error: e });

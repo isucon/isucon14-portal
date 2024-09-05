@@ -1,5 +1,3 @@
-import { isuxportal } from "../pb_admin";
-import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
@@ -13,6 +11,9 @@ import { BenchmarkJobStatus } from "../BenchmarkJobStatus";
 
 import { AdminBenchmarkJobForm } from "./AdminBenchmarkJobForm";
 import ReactPaginate from "react-paginate";
+import { BenchmarkJob_Status, type BenchmarkJob } from "../../../proto/isuxportal/resources/benchmark_job_pb";
+import type { ListBenchmarkJobsResponse } from "../../../proto/isuxportal/services/admin/benchmark_pb";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
 
 type ListFilterProps = {
   teamId: string | null;
@@ -67,13 +68,11 @@ const ListFilter: React.FC<ListFilterProps> = (props: ListFilterProps) => {
                 <div className="select" id="AdminBenchmarkJobListFilter-status">
                   <select {...register("status")}>
                     <option value={""}>-----</option>
-                    <option value={isuxportal.proto.resources.BenchmarkJob.Status.PENDING.toString()}>PENDING</option>
-                    <option value={isuxportal.proto.resources.BenchmarkJob.Status.RUNNING.toString()}>RUNNING</option>
-                    <option value={isuxportal.proto.resources.BenchmarkJob.Status.ERRORED.toString()}>ERRORED</option>
-                    <option value={isuxportal.proto.resources.BenchmarkJob.Status.CANCELLED.toString()}>
-                      CANCELLED
-                    </option>
-                    <option value={isuxportal.proto.resources.BenchmarkJob.Status.FINISHED.toString()}>FINISHED</option>
+                    <option value={BenchmarkJob_Status.PENDING.toString()}>PENDING</option>
+                    <option value={BenchmarkJob_Status.RUNNING.toString()}>RUNNING</option>
+                    <option value={BenchmarkJob_Status.ERRORED.toString()}>ERRORED</option>
+                    <option value={BenchmarkJob_Status.CANCELLED.toString()}>CANCELLED</option>
+                    <option value={BenchmarkJob_Status.FINISHED.toString()}>FINISHED</option>
                   </select>
                 </div>
               </div>
@@ -99,38 +98,36 @@ const ListFilter: React.FC<ListFilterProps> = (props: ListFilterProps) => {
 };
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: AdminApiClient;
   teamId: string | null;
-  status: isuxportal.proto.resources.BenchmarkJob.Status | null;
+  status: BenchmarkJob_Status | null;
   failedOnly: boolean;
 }
 
 export interface State {
-  list: isuxportal.proto.services.admin.ListBenchmarkJobsResponse | null;
+  list: ListBenchmarkJobsResponse | null;
   error: Error | null;
-  pageCount: number;
+  pageCount: bigint;
   currentPage: number;
 }
 
-const parseBenchmarkJobStatus = (
-  statusString: string | null,
-): isuxportal.proto.resources.BenchmarkJob.Status | null => {
+const parseBenchmarkJobStatus = (statusString: string | null): BenchmarkJob_Status | null => {
   if (statusString === null || statusString === "") return null;
 
   const status = +statusString;
 
   switch (status) {
-    case isuxportal.proto.resources.BenchmarkJob.Status.PENDING:
-      return isuxportal.proto.resources.BenchmarkJob.Status.PENDING;
-    case isuxportal.proto.resources.BenchmarkJob.Status.RUNNING:
-      return isuxportal.proto.resources.BenchmarkJob.Status.RUNNING;
-    case isuxportal.proto.resources.BenchmarkJob.Status.ERRORED:
-      return isuxportal.proto.resources.BenchmarkJob.Status.ERRORED;
-    case isuxportal.proto.resources.BenchmarkJob.Status.CANCELLED:
-      return isuxportal.proto.resources.BenchmarkJob.Status.CANCELLED;
-    case isuxportal.proto.resources.BenchmarkJob.Status.FINISHED:
-      return isuxportal.proto.resources.BenchmarkJob.Status.FINISHED;
+    case BenchmarkJob_Status.PENDING:
+      return BenchmarkJob_Status.PENDING;
+    case BenchmarkJob_Status.RUNNING:
+      return BenchmarkJob_Status.RUNNING;
+    case BenchmarkJob_Status.ERRORED:
+      return BenchmarkJob_Status.ERRORED;
+    case BenchmarkJob_Status.CANCELLED:
+      return BenchmarkJob_Status.CANCELLED;
+    case BenchmarkJob_Status.FINISHED:
+      return BenchmarkJob_Status.FINISHED;
   }
   console.warn("Unexpected status", status);
   return null;
@@ -155,7 +152,7 @@ class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
     this.state = {
       list: null,
       error: null,
-      pageCount: 0,
+      pageCount: 0n,
       currentPage: 0,
     };
   }
@@ -171,12 +168,12 @@ class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
   async updateList(page?: number) {
     try {
       const list = await this.props.client.listBenchmarkJobs(
-        this.props.teamId ? parseInt(this.props.teamId, 10) : null,
+        this.props.teamId ? BigInt(this.props.teamId) : null,
         this.props.status ?? undefined,
         this.props.failedOnly,
         page,
       );
-      const pageCount = list.maxPage as number;
+      const pageCount = list.maxPage;
       this.setState({ list, pageCount });
     } catch (error) {
       this.setState({ error });
@@ -231,7 +228,7 @@ class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
         nextLabel="next"
         breakLabel="..."
         breakClassName="pagination-list pagination-ellipsis"
-        pageCount={this.state.pageCount}
+        pageCount={Number(this.state.pageCount)}
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
         onPageChange={handlePageClick}
@@ -269,7 +266,7 @@ class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
     );
   }
 
-  renderJob(job: isuxportal.proto.resources.IBenchmarkJob, i: number) {
+  renderJob(job: BenchmarkJob, i: number) {
     const id = job.id!.toString();
     return (
       <tr key={id}>

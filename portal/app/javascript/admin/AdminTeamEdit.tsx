@@ -1,5 +1,3 @@
-import { isuxportal } from "../pb_admin";
-import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
@@ -7,11 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { ErrorMessage } from "../ErrorMessage";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
+import type { Team } from "../../../proto/isuxportal/resources/team_pb";
+import type { Contestant } from "../../../proto/isuxportal/resources/contestant_pb";
+import { create } from "@bufbuild/protobuf";
+import { UpdateTeamRequestSchema } from "../../../proto/isuxportal/services/admin/teams_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: AdminApiClient;
-  team: isuxportal.proto.resources.ITeam;
+  team: Team;
 }
 
 export interface State {
@@ -29,8 +32,8 @@ export const AdminTeamEdit: React.FC<Props> = (props: Props) => {
     setValue,
     formState: { errors },
   } = useForm<{
-    team: isuxportal.proto.resources.ITeam;
-    contestants: isuxportal.proto.resources.IContestant[];
+    team: Team;
+    contestants: Contestant[];
   }>({
     defaultValues: {
       team: props.team,
@@ -40,7 +43,7 @@ export const AdminTeamEdit: React.FC<Props> = (props: Props) => {
   const onSubmit = handleSubmit(async (data) => {
     setRequesting(true);
     try {
-      const resp = await props.client.updateTeam(data);
+      const resp = await props.client.updateTeam(create(UpdateTeamRequestSchema, data));
       navigate(`/admin/teams/${encodeURIComponent(props.team.id!.toString())}`);
     } catch (e) {
       setRequesting(false);
@@ -82,8 +85,8 @@ export const AdminTeamEdit: React.FC<Props> = (props: Props) => {
                 <div className="select">
                   <select required={true} {...register("team.leaderId")} id={`AdminTeamEdit-${props.team.id}-leaderId`}>
                     {props.team.members!.map((v) => (
-                      <option key={v.id!.toString()} value={v.id!.toString()}>
-                        {v.id!.toString()}: {v.name}
+                      <option key={v.id.toString()} value={v.id.toString()}>
+                        {v.id.toString()}: {v.name}
                       </option>
                     ))}
                   </select>
@@ -146,8 +149,8 @@ export const AdminTeamEdit: React.FC<Props> = (props: Props) => {
 
         {props.team.members!.map((member, i) => {
           return (
-            <div className="card mt-5" key={member.id!.toString()}>
-              <input type="hidden" value={member.id!.toString()} {...register(`contestants.${i}.id` as const)} />
+            <div className="card mt-5" key={member.id.toString()}>
+              <input type="hidden" value={member.id.toString()} {...register(`contestants.${i}.id` as const)} />
               <div className="card-content">
                 <div className="field">
                   <label className="label" htmlFor={`AdminTeamEdit-${props.team.id}-${member.id}-name`}>

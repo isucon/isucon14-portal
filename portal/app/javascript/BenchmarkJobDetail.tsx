@@ -1,17 +1,17 @@
-import { isuxportal } from "./pb";
-
 import React from "react";
 import { Link } from "react-router-dom";
 
 import { BenchmarkJobStatus } from "./BenchmarkJobStatus";
 import { Timestamp } from "./Timestamp";
+import type { BenchmarkJob } from "../../proto/isuxportal/resources/benchmark_job_pb";
+import type { Team } from "../../proto/isuxportal/resources/team_pb";
 
 export interface Props {
-  job: isuxportal.proto.resources.IBenchmarkJob;
+  job: BenchmarkJob;
   admin?: boolean;
 }
 
-const renderJobSummary = (job: isuxportal.proto.resources.IBenchmarkJob, admin: boolean) => {
+const renderJobSummary = (job: BenchmarkJob, admin: boolean) => {
   return (
     <div className="card mt-5">
       <header className="card-header">
@@ -19,11 +19,11 @@ const renderJobSummary = (job: isuxportal.proto.resources.IBenchmarkJob, admin: 
       </header>
       <div className="card-content">
         <p>
-          <b>ID:</b> {job.id}
+          <b>ID:</b> {job.id.toString()}
         </p>
         <p>
-          <b>Target:</b> #{job.target!.number}: {job.target!.privateIpv4Address} ({job.target!.publicIpv4Address}){" "}
-          {admin ? `(#${job.target!.id}, ${job.target!.cloudId})` : null}
+          <b>Target:</b> #{job.target!.number.toString()}: {job.target!.privateIpv4Address} (
+          {job.target!.publicIpv4Address}) {admin ? `(#${job.target!.id.toString()}, ${job.target!.cloudId})` : null}
         </p>
         <p>
           <b>Status:</b> <BenchmarkJobStatus status={job.status!} />
@@ -45,7 +45,7 @@ const renderJobSummary = (job: isuxportal.proto.resources.IBenchmarkJob, admin: 
   );
 };
 
-const renderTeam = (team: isuxportal.proto.resources.ITeam) => {
+const renderTeam = (team: Team) => {
   return (
     <div className="card mt-5">
       <header className="card-header">
@@ -62,7 +62,7 @@ const renderTeam = (team: isuxportal.proto.resources.ITeam) => {
   );
 };
 
-const renderJobResult = (job: isuxportal.proto.resources.IBenchmarkJob) => {
+const renderJobResult = (job: BenchmarkJob) => {
   if (!job.result) return;
   const { result } = job;
   return (
@@ -89,11 +89,12 @@ const renderJobResult = (job: isuxportal.proto.resources.IBenchmarkJob) => {
           <b>Marked At:</b> <Timestamp timestamp={result.markedAt!} />
         </p>
         <p>
-          <b>Score:</b> {result.score}
+          <b>Score:</b> {result.score.toString()}
         </p>
         {result.scoreBreakdown ? (
           <p>
-            <b>Score Breakdown:</b> base={result.scoreBreakdown.raw}, deduction={result.scoreBreakdown.deduction}
+            <b>Score Breakdown:</b> base={result.scoreBreakdown.raw.toString()}, deduction=
+            {result.scoreBreakdown.deduction.toString()}
           </p>
         ) : null}
       </div>
@@ -101,7 +102,7 @@ const renderJobResult = (job: isuxportal.proto.resources.IBenchmarkJob) => {
   );
 };
 
-const renderJobExecution = (job: isuxportal.proto.resources.IBenchmarkJob, admin: boolean) => {
+const renderJobExecution = (job: BenchmarkJob, admin: boolean) => {
   if (!job.result) return;
   if (!job.result.execution) return;
   const { execution } = job.result;

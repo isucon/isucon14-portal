@@ -1,4 +1,4 @@
-import type { isuxportal } from "../pb_admin";
+import { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
 import { AdminApiClient } from "./AdminApiClient";
 import * as Rails from "@rails/ujs";
 
@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { ErrorMessage } from "../ErrorMessage";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: AdminApiClient;
 }
 

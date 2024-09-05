@@ -1,14 +1,14 @@
-import type { isuxportal } from "./pb";
 import React from "react";
 
 import { Timestamp } from "./Timestamp";
 import type { TeamPinsMap } from "./TeamPins";
+import type { Leaderboard as LeaderboardType, LeaderboardItem } from "../../proto/isuxportal/resources/leaderboard_pb";
 
 const NUMBER_OF_ROWS_VISIBLE_BY_DEFAULT = 25;
 
 interface TeamItemProps {
   position: number;
-  item: isuxportal.proto.resources.ILeaderboardItem;
+  item: LeaderboardItem;
   changed: boolean;
   pinned: boolean;
   onPin: (teamId: string, flag: boolean) => void;
@@ -59,7 +59,7 @@ const TeamItem: React.FC<TeamItemProps> = (props: TeamItemProps) => {
             className={`isux-pin-button is-small ${
               pinned ? "material-icons has-text-danger" : "material-icons-outlined has-text-grey-light"
             }`}
-            onClick={() => onPin(item.team!.id!.toString(), !pinned)}
+            onClick={() => onPin(item.team!.id.toString(), !pinned)}
           >
             push_pin
           </i>
@@ -67,10 +67,10 @@ const TeamItem: React.FC<TeamItemProps> = (props: TeamItemProps) => {
       </th>
       <th className="has-text-right">{position}</th>
       <td>
-        {item.team!.id}: {item.team!.name}
+        {item.team!.id.toString()}: {item.team!.name}
       </td>
-      <td className="has-text-right">{item.bestScore?.score || 0}</td>
-      <td className="has-text-weight-semibold has-text-right">{item.latestScore?.score || 0}</td>
+      <td className="has-text-right">{(item.bestScore?.score || 0n).toString()}</td>
+      <td className="has-text-weight-semibold has-text-right">{(item.latestScore?.score || 0n).toString()}</td>
       <td>{item.latestScore ? <Timestamp timestamp={item.latestScore.markedAt!} short /> : "N/A"}</td>
       <td>{studentStatus}</td>
     </tr>
@@ -82,8 +82,8 @@ type Mode = "all" | "general" | "students" | "hidden";
 interface Props {
   teamPins: TeamPinsMap;
   onPin: (teamId: string, flag: boolean) => void;
-  leaderboard: isuxportal.proto.resources.ILeaderboard;
-  teamId?: number | Long;
+  leaderboard: LeaderboardType;
+  teamId?: bigint;
   enableHiddenTeamsMode?: boolean;
 }
 
@@ -96,7 +96,7 @@ const usePrevious = function <T>(value: T) {
 };
 
 // XXX: logic duplicate with selectTeam in BroadcastLeaderboard.tsx
-const chooseTeamList = (mode: Mode, leaderboard: isuxportal.proto.resources.ILeaderboard) => {
+const chooseTeamList = (mode: Mode, leaderboard: LeaderboardType) => {
   switch (mode) {
     case "all":
       return leaderboard.teams || [];
@@ -136,20 +136,20 @@ export const Leaderboard: React.FC<Props> = (props: Props) => {
 
   type TeamStanding = {
     position: number;
-    item: isuxportal.proto.resources.ILeaderboardItem;
+    item: LeaderboardItem;
     pinned: boolean;
     me: boolean;
     lastPosition?: number;
-    lastScore?: number | Long;
+    lastScore?: bigint;
   };
   const teams = filteredTeams.map((item, idx): TeamStanding => {
-    const pinned = pins.has(item.team!.id!.toString());
+    const pinned = pins.has(item.team!.id.toString());
     const me = item.team!.id === teamId;
-    if (prevRanks.get(item.team!.id!) && prevRanks.get(item.team!.id!) !== idx + 1) console.log(item);
+    if (prevRanks.get(item.team!.id) && prevRanks.get(item.team!.id) !== idx + 1) console.log(item);
     return {
       position: idx + 1,
-      lastPosition: prevRanks.get(item.team!.id!),
-      lastScore: prevScores.get(item.team!.id!),
+      lastPosition: prevRanks.get(item.team!.id),
+      lastScore: prevScores.get(item.team!.id),
       item,
       pinned,
       me,

@@ -1,5 +1,3 @@
-import type { isuxportal } from "../pb_admin";
-import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
@@ -8,6 +6,10 @@ import { useForm } from "react-hook-form";
 
 import { Clarification } from "../Clarification";
 import { ErrorMessage } from "../ErrorMessage";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
+import type { Clarification as ClarificationType } from "../../../proto/isuxportal/resources/clarification_pb";
+import { create } from "@bufbuild/protobuf";
+import { RespondClarificationRequestSchema } from "../../../proto/isuxportal/services/admin/clarifications_pb";
 
 interface QuickButtonProps {
   caption?: string;
@@ -29,10 +31,10 @@ const ClarQuickButton: React.FC<QuickButtonProps> = (props: QuickButtonProps) =>
 };
 
 interface FormProps {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: AdminApiClient;
-  clarification: isuxportal.proto.resources.IClarification;
-  onSubmit: (clar: isuxportal.proto.resources.IClarification) => any;
+  clarification: ClarificationType;
+  onSubmit: (clar: ClarificationType) => any;
 }
 
 const ClarForm: React.FC<FormProps> = (props: FormProps) => {
@@ -58,7 +60,7 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
     },
   });
 
-  const [list, setList] = React.useState<isuxportal.proto.resources.IClarification[] | null>(null);
+  const [list, setList] = React.useState<ClarificationType[] | null>(null);
   React.useEffect(() => {
     props.client
       .listClarifications()
@@ -70,12 +72,14 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
     try {
       setRequesting(true);
       console.log(data);
-      const resp = await props.client.respondClarification({
-        id: props.clarification.id!,
-        answer: data.answer,
-        question: data.question,
-        disclose: data.disclose,
-      });
+      const resp = await props.client.respondClarification(
+        create(RespondClarificationRequestSchema, {
+          id: props.clarification.id,
+          answer: data.answer,
+          question: data.question,
+          disclose: data.disclose,
+        }),
+      );
       props.onSubmit(resp.clarification!);
       setRequesting(false);
     } catch (e) {
@@ -183,13 +187,13 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
                         )
                         .map((v) => (
                           <ClarQuickButton
-                            id={v.id!.toString()}
+                            id={v.id.toString()}
                             body={`${
-                              v.disclosed ? `既に Clarification #${v.id!} で回答されている内容です(再掲します)\n\n` : ""
+                              v.disclosed ? `既に Clarification #${v.id} で回答されている内容です(再掲します)\n\n` : ""
                             }${v.answer!}`}
                             caption={v.answer!.slice(0, 25)}
                             onClick={onQuickButton}
-                            key={v.id!.toString()}
+                            key={v.id.toString()}
                           />
                         ))}
                     </div>
@@ -208,7 +212,7 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
 };
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: AdminApiClient;
   id: string;
 }
@@ -221,15 +225,15 @@ export const AdminClarificationDetail = (props: Omit<Props, "id">) => {
 
 const AdminClarificationDetailInternal: React.FC<Props> = (props: Props) => {
   const [error, setError] = React.useState<Error | null>(null);
-  const [clar, setClar] = React.useState<isuxportal.proto.resources.IClarification | null>(null);
+  const [clar, setClar] = React.useState<ClarificationType | null>(null);
 
   React.useEffect(() => {
     props.client
-      .getClarification(parseInt(props.id, 10))
+      .getClarification(BigInt(props.id))
       .then((resp) => setClar(resp.clarification!))
       .catch((e) => setError(e));
   }, []);
-  const onClarSubmit = (clar: isuxportal.proto.resources.IClarification) => {
+  const onClarSubmit = (clar: ClarificationType) => {
     setClar(clar);
   };
 

@@ -1,17 +1,17 @@
-import type { isuxportal } from "../pb";
+import type { Notification } from "../../../proto/isuxportal/resources/notification_pb";
 import type { ApiClient, ApiError } from "../ApiClient";
 
 export class ContestantNotificationsObserver {
   client: ApiClient;
-  last?: number;
+  last?: bigint;
   requesting: boolean;
 
   timer?: number;
 
-  public onLastAnsweredClarificationIdChange?: (id: number | undefined) => any;
-  public onNewNotifications?: (notifications: isuxportal.proto.resources.INotification[]) => any;
+  public onLastAnsweredClarificationIdChange?: (id: bigint | undefined) => any;
+  public onNewNotifications?: (notifications: Notification[]) => any;
 
-  lastAnsweredClarificationId?: number;
+  lastAnsweredClarificationId?: bigint;
 
   constructor(client: ApiClient) {
     this.client = client;
@@ -39,7 +39,7 @@ export class ContestantNotificationsObserver {
       const resp = await this.client.listNotifications(this.last);
 
       const lastAnsweredClarificationId =
-        resp.lastAnsweredClarificationId === 0 ? undefined : (resp.lastAnsweredClarificationId as number);
+        resp.lastAnsweredClarificationId === 0n ? undefined : resp.lastAnsweredClarificationId;
       if (
         lastAnsweredClarificationId !== this.lastAnsweredClarificationId &&
         this.onLastAnsweredClarificationIdChange
@@ -56,7 +56,7 @@ export class ContestantNotificationsObserver {
       }
 
       const last = resp.notifications[resp.notifications.length - 1];
-      this.last = (last?.id! as number) || this.last;
+      this.last = last?.id || this.last;
     } catch (e) {
       console.error("ContestantNotificationsObserver: error while polling", e);
       this.requesting = false;

@@ -7,8 +7,9 @@ RUN yarn install && rm -rf /root/.cache/yarn
 COPY webpack.config.js ./
 COPY tsconfig.json ./
 COPY types ./
-COPY app/javascript ./app/javascript
 COPY sw ./sw
+COPY proto ./proto
+COPY app/javascript ./app/javascript
 RUN NODE_ENV=production node_modules/.bin/webpack
 
 # https://github.com/sorah-rbpkg/dockerfiles

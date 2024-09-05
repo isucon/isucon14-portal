@@ -1,18 +1,19 @@
-import { isuxportal } from "./pb";
 import { ApiClient } from "./ApiClient";
 
 import React from "react";
 
 import { ErrorMessage } from "./ErrorMessage";
+import { EnvCheckStatus } from "../../proto/isuxportal/resources/env_check_pb";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
 
 const stateMap = new Map([
   [null, { type: "", icon: "hourglass_top", desc: "状態取得中" }],
   [
-    isuxportal.proto.resources.EnvCheckStatus.NOT_STARTED,
+    EnvCheckStatus.NOT_STARTED,
     { type: "is-danger", icon: "cancel", desc: "確認が未完了です。下記の手順に従って競技環境の確認を行ってください。" },
   ],
   [
-    isuxportal.proto.resources.EnvCheckStatus.CREATED_INSTANCE,
+    EnvCheckStatus.CREATED_INSTANCE,
     {
       type: "is-danger",
       icon: "cancel",
@@ -20,7 +21,7 @@ const stateMap = new Map([
     },
   ],
   [
-    isuxportal.proto.resources.EnvCheckStatus.DONE,
+    EnvCheckStatus.DONE,
     { type: "is-info", icon: "check_circle", desc: "確認が完了しています。ご協力ありがとうございます。" },
   ],
 ] as const);
@@ -28,13 +29,13 @@ const stateMap = new Map([
 const FETCH_INFORMATION_INTERVAL = 60 * 1000; // 1min
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 }
 
 export interface State {
   template: string;
-  checkStatus: isuxportal.proto.resources.EnvCheckStatus | null;
+  checkStatus: EnvCheckStatus | null;
   instanceIP: string;
   isFetching: boolean;
   intervalId: number | null;
@@ -56,11 +57,11 @@ export class EnvCheck extends React.Component<Props, State> {
 
   public componentDidMount() {
     this.fetchEnvCheckInformation().then((status) => {
-      if (status === isuxportal.proto.resources.EnvCheckStatus.DONE) return;
+      if (status === EnvCheckStatus.DONE) return;
 
       const intervalId = setInterval(async () => {
         const status = await this.fetchEnvCheckInformation();
-        if (status === isuxportal.proto.resources.EnvCheckStatus.DONE) {
+        if (status === EnvCheckStatus.DONE) {
           if (this.state.intervalId) {
             clearInterval(this.state.intervalId);
             this.setState({ intervalId: null });

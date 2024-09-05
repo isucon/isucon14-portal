@@ -1,5 +1,3 @@
-import type { isuxportal } from "../pb_admin";
-import { ApiError, ApiClient } from "../ApiClient";
 import { AdminApiClient } from "./AdminApiClient";
 
 import React from "react";
@@ -8,6 +6,10 @@ import { useForm } from "react-hook-form";
 
 import { Clarification } from "../Clarification";
 import { ErrorMessage } from "../ErrorMessage";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
+import type { Clarification as ClarificationType } from "../../../proto/isuxportal/resources/clarification_pb";
+import { create } from "@bufbuild/protobuf";
+import { CreateClarificationRequestSchema } from "../../../proto/isuxportal/services/admin/clarifications_pb";
 
 type ListFilterProps = {
   teamId: string | null;
@@ -68,9 +70,9 @@ const ListFilter: React.FC<ListFilterProps> = (props: ListFilterProps) => {
   );
 };
 interface FormProps {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: AdminApiClient;
-  onSubmit: (clar: isuxportal.proto.resources.IClarification) => any;
+  onSubmit: (clar: ClarificationType) => any;
 }
 
 const ClarForm: React.FC<FormProps> = (props: FormProps) => {
@@ -112,11 +114,13 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
         throw new Error(`Invalid teamId: ${teamIdString}`);
       }
 
-      const resp = await props.client.createClarification({
-        answer: data.answer,
-        question: data.question,
-        teamId: data.teamId !== "" ? parseInt(data.teamId, 10) : 0,
-      });
+      const resp = await props.client.createClarification(
+        create(CreateClarificationRequestSchema, {
+          answer: data.answer,
+          question: data.question,
+          teamId: data.teamId !== "" ? BigInt(data.teamId) : 0n,
+        }),
+      );
       props.onSubmit(resp.clarification!);
       e!.target.reset();
       setError(null);
@@ -194,7 +198,7 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
 };
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: AdminApiClient;
   teamId: string | null;
   unansweredOnly: boolean;
@@ -214,15 +218,15 @@ export const AdminClarificationList = (props: Omit<Props, "teamId" | "unanswered
 const AdminClarificationListInternal: React.FC<Props> = (props: Props) => {
   const { teamId, unansweredOnly } = props;
   const [error, setError] = React.useState<Error | null>(null);
-  const [list, setList] = React.useState<isuxportal.proto.resources.IClarification[] | null>(null);
+  const [list, setList] = React.useState<ClarificationType[] | null>(null);
 
   React.useEffect(() => {
     props.client
-      .listClarifications(teamId && teamId !== "" ? parseInt(teamId, 10) : 0, unansweredOnly)
+      .listClarifications(teamId ? BigInt(teamId) : 0n, unansweredOnly)
       .then((resp) => setList(resp.clarifications))
       .catch((e) => setError(e));
   }, [location.search]);
-  const onClarSubmit = (clar: isuxportal.proto.resources.IClarification) => {
+  const onClarSubmit = (clar: ClarificationType) => {
     setList(list ? [clar, ...list] : [clar]);
   };
 

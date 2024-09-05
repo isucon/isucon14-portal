@@ -1,4 +1,3 @@
-import { isuxportal } from "../pb";
 import { ApiError, ApiClient } from "../ApiClient";
 
 import React from "react";
@@ -6,9 +5,12 @@ import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { ErrorMessage } from "../ErrorMessage";
+import { create } from "@bufbuild/protobuf";
+import { EnqueueBenchmarkJobRequestSchema } from "../../../proto/isuxportal/services/contestant/benchmark_pb";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
 
 type Props = {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 };
 
@@ -32,9 +34,11 @@ export const ContestantBenchmarkJobForm: React.FC<Props> = (props: Props) => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setRequesting(true);
-      const resp = await props.client.enqueueBenchmarkJob({
-        targetId: data.targetId ? parseInt(data.targetId, 10) : 0,
-      });
+      const resp = await props.client.enqueueBenchmarkJob(
+        create(EnqueueBenchmarkJobRequestSchema, {
+          targetId: data.targetId ? BigInt(data.targetId) : 0n,
+        }),
+      );
       try {
         window.localStorage.setItem("isuxportal-last-target-id", data.targetId);
       } catch (e) {
@@ -64,8 +68,8 @@ export const ContestantBenchmarkJobForm: React.FC<Props> = (props: Props) => {
                 <select {...register("targetId")}>
                   {(props.session.contestantInstances || []).map((ci) => {
                     return (
-                      <option key={ci.id!.toString()} value={ci.id!.toString()}>
-                        {ci.number}: {ci.privateIpv4Address} ({ci.publicIpv4Address})
+                      <option key={ci.id.toString()} value={ci.id.toString()}>
+                        {ci.number.toString()}: {ci.privateIpv4Address} ({ci.publicIpv4Address})
                       </option>
                     );
                   })}

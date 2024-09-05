@@ -1,4 +1,3 @@
-import { isuxportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 import { TeamPinsMap, TeamPins } from "./TeamPins";
 
@@ -10,20 +9,21 @@ import { ReloadButton } from "./ReloadButton";
 import { ContestClock } from "./ContestClock";
 import { ScoreGraph } from "./ScoreGraph";
 import { Leaderboard } from "./Leaderboard";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
+import type { DashboardResponse } from "../../proto/isuxportal/services/audience/dashboard_pb";
+import type { LeaderboardItem } from "../../proto/isuxportal/resources/leaderboard_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 }
 
 export const AudienceDashboard: React.FC<Props> = ({ session, client }) => {
   const [requesting, setRequesting] = React.useState(false);
-  const [dashboard, setDashboard] = React.useState<isuxportal.proto.services.audience.DashboardResponse | null>(null);
+  const [dashboard, setDashboard] = React.useState<DashboardResponse | null>(null);
   const [error, setError] = React.useState<Error | null>(null);
 
-  const [pinnedTeamLeaderboardItems, setPinnedTeamLeaderboardItems] = React.useState<
-    isuxportal.proto.resources.ILeaderboardItem[]
-  >([]);
+  const [pinnedTeamLeaderboardItems, setPinnedTeamLeaderboardItems] = React.useState<LeaderboardItem[]>([]);
 
   const [teamPins, setTeamPins] = React.useState(new TeamPins());
   const [teamPinsMap, setTeamPinsMap] = React.useState(teamPins.all());
@@ -37,7 +37,7 @@ export const AudienceDashboard: React.FC<Props> = ({ session, client }) => {
       const db = await client.getAudienceDashboard();
       setDashboard(db);
 
-      const items = await client.getAudienceLeaderboardItems(Array.from(teamPinsMap.keys()));
+      const items = await client.getAudienceLeaderboardItems(Array.from(teamPinsMap.keys(), (v) => BigInt(v)));
       setPinnedTeamLeaderboardItems(items);
 
       setError(null);

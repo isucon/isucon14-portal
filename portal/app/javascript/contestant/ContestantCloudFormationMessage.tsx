@@ -1,4 +1,3 @@
-import { isuxportal } from "../pb";
 import { ApiError, ApiClient } from "../ApiClient";
 import * as Rails from "@rails/ujs";
 
@@ -6,9 +5,10 @@ import React, { useState } from "react";
 import { Link, useMatch } from "react-router-dom";
 
 import { ErrorMessage } from "../ErrorMessage";
+import type { ContestantInstance } from "../../../proto/isuxportal/resources/contestant_instance_pb";
 
 type Props = {
-  instances: isuxportal.proto.resources.IContestantInstance[];
+  instances: ContestantInstance[];
 };
 
 export const ContestantCloudFormationMessage = ({ instances }: Props) => {

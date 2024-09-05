@@ -1,7 +1,7 @@
-import { isuxportal } from "./pb";
 import { ApiClient } from "./ApiClient";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
 
-export function updateNavBarSession(session: isuxportal.proto.services.common.GetCurrentSessionResponse) {
+export function updateNavBarSession(session: GetCurrentSessionResponse) {
   if (session.contestant) {
     document.body.classList.add("isux-session-user");
   } else {

@@ -4,7 +4,6 @@
 require 'google/protobuf'
 
 require 'isuxportal/resources/contestant_pb'
-
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("isuxportal/resources/team.proto", :syntax => :proto3) do
     add_message "isuxportal.proto.resources.Team" do

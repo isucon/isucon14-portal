@@ -1,4 +1,3 @@
-import { isuxportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 
 import React from "react";
@@ -16,9 +15,11 @@ import { ContestantDiscordPage } from "./contestant/ContestantDiscordPage";
 
 import { ContestantNotificationsObserver } from "./contestant/ContestantNotificationsObserver";
 import { ContestantCloudFormationMessage } from "./contestant/ContestantCloudFormationMessage";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
+import type { Notification } from "../../proto/isuxportal/resources/notification_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
   release?: string;
 }
@@ -26,8 +27,8 @@ export interface Props {
 export interface State {
   notificationObserver: ContestantNotificationsObserver;
   lastAnsweredClarificationIdObserved: boolean;
-  lastAnsweredClarificationId?: number;
-  lastClarificationIdSeen?: number;
+  lastAnsweredClarificationId?: bigint;
+  lastClarificationIdSeen?: bigint;
   localNotificationEnabled: boolean;
 
   serviceWorker: ServiceWorkerRegistration | null;
@@ -53,7 +54,7 @@ export class ContestantApp extends React.Component<Props, State> {
   getLastClarificationIdSeen() {
     const str = window.localStorage.getItem("isuxportal-contestantLastClarificationIdSeen");
     if (!str) return undefined;
-    return parseInt(str, 10);
+    return BigInt(str);
   }
 
   getLocalNotificationEnabled() {
@@ -127,7 +128,7 @@ export class ContestantApp extends React.Component<Props, State> {
     this.state.notificationObserver.shutdown();
   }
 
-  onLastAnsweredClarificationIdChange(id?: number) {
+  onLastAnsweredClarificationIdChange(id?: bigint) {
     this.setState({
       lastAnsweredClarificationIdObserved: true,
       lastAnsweredClarificationId: id,
@@ -135,7 +136,7 @@ export class ContestantApp extends React.Component<Props, State> {
     });
   }
 
-  onLastClarificationIdSeenChange(id?: number) {
+  onLastClarificationIdSeenChange(id?: bigint) {
     try {
       if (id) {
         window.localStorage.setItem("isuxportal-contestantLastClarificationIdSeen", id.toString());
@@ -148,7 +149,7 @@ export class ContestantApp extends React.Component<Props, State> {
     this.setState({ lastClarificationIdSeen: id });
   }
 
-  onNewNotifications(notifications: isuxportal.proto.resources.INotification[]) {
+  onNewNotifications(notifications: Notification[]) {
     console.log({ localNotificationEnabled: this.state.localNotificationEnabled });
     if (!this.state.localNotificationEnabled) return;
     const worker = this.state.serviceWorker?.active;

@@ -24,6 +24,7 @@
     "workbox-webpack-plugin": "^7.1.0"
   },
   "dependencies": {
+    "@bufbuild/protobuf": "^2.0.0",
     "@rails/ujs": "^6.1.6",
     "@sentry/browser": "^8.26.0",
     "bulma": "^0.9.4",

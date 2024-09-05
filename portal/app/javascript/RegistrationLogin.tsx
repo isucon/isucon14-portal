@@ -1,11 +1,12 @@
-import { isuxportal } from "./pb";
 import { ApiClient } from "./ApiClient";
 import React from "react";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
+import type { GetRegistrationSessionResponse } from "../../proto/isuxportal/services/registration/session_pb";
 
 export interface Props {
   client: ApiClient;
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
-  registrationSession: isuxportal.proto.services.registration.GetRegistrationSessionResponse;
+  session: GetCurrentSessionResponse;
+  registrationSession: GetRegistrationSessionResponse;
 }
 
 export interface State {}

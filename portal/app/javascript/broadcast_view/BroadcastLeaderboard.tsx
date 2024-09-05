@@ -1,15 +1,21 @@
-import type { isuxportal } from "../pb";
 import { ApiClient } from "../ApiClient";
 import React from "react";
 
 import { Timestamp } from "../Timestamp";
 import { ErrorMessage } from "../ErrorMessage";
 import { useSearchParams } from "react-router-dom";
+import {
+  LeaderboardItemSchema,
+  type Leaderboard,
+  type LeaderboardItem,
+} from "../../../proto/isuxportal/resources/leaderboard_pb";
+import type { DashboardResponse } from "../../../proto/isuxportal/services/audience/dashboard_pb";
+import { create } from "@bufbuild/protobuf";
 
 interface TeamItemProps {
   position: number;
   lastPosition?: number;
-  item: isuxportal.proto.resources.ILeaderboardItem;
+  item: LeaderboardItem;
   changed: boolean;
 }
 
@@ -52,7 +58,7 @@ const TeamItem: React.FC<TeamItemProps> = ({ position, lastPosition, changed, it
       </div>
       <div className="column isux-broadcast-leaderboard-item-student">{studentStatus}</div>
       <div className="column has-text-right isux-broadcast-leaderboard-item-score">
-        <p>{item.latestScore?.score || 0}</p>
+        <p>{(item.latestScore?.score || 0n).toString()}</p>
       </div>
     </div>
   );
@@ -75,7 +81,7 @@ export const BroadcastLeaderboard: React.FC<Props> = (props: Props) => {
 
   const [error, setError] = React.useState<Error | null>(null);
   const [requesting, setRequesting] = React.useState(false);
-  const [dashboard, setDashboard] = React.useState<isuxportal.proto.services.audience.DashboardResponse | null>(null);
+  const [dashboard, setDashboard] = React.useState<DashboardResponse | null>(null);
   const refresh = () => {
     if (requesting) return;
     setRequesting(true);
@@ -131,7 +137,7 @@ interface InnerProps {
   showDummy?: boolean;
   mode?: string;
   bottom?: boolean;
-  leaderboard?: isuxportal.proto.resources.ILeaderboard;
+  leaderboard?: Leaderboard;
 }
 
 const BroadcastLeaderboardInner: React.FC<InnerProps> = (props: InnerProps) => {
@@ -141,9 +147,9 @@ const BroadcastLeaderboardInner: React.FC<InnerProps> = (props: InnerProps) => {
 
   type TeamStanding = {
     position: number;
-    item: isuxportal.proto.resources.ILeaderboardItem;
+    item: LeaderboardItem;
     lastPosition?: number;
-    lastScore?: number | Long;
+    lastScore?: bigint;
   };
   const renderTeam = (key: string, { item, position, lastPosition, lastScore }: TeamStanding) => {
     return (
@@ -151,7 +157,7 @@ const BroadcastLeaderboardInner: React.FC<InnerProps> = (props: InnerProps) => {
         item={item}
         position={position}
         lastPosition={lastPosition}
-        changed={lastScore != item.latestScore?.score!}
+        changed={lastScore != item.latestScore?.score}
         key={`${key}-${item.team!.id!.toString()}`}
       />
     );
@@ -164,32 +170,35 @@ const BroadcastLeaderboardInner: React.FC<InnerProps> = (props: InnerProps) => {
       {
         position: 1,
         lastPosition: 1,
-        lastScore: 14835,
-        item: {
-          team: { id: 424242, name: "あいうあいうあいう", student: { status: true } },
-          bestScore: { score: 14835 },
-          latestScore: { score: 14835 },
-        },
+        lastScore: 14835n,
+        item: create(LeaderboardItemSchema, {
+          team: { id: 424242n, name: "あいうあいうあいう", student: { status: true } },
+          bestScore: { score: 14835n },
+          latestScore: { score: 14835n },
+        }),
       },
       {
         position: 2,
         lastPosition: 3,
-        lastScore: 11835,
-        item: {
-          team: { id: 424243, name: "なにぬなにぬなにぬ" },
-          bestScore: { score: 11835 },
-          latestScore: { score: 11835 },
-        },
+        lastScore: 11835n,
+        item: create(LeaderboardItemSchema, {
+          team: { id: 424243n, name: "なにぬなにぬなにぬ" },
+          bestScore: { score: 11835n },
+          latestScore: { score: 11835n },
+        }),
       },
       {
         position: 3,
         lastPosition: 2,
-        lastScore: 9835,
-        item: {
-          team: { id: 400000, name: "railsへの執着はもはや煩悩の域であり、開発者一同は瞑想したほうがいいと思います。" },
-          bestScore: { score: 9835 },
-          latestScore: { score: 9835 },
-        },
+        lastScore: 9835n,
+        item: create(LeaderboardItemSchema, {
+          team: {
+            id: 400000n,
+            name: "railsへの執着はもはや煩悩の域であり、開発者一同は瞑想したほうがいいと思います。",
+          },
+          bestScore: { score: 9835n },
+          latestScore: { score: 9835n },
+        }),
       },
     ];
   } else {

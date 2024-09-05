@@ -1,16 +1,20 @@
-import { isuxportal } from "./pb";
 import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
 
 import { ErrorMessage } from "./ErrorMessage";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
+import type {
+  ListTeamsResponse,
+  ListTeamsResponse_TeamListItem,
+} from "../../proto/isuxportal/services/audience/team_list_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 }
 
 export interface State {
-  teamList: isuxportal.proto.services.audience.ListTeamsResponse | null;
+  teamList: ListTeamsResponse | null;
   error: Error | null;
 }
 
@@ -60,7 +64,7 @@ export class TeamList extends React.Component<Props, State> {
     return <>{this.state.teamList.teams!.map((team, i) => this.renderTeam(team, i))}</>;
   }
 
-  renderTeam(team: isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem, i: number) {
+  renderTeam(team: ListTeamsResponse_TeamListItem, i: number) {
     return (
       <div className="card mt-4" key={i}>
         <div className="card-content">

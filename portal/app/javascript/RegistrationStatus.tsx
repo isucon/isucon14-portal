@@ -1,14 +1,18 @@
-import { isuxportal } from "./pb";
 import { ApiClient } from "./ApiClient";
 import React from "react";
 
 import { ErrorMessage } from "./ErrorMessage";
 import { Link } from "react-router-dom";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
+import type { GetRegistrationSessionResponse } from "../../proto/isuxportal/services/registration/session_pb";
+import { create } from "@bufbuild/protobuf";
+import { ActivateCouponRequestSchema } from "../../proto/isuxportal/services/registration/activate_coupon_pb";
+import type { Contestant } from "../../proto/isuxportal/resources/contestant_pb";
 
 export interface Props {
   client: ApiClient;
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
-  registrationSession: isuxportal.proto.services.registration.GetRegistrationSessionResponse;
+  session: GetCurrentSessionResponse;
+  registrationSession: GetRegistrationSessionResponse;
   updateRegistrationSession: () => void;
   enableEdit: () => void;
 }
@@ -46,7 +50,7 @@ export class RegistrationStatus extends React.Component<Props, State> {
     event?.preventDefault();
     try {
       const teamId = this.props.registrationSession.team?.id;
-      await this.props.client.activateCoupon({ teamId });
+      await this.props.client.activateCoupon(create(ActivateCouponRequestSchema, { teamId }));
       document.location.href = "/registration";
     } catch (error) {
       this.setState({ error });
@@ -256,9 +260,9 @@ export class RegistrationStatus extends React.Component<Props, State> {
     return this.props.registrationSession.team!.members!.map((member) => this.renderTeamMember(member));
   }
 
-  renderTeamMember(member: isuxportal.proto.resources.IContestant) {
+  renderTeamMember(member: Contestant) {
     return (
-      <div className="card mt-2 isux-registration-member-card" key={member.id!.toString()}>
+      <div className="card mt-2 isux-registration-member-card" key={member.id.toString()}>
         <div className="card-content">
           <div className="media">
             <div className="media-left">

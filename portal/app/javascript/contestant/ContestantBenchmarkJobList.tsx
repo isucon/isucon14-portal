@@ -1,4 +1,3 @@
-import { isuxportal } from "../pb";
 import { ApiError, ApiClient } from "../ApiClient";
 
 import React from "react";
@@ -10,14 +9,16 @@ import { ErrorMessage } from "../ErrorMessage";
 import { BenchmarkJobList } from "../BenchmarkJobList";
 
 import { ContestantBenchmarkJobForm } from "./ContestantBenchmarkJobForm";
+import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
+import type { ListBenchmarkJobsResponse } from "../../../proto/isuxportal/services/contestant/benchmark_pb";
 
 export interface Props {
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
+  session: GetCurrentSessionResponse;
   client: ApiClient;
 }
 
 export interface State {
-  list: isuxportal.proto.services.contestant.ListBenchmarkJobsResponse | null;
+  list: ListBenchmarkJobsResponse | null;
   error: Error | null;
 }
 

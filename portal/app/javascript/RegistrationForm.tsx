@@ -1,14 +1,22 @@
-import { isuxportal } from "./pb";
 import { ApiClient } from "./ApiClient";
 import React from "react";
 
 import { ErrorMessage } from "./ErrorMessage";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
+import {
+  GetRegistrationSessionResponse_Status,
+  UpdateRegistrationRequestSchema,
+  type GetRegistrationSessionResponse,
+} from "../../proto/isuxportal/services/registration/session_pb";
+import { create } from "@bufbuild/protobuf";
+import { CreateTeamRequestSchema } from "../../proto/isuxportal/services/registration/create_team_pb";
+import { JoinTeamRequestSchema } from "../../proto/isuxportal/services/registration/join_pb";
 
 export interface Props {
   client: ApiClient;
-  session: isuxportal.proto.services.common.GetCurrentSessionResponse;
-  inviteToken: string | null;
-  registrationSession: isuxportal.proto.services.registration.GetRegistrationSessionResponse;
+  session: GetCurrentSessionResponse;
+  inviteToken: string | undefined;
+  registrationSession: GetRegistrationSessionResponse;
   updateRegistrationSession: () => void;
 }
 
@@ -66,37 +74,40 @@ export class RegistrationForm extends React.Component<Props, State> {
   }
 
   createTeam() {
-    return this.props.client.createTeam({
-      teamName: this.state.teamName,
-      emailAddress: this.state.emailAddress,
-      name: this.state.name,
-      isStudent: this.state.isStudent,
-    });
+    return this.props.client.createTeam(
+      create(CreateTeamRequestSchema, {
+        teamName: this.state.teamName,
+        emailAddress: this.state.emailAddress,
+        name: this.state.name,
+        isStudent: this.state.isStudent,
+      }),
+    );
   }
 
   joinTeam() {
-    return this.props.client.joinTeam({
-      inviteToken: this.props.inviteToken,
-      teamId: this.props.registrationSession.team!.id,
-      name: this.state.name,
-      isStudent: this.state.isStudent,
-    });
+    return this.props.client.joinTeam(
+      create(JoinTeamRequestSchema, {
+        inviteToken: this.props.inviteToken,
+        teamId: this.props.registrationSession.team!.id,
+        name: this.state.name,
+        isStudent: this.state.isStudent,
+      }),
+    );
   }
 
   updateRegistration() {
-    return this.props.client.updateRegistration({
-      teamName: this.state.teamName,
-      emailAddress: this.state.emailAddress,
-      name: this.state.name,
-      isStudent: this.state.isStudent,
-    });
+    return this.props.client.updateRegistration(
+      create(UpdateRegistrationRequestSchema, {
+        teamName: this.state.teamName,
+        emailAddress: this.state.emailAddress,
+        name: this.state.name,
+        isStudent: this.state.isStudent,
+      }),
+    );
   }
 
   isEditing() {
-    return (
-      this.props.registrationSession.status ==
-      isuxportal.proto.services.registration.GetRegistrationSessionResponse.Status.JOINED
-    );
+    return this.props.registrationSession.status == GetRegistrationSessionResponse_Status.JOINED;
   }
 
   public render() {
