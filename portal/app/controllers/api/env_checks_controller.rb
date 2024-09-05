@@ -3,7 +3,7 @@ class Api::EnvChecksController < Api::ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :require_valid_checker_token
 
-  TEST_AMI_IDS = [Rails.application.config.x.test_ami_id]
+  TEST_AMI_IDS = Rails.application.config.x.test_ami_id.nil? ? [] : [Rails.application.config.x.test_ami_id]
   QUALIFY_AMI_IDS = [Rails.application.config.x.qualify_ami_id]
 
   def create

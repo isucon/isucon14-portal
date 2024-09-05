@@ -19,6 +19,9 @@ module CloudFormation
     portal_credentials = create_portal_credentials(token)
     portal_host = get_portal_host()
     ami_id = Rails.application.config.x.test_ami_id
+    if ami_id.nil?
+      raise "AMI ID should be set to test"
+    end
 
     unless zone_id.nil?
       template(TEST_ERB, binding)
