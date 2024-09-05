@@ -4,6 +4,7 @@ package isuxportal.proto.services.registration;
 
 import "isuxportal/resources/team.proto";
 import "isuxportal/resources/coupon.proto";
+import "isuxportal/resources/env_check.proto";
 
 // query parameter
 message GetRegistrationSessionQuery {
@@ -30,7 +31,7 @@ message GetRegistrationSessionResponse {
   string discord_avatar_url = 6;
   string member_invite_url = 7;
   string discord_server_id = 8;
-  bool env_check_done = 9;
+  isuxportal.proto.resources.EnvCheckStatus env_check_status = 9;
   isuxportal.proto.resources.Coupon coupon = 10;
 }
 

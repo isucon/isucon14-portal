@@ -5,9 +5,10 @@ package isuxportal.proto.resources;
 import "google/protobuf/timestamp.proto";
 
 enum EnvCheckStatus {
-  NOT_STARTED = 0;
-  CREATED_INSTANCE = 1; // obtained instance ip successfully
-  DONE = 2; // confirmed ssh
+  PREPARING = 0;
+  NOT_STARTED = 1;
+  CREATED_INSTANCE = 2; // obtained instance ip successfully
+  DONE = 3; // confirmed ssh
 }
 
 message EnvCheck {
