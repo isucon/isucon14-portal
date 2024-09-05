@@ -5,6 +5,7 @@
 import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
 import type { Message } from "@bufbuild/protobuf";
 import type { Team } from "../../resources/team_pb";
+import type { EnvCheckStatus } from "../../resources/env_check_pb";
 import type { Coupon } from "../../resources/coupon_pb";
 
 /**
@@ -85,9 +86,9 @@ export declare type GetRegistrationSessionResponse = Message<"isuxportal.proto.s
   discordServerId: string;
 
   /**
-   * @generated from field: bool env_check_done = 9;
+   * @generated from field: isuxportal.proto.resources.EnvCheckStatus env_check_status = 9;
    */
-  envCheckDone: boolean;
+  envCheckStatus: EnvCheckStatus;
 
   /**
    * @generated from field: isuxportal.proto.resources.Coupon coupon = 10;
