@@ -8,6 +8,7 @@ import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/
 
 const stateMap = new Map([
   [null, { type: "", icon: "hourglass_top", desc: "状態取得中" }],
+  [EnvCheckStatus.PREPARING, { type: "", icon: "hourglass_top", desc: "準備中" }],
   [
     EnvCheckStatus.NOT_STARTED,
     { type: "is-danger", icon: "cancel", desc: "確認が未完了です。下記の手順に従って競技環境の確認を行ってください。" },
@@ -57,7 +58,7 @@ export class EnvCheck extends React.Component<Props, State> {
 
   public componentDidMount() {
     this.fetchEnvCheckInformation().then((status) => {
-      if (status === EnvCheckStatus.DONE) return;
+      if (status === EnvCheckStatus.PREPARING || status === EnvCheckStatus.DONE) return;
 
       const intervalId = setInterval(async () => {
         const status = await this.fetchEnvCheckInformation();
@@ -121,6 +122,9 @@ export class EnvCheck extends React.Component<Props, State> {
   public renderMain() {
     if (!this.props.session.team) {
       return <>未ログインです</>;
+    }
+    if (this.state.checkStatus === null || this.state.checkStatus === EnvCheckStatus.PREPARING) {
+      return <section>{this.renderState()}</section>;
     }
 
     const templateBase64 = `data:text/plain,${encodeURIComponent(this.state.template ?? "")}`;

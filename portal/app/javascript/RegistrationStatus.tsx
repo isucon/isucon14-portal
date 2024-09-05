@@ -8,6 +8,7 @@ import type { GetRegistrationSessionResponse } from "../../proto/isuxportal/serv
 import { create } from "@bufbuild/protobuf";
 import { ActivateCouponRequestSchema } from "../../proto/isuxportal/services/registration/activate_coupon_pb";
 import type { Contestant } from "../../proto/isuxportal/resources/contestant_pb";
+import { EnvCheckStatus } from "../../proto/isuxportal/resources/env_check_pb";
 
 export interface Props {
   client: ApiClient;
@@ -180,18 +181,20 @@ export class RegistrationStatus extends React.Component<Props, State> {
     const isDiscordAndSSHDone = this.props.registrationSession.team!.members!.every(
       (member) => member.detail!.isSshKeyRegistered && member.detail!.isDiscordGuildMember,
     );
-    const isEnvCheckDone = this.props.registrationSession.envCheckDone;
-    const isOk = isDiscordAndSSHDone && isEnvCheckDone;
+    const envCheckStatus = this.props.registrationSession.envCheckStatus;
 
     let message: React.ReactNode = "現時点での準備が整っています。次のアナウンスをお待ちください。";
+    let isOk = true;
     if (!isDiscordAndSSHDone) {
       message = "参加準備が整っていません。GitHubへのSSH鍵の登録とDiscordサーバーへの参加をしてください。";
-    } else if (!isEnvCheckDone) {
+      isOk = false;
+    } else if (envCheckStatus !== EnvCheckStatus.PREPARING && envCheckStatus !== EnvCheckStatus.DONE) {
       message = (
         <>
           参加準備が整っていません。<Link to="/registration/env_check">競技環境確認</Link>を行ってください。
         </>
       );
+      isOk = false;
     }
 
     return (

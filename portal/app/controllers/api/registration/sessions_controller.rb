@@ -38,6 +38,7 @@ class Api::Registration::SessionsController < Api::Registration::ApplicationCont
       raise "undeterminable status"
     end
 
+    env_check_status = EnvCheck.status(current_team)
     coupon = @team&.yield_self{ |team| Coupon.find_by(team_id: @team.id) }
 
     render protobuf: Isuxportal::Proto::Services::Registration::GetRegistrationSessionResponse.new(
@@ -49,7 +50,7 @@ class Api::Registration::SessionsController < Api::Registration::ApplicationCont
       discord_avatar_url: discord_login&.fetch('avatar_url'),
       member_invite_url: @team && registration_url(team_id: @team.id, invite_token: @team.invite_token), # TODO:
       discord_server_id: status == Isuxportal::Proto::Services::Registration::GetRegistrationSessionResponse::Status::JOINED ? Rails.application.config.x.discord.server_id : "",
-      env_check_done: EnvCheck.of_team(current_team).test_ssh_passed.exists?,
+      env_check_status: env_check_status,
       coupon: coupon&.to_pb
     )
   end
