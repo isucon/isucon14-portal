@@ -77,23 +77,28 @@ export declare const EnvCheckSchema: GenMessage<EnvCheck>;
  */
 export enum EnvCheckStatus {
   /**
-   * @generated from enum value: NOT_STARTED = 0;
+   * @generated from enum value: PREPARING = 0;
    */
-  NOT_STARTED = 0,
+  PREPARING = 0,
+
+  /**
+   * @generated from enum value: NOT_STARTED = 1;
+   */
+  NOT_STARTED = 1,
 
   /**
    * obtained instance ip successfully
    *
-   * @generated from enum value: CREATED_INSTANCE = 1;
+   * @generated from enum value: CREATED_INSTANCE = 2;
    */
-  CREATED_INSTANCE = 1,
+  CREATED_INSTANCE = 2,
 
   /**
    * confirmed ssh
    *
-   * @generated from enum value: DONE = 2;
+   * @generated from enum value: DONE = 3;
    */
-  DONE = 2,
+  DONE = 3,
 }
 
 /**

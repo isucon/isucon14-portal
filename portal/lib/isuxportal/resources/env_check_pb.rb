@@ -19,9 +19,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :updated_at, :message, 10, "google.protobuf.Timestamp"
     end
     add_enum "isuxportal.proto.resources.EnvCheckStatus" do
-      value :NOT_STARTED, 0
-      value :CREATED_INSTANCE, 1
-      value :DONE, 2
+      value :PREPARING, 0
+      value :NOT_STARTED, 1
+      value :CREATED_INSTANCE, 2
+      value :DONE, 3
     end
   end
 end

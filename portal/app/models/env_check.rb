@@ -14,6 +14,18 @@ class EnvCheck < ApplicationRecord
   scope :test_boot, -> { where(name: 'test-boot') }
   scope :test_ssh_passed, -> { where(name: 'test-ssh', passed: true) }
 
+  def self.status(team_id)
+    if Rails.application.config.x.test_ami_id.nil?
+      Isuxportal::Proto::Resources::EnvCheckStatus::PREPARING
+    elsif self.of_team(team_id).test_ssh_passed.exists?
+      Isuxportal::Proto::Resources::EnvCheckStatus::DONE
+    elsif self.of_team(team_id).test_boot.last&.ip_address.present?
+      Isuxportal::Proto::Resources::EnvCheckStatus::CREATED_INSTANCE
+    else
+      Isuxportal::Proto::Resources::EnvCheckStatus::NOT_STARTED
+    end
+  end
+
   def to_pb()
     Isuxportal::Proto::Resources::EnvCheck.new(
       id: id,
