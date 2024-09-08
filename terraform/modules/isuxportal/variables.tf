@@ -16,6 +16,11 @@ variable "enable_auth" {
   default = true
 }
 
+variable "enable_auto_scaling" {
+  type    = bool
+  default = false
+}
+
 variable "fqdn" {
   type = object({
     xx     = string

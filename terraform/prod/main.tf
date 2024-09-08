@@ -1,7 +1,7 @@
 module "dns" {
   source      = "../modules/dns"
-  fqdn_xx     = "xiv.isucon.jp"
-  fqdn_portal = "portal.isucon.jp"
+  fqdn_xx     = "xiv.isucon.net"
+  fqdn_portal = "portal.isucon.net"
 }
 
 module "isuxportal" {
@@ -11,7 +11,7 @@ module "isuxportal" {
   }
 
   enable_auth         = true
-  enable_auto_scaling = false
+  enable_auto_scaling = false // ECS 起動後にtrueにする
 
   env     = local.env
   project = local.project
@@ -28,12 +28,13 @@ module "isuxportal" {
 
   isuconx = "isucon14"
 
-  aws_admin_role = "AWSReservedSSO_AdministratorAccess_71a4d573abfa63cc"
+  aws_admin_role = "AWSReservedSSO_AdministratorAccess_41d64ba53efc15ee"
 
   aurora_serverless_configuration = {
-    max_capacity = 4
+    max_capacity = 16
     min_capacity = 0.5
   }
+
 
 
 }
