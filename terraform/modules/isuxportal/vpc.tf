@@ -4,7 +4,7 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "${local.env}-${local.project}-vpc"
+    Name = "${var.env}-${var.project}-vpc"
   }
 }
 
@@ -12,7 +12,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "${local.env}-${local.project}-igw"
+    Name = "${var.env}-${var.project}-igw"
   }
 }
 
@@ -25,7 +25,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "${local.env}-${local.project}-public"
+    Name = "${var.env}-${var.project}-public"
   }
 }
 
@@ -40,7 +40,7 @@ resource "aws_subnet" "az-a" {
   map_public_ip_on_launch = true
   availability_zone       = "ap-northeast-1a"
   tags = {
-    Name = "${local.env}-${local.project}-az-a"
+    Name = "${var.env}-${var.project}-az-a"
   }
 }
 
@@ -50,7 +50,7 @@ resource "aws_subnet" "az-c" {
   map_public_ip_on_launch = true
   availability_zone       = "ap-northeast-1c"
   tags = {
-    Name = "${local.env}-${local.project}-az-c"
+    Name = "${var.env}-${var.project}-az-c"
   }
 }
 
@@ -60,7 +60,7 @@ resource "aws_subnet" "az-d" {
   map_public_ip_on_launch = true
   availability_zone       = "ap-northeast-1d"
   tags = {
-    Name = "${local.env}-${local.project}-az-d"
+    Name = "${var.env}-${var.project}-az-d"
   }
 }
 
@@ -70,7 +70,7 @@ resource "aws_subnet" "az-a-benchmarker" {
   map_public_ip_on_launch = true
   availability_zone       = "ap-northeast-1a"
   tags = {
-    Name = "${local.env}-${local.project}-az-a-benchmarker"
+    Name = "${var.env}-${var.project}-az-a-benchmarker"
   }
 }
 
@@ -80,7 +80,7 @@ resource "aws_subnet" "az-c-benchmarker" {
   map_public_ip_on_launch = true
   availability_zone       = "ap-northeast-1c"
   tags = {
-    Name = "${local.env}-${local.project}-az-c-benchmarker"
+    Name = "${var.env}-${var.project}-az-c-benchmarker"
   }
 }
 
@@ -90,13 +90,13 @@ resource "aws_subnet" "az-d-benchmarker" {
   map_public_ip_on_launch = true
   availability_zone       = "ap-northeast-1d"
   tags = {
-    Name = "${local.env}-${local.project}-az-d-benchmarker"
+    Name = "${var.env}-${var.project}-az-d-benchmarker"
   }
 }
 
 resource "aws_security_group" "internal" {
   vpc_id = aws_vpc.main.id
-  name   = "${local.env}-${local.project}-internal"
+  name   = "${var.env}-${var.project}-internal"
 
   ingress {
     description = "from myself"
@@ -116,7 +116,7 @@ resource "aws_security_group" "internal" {
   }
 
   tags = {
-    Name = "${local.env}-${local.project}-internal"
+    Name = "${var.env}-${var.project}-internal"
   }
 
   lifecycle {
@@ -126,7 +126,7 @@ resource "aws_security_group" "internal" {
 
 resource "aws_security_group" "http-https" {
   vpc_id = aws_vpc.main.id
-  name   = "${local.env}-${local.project}-http-https"
+  name   = "${var.env}-${var.project}-http-https"
 
   ingress {
     description = "http"
@@ -149,6 +149,6 @@ resource "aws_security_group" "http-https" {
   }
 
   tags = {
-    Name = "${local.env}-${local.project}-http-https"
+    Name = "${var.env}-${var.project}-http-https"
   }
 }

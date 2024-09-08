@@ -1,5 +1,5 @@
 resource "aws_lb" "main" {
-  name               = "${local.env}-${local.project}"
+  name               = "${var.env}-${var.project}"
   internal           = false
   load_balancer_type = "application"
 
@@ -56,7 +56,7 @@ resource "aws_lb_listener" "https" {
 }
 
 resource "aws_lb_target_group" "app" {
-  name                 = "${local.env}-${local.project}-app2"
+  name                 = "${var.env}-${var.project}-app2"
   port                 = 80
   protocol             = "HTTP"
   vpc_id               = aws_vpc.main.id
@@ -79,16 +79,19 @@ resource "aws_lb_listener_rule" "app" {
   listener_arn = aws_lb_listener.https.arn
   priority     = 10
 
-  action {
-    type = "authenticate-cognito"
+  dynamic "action" {
+    for_each = var.enable_auth ? [1] : []
+    content {
+      type = "authenticate-cognito"
 
-    authenticate_cognito {
-      user_pool_arn              = aws_cognito_user_pool.developers.arn
-      user_pool_client_id        = aws_cognito_user_pool_client.client.id
-      user_pool_domain           = aws_cognito_user_pool_domain.domain.domain
-      on_unauthenticated_request = "authenticate"
-      session_timeout            = "86400"
-      session_cookie_name        = "AWSELBAuthSessionCookie"
+      authenticate_cognito {
+        user_pool_arn              = aws_cognito_user_pool.developers.arn
+        user_pool_client_id        = aws_cognito_user_pool_client.client.id
+        user_pool_domain           = aws_cognito_user_pool_domain.domain.domain
+        on_unauthenticated_request = "authenticate"
+        session_timeout            = "86400"
+        session_cookie_name        = "AWSELBAuthSessionCookie"
+      }
     }
   }
 

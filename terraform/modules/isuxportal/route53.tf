@@ -1,13 +1,6 @@
-resource "aws_route53_zone" "xiv" {
-  name = "xiv.isucon.jp"
-}
-resource "aws_route53_zone" "portal" {
-  name = "portal.isucon.jp"
-}
-
 resource "aws_route53_record" "portal" {
-  zone_id = aws_route53_zone.portal.zone_id
-  name    = aws_route53_zone.portal.name
+  zone_id = var.zone_id.portal
+  name    = var.fqdn.portal
   type    = "A"
   alias {
     name                   = aws_cloudfront_distribution.portal.domain_name
@@ -17,8 +10,8 @@ resource "aws_route53_record" "portal" {
 }
 
 resource "aws_route53_record" "portal-lb" {
-  zone_id = aws_route53_zone.portal.zone_id
-  name    = "lb.${aws_route53_zone.portal.name}"
+  zone_id = var.zone_id.portal
+  name    = "lb.${var.fqdn.portal}"
   type    = "A"
   alias {
     name                   = aws_lb.main.dns_name
@@ -41,5 +34,5 @@ resource "aws_route53_record" "cert" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = aws_route53_zone.portal.zone_id
+  zone_id         = var.zone_id.portal
 }

@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "logs" {
-  bucket = "logs-${local.env}-${local.project}-isucon14"
+  bucket = "logs-${var.env}-${var.project}-${var.isuconx}"
 }
 
 // CloudFront の Access Logs は ACL が有効でないといけないのでACLを有効に
@@ -72,7 +72,7 @@ resource "aws_s3_bucket_policy" "logs" {
 }
 
 resource "aws_s3_bucket" "config" {
-  bucket = "config-${local.env}-${local.project}-isucon14"
+  bucket = "config-${var.env}-${var.project}-${var.isuconx}"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "config" {

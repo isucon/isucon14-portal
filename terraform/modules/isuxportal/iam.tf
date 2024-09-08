@@ -1,9 +1,9 @@
 data "aws_iam_role" "admin" {
-  name = "AWSReservedSSO_AdministratorAccess_71a4d573abfa63cc"
+  name = var.aws_admin_role
 }
 
 resource "aws_iam_role" "rds-monitoring" {
-  name = "${local.env}-${local.project}-rds-monitoring"
+  name = "${var.env}-${var.project}-rds-monitoring"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -25,7 +25,7 @@ resource "aws_iam_role_policy_attachment" "rds-monitoring" {
 }
 
 resource "aws_iam_role" "ecs-task" {
-  name = "${local.env}-${local.project}-ecs-task"
+  name = "${var.env}-${var.project}-ecs-task"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -42,7 +42,7 @@ resource "aws_iam_role" "ecs-task" {
 }
 
 resource "aws_iam_policy" "ecs-task" {
-  name        = "${local.env}-${local.project}-ecs-task"
+  name        = "${var.env}-${var.project}-ecs-task"
   path        = "/"
   description = ""
 

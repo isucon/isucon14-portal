@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "main" {
-  name = "${local.env}-${local.project}"
+  name = "${var.env}-${var.project}"
 
   setting {
     name  = "containerInsights"
@@ -20,17 +20,17 @@ resource "aws_ecs_cluster" "main" {
 }
 
 resource "aws_ecr_repository" "app" {
-  name                 = "${local.env}/${local.project}/app"
+  name                 = "${var.env}/${var.project}/app"
   image_tag_mutability = "MUTABLE"
 }
 
 resource "aws_ecr_repository" "nginx" {
-  name                 = "${local.env}/${local.project}/nginx"
+  name                 = "${var.env}/${var.project}/nginx"
   image_tag_mutability = "MUTABLE"
 }
 
 resource "aws_ecs_cluster" "benchmarker" {
-  name = "${local.env}-benchmarker"
+  name = "${var.env}-benchmarker"
 
   setting {
     name  = "containerInsights"
@@ -51,6 +51,6 @@ resource "aws_ecs_cluster" "benchmarker" {
 }
 
 resource "aws_ecr_repository" "benchmarker" {
-  name                 = "${local.env}/benchmarker"
+  name                 = "${var.env}/benchmarker"
   image_tag_mutability = "MUTABLE"
 }

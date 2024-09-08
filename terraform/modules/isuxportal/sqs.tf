@@ -1,5 +1,5 @@
 resource "aws_sqs_queue" "activejob" {
-  name = "${local.env}-${local.project}-activejob"
+  name = "${var.env}-${var.project}-activejob"
 
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.activejob-dlq.arn
@@ -8,5 +8,5 @@ resource "aws_sqs_queue" "activejob" {
 }
 
 resource "aws_sqs_queue" "activejob-dlq" {
-  name = "${local.env}-${local.project}-activejob-dlq"
+  name = "${var.env}-${var.project}-activejob-dlq"
 }

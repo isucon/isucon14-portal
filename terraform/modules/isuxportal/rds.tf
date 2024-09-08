@@ -1,7 +1,7 @@
 resource "aws_rds_cluster_parameter_group" "main" {
-  name        = "${local.env}-${local.project}-mysql8"
+  name        = "${var.env}-${var.project}-mysql8"
   family      = "aurora-mysql8.0"
-  description = "${local.env} ${local.project} aurora cluster parameter group"
+  description = "${var.env} ${var.project} aurora cluster parameter group"
 
   parameter {
     apply_method = "immediate"
@@ -41,9 +41,9 @@ resource "aws_rds_cluster_parameter_group" "main" {
 }
 
 resource "aws_db_parameter_group" "main" {
-  name        = "${local.env}-${local.project}-aurora-mysql8"
+  name        = "${var.env}-${var.project}-aurora-mysql8"
   family      = "aurora-mysql8.0"
-  description = "${local.env} ${local.project} aurora db parameter group"
+  description = "${var.env} ${var.project} aurora db parameter group"
 
   parameter {
     apply_method = "pending-reboot"
@@ -73,7 +73,7 @@ resource "aws_db_parameter_group" "main" {
 }
 
 resource "aws_db_subnet_group" "main" {
-  name = "${local.env}-${local.project}"
+  name = "${var.env}-${var.project}"
   subnet_ids = [
     aws_subnet.az-a.id,
     aws_subnet.az-c.id,
@@ -81,12 +81,12 @@ resource "aws_db_subnet_group" "main" {
   ]
 
   tags = {
-    Name = "${local.env}-${local.project}"
+    Name = "${var.env}-${var.project}"
   }
 }
 
 resource "aws_rds_cluster" "main" {
-  cluster_identifier          = "${local.env}-${local.project}"
+  cluster_identifier          = "${var.env}-${var.project}"
   engine                      = "aurora-mysql"
   engine_version              = "8.0.mysql_aurora.3.07.1"
   master_username             = "root"
@@ -107,14 +107,14 @@ resource "aws_rds_cluster" "main" {
   ]
 
   serverlessv2_scaling_configuration {
-    max_capacity = 4
-    min_capacity = 0.5
+    max_capacity = var.aurora_serverless_configuration.max_capacity
+    min_capacity = var.aurora_serverless_configuration.min_capacity
   }
 
 }
 
 resource "aws_rds_cluster_instance" "main-1" {
-  identifier                   = "${local.env}-${local.project}-1"
+  identifier                   = "${var.env}-${var.project}-1"
   cluster_identifier           = aws_rds_cluster.main.id
   engine                       = "aurora-mysql"
   instance_class               = "db.serverless"

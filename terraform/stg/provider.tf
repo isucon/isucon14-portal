@@ -1,12 +1,3 @@
-
-data "aws_caller_identity" "current" {}
-locals {
-  env           = "stg"
-  project       = "portal"
-  root_user_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-}
-
-
 provider "aws" {
   profile = "portal-stg"
   region  = "ap-northeast-1"
@@ -32,12 +23,9 @@ provider "aws" {
   }
 }
 
-terraform {
-  backend "s3" {
-    profile = "portal-stg"
-    region  = "ap-northeast-1"
-
-    bucket = "tfstate-isucon14-portal-stg"
-    key    = "terraform.tfstate"
-  }
+locals {
+  env     = "stg"
+  project = "portal"
 }
+
+

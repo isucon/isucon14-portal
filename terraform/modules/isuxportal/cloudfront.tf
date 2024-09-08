@@ -1,10 +1,10 @@
 resource "aws_cloudfront_distribution" "portal" {
   enabled         = true
   is_ipv6_enabled = true
-  comment         = "${local.env}-portal"
+  comment         = "${var.env}-${var.project}"
 
   aliases = [
-    aws_route53_zone.portal.name // APEX
+    var.fqdn.portal // APEX
   ]
 
   viewer_certificate {
@@ -48,8 +48,8 @@ resource "aws_cloudfront_distribution" "portal" {
       }
     }
     min_ttl                = 0
-    default_ttl            = 86400 // NOTE: stgで認証を書けているので認証切れた後にキャッシュされないようにしている
-    max_ttl                = 86400
+    default_ttl            = var.enable_auth ? 86400 : 31536000 // NOTE: stgで認証を書けているので認証切れた後にキャッシュされないようにしている
+    max_ttl                = var.enable_auth ? 86400 : 31536000
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
   }
