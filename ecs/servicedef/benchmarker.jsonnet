@@ -14,12 +14,12 @@
     awsvpcConfiguration: {
       assignPublicIp: 'ENABLED',
       securityGroups: [
-        "{{ tfstate `aws_security_group.internal.id` }}",
+        "{{ tfstate `module.isuxportal.aws_security_group.internal.id` }}",
       ],
       subnets: [
-        "{{ tfstate `aws_subnet.az-a-benchmarker.id` }}",
-        "{{ tfstate `aws_subnet.az-c-benchmarker.id` }}",
-        "{{ tfstate `aws_subnet.az-d-benchmarker.id` }}",
+        "{{ tfstate `module.isuxportal.aws_subnet.az-a-benchmarker.id` }}",
+        "{{ tfstate `module.isuxportal.aws_subnet.az-c-benchmarker.id` }}",
+        "{{ tfstate `module.isuxportal.aws_subnet.az-d-benchmarker.id` }}",
       ],
     },
   },

@@ -1,8 +1,15 @@
 export ENV?=stg
 export TAG?=$(shell git log -1 --format=%H)
 export ECR?=$(shell jq -r '.credHelpers | keys | .[0]' .docker/config.json)
+# export ECR=703671906592.dkr.ecr.ap-northeast-1.amazonaws.com
+export ECR=692859926955.dkr.ecr.ap-northeast-1.amazonaws.com
 export SOPS_KMS_ARN?=arn:aws:kms:ap-northeast-1:692859926955:alias/$(ENV)-portal
 DOCKER_CMD=docker --config .docker
+
+
+login: 
+	aws --profile portal-$(ENV) ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin $(ECR)
+
 build/app:
 	cd ../portal && \
 	$(DOCKER_CMD) build \

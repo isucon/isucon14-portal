@@ -3,7 +3,7 @@
   environment: [
     {
       name: 'ISUXPORTAL_SHORYUKEN_QUEUE',
-      value: '{{ tfstate `aws_sqs_queue.activejob.name` }}',
+      value: '{{ tfstate `module.isuxportal.aws_sqs_queue.activejob.name` }}',
     },
       // {
       //   name: 'ISUXPORTAL_TEST_AMI_ID',
@@ -17,9 +17,9 @@
   environmentFiles: [
     {
       type: 's3',
-      value: '{{ tfstate `aws_s3_bucket.config.arn` }}/ecs/{{ must_env `ENV` }}.env',
+      value: '{{ tfstate `module.isuxportal.aws_s3_bucket.config.arn` }}/ecs/{{ must_env `ENV` }}.env',
     },
   ],
   essential: true,
-  image: '{{ tfstate `aws_ecr_repository.app.repository_url` }}:{{ must_env `TAG` }}',
+  image: '{{ tfstate `module.isuxportal.aws_ecr_repository.app.repository_url` }}:{{ must_env `TAG` }}',
 }

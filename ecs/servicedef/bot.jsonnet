@@ -15,12 +15,12 @@
     awsvpcConfiguration: {
       assignPublicIp: 'ENABLED',
       securityGroups: [
-        "{{ tfstate `aws_security_group.internal.id` }}",
+        "{{ tfstate `module.isuxportal.aws_security_group.internal.id` }}",
       ],
       subnets: [
-        "{{ tfstate `aws_subnet.az-a.id` }}",
-        "{{ tfstate `aws_subnet.az-c.id` }}",
-        "{{ tfstate `aws_subnet.az-d.id` }}",
+        "{{ tfstate `module.isuxportal.aws_subnet.az-a.id` }}",
+        "{{ tfstate `module.isuxportal.aws_subnet.az-c.id` }}",
+        "{{ tfstate `module.isuxportal.aws_subnet.az-d.id` }}",
       ],
     },
   },

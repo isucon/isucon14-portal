@@ -15,19 +15,19 @@
     {
       containerName: 'nginx',
       containerPort: 80,
-      targetGroupArn: '{{ tfstate `aws_lb_target_group.app.arn` }}',
+      targetGroupArn: '{{ tfstate `module.isuxportal.aws_lb_target_group.app.arn` }}',
     },
   ],
   networkConfiguration: {
     awsvpcConfiguration: {
       assignPublicIp: 'ENABLED',
       securityGroups: [
-        "{{ tfstate `aws_security_group.internal.id` }}",
+        "{{ tfstate `module.isuxportal.aws_security_group.internal.id` }}",
       ],
       subnets: [
-        "{{ tfstate `aws_subnet.az-a.id` }}",
-        "{{ tfstate `aws_subnet.az-c.id` }}",
-        "{{ tfstate `aws_subnet.az-d.id` }}",
+        "{{ tfstate `module.isuxportal.aws_subnet.az-a.id` }}",
+        "{{ tfstate `module.isuxportal.aws_subnet.az-c.id` }}",
+        "{{ tfstate `module.isuxportal.aws_subnet.az-d.id` }}",
       ],
     },
   },

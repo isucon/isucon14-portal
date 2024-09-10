@@ -7,7 +7,7 @@ local app = import 'lib/app.libsonnet';
       logConfiguration: {
         logDriver: 'awslogs',
         options: {
-          'awslogs-group': "{{ tfstate `aws_cloudwatch_log_group.ecs['app'].name` }}",
+          'awslogs-group': "{{ tfstate `module.isuxportal.aws_cloudwatch_log_group.ecs['app'].name` }}",
           'awslogs-region': 'ap-northeast-1',
           'awslogs-stream-prefix': 'app',
         },
@@ -17,11 +17,11 @@ local app = import 'lib/app.libsonnet';
       name: 'nginx',
       environment: [],
       essential: true,
-      image: '{{ tfstate `aws_ecr_repository.nginx.repository_url` }}:{{ must_env `TAG` }}',
+      image: '{{ tfstate `module.isuxportal.aws_ecr_repository.nginx.repository_url` }}:{{ must_env `TAG` }}',
       logConfiguration: {
         logDriver: 'awslogs',
         options: {
-          'awslogs-group': "{{ tfstate `aws_cloudwatch_log_group.ecs['app'].name` }}",
+          'awslogs-group': "{{ tfstate `module.isuxportal.aws_cloudwatch_log_group.ecs['app'].name` }}",
           'awslogs-region': 'ap-northeast-1',
           'awslogs-stream-prefix': 'nginx',
         },
@@ -42,7 +42,7 @@ local app = import 'lib/app.libsonnet';
     },
   ],
   cpu: '1024',
-  executionRoleArn: '{{ tfstate `aws_iam_role.ecs-task.arn` }}',
+  executionRoleArn: '{{ tfstate `module.isuxportal.aws_iam_role.ecs-task.arn` }}',
   family: '{{ must_env `ENV` }}-portal',
   memory: '4096',
   networkMode: 'awsvpc',
@@ -62,5 +62,5 @@ local app = import 'lib/app.libsonnet';
       value: 'portal',
     },
   ],
-  taskRoleArn: '{{ tfstate `aws_iam_role.ecs-task.arn` }}',
+  taskRoleArn: '{{ tfstate `module.isuxportal.aws_iam_role.ecs-task.arn` }}',
 }
