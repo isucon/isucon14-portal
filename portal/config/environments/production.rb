@@ -158,6 +158,7 @@ Rails.application.configure do
   config.x.webpush.subject = ENV['ISUXPORTAL_VAPID_SUBJECT'] || 'isucon10@googlegroups.com'
 
   config.x.sentry.dsn = ENV.fetch('SENTRY_DSN')
+  config.x.sentry.environment = ENV.fetch('SENTRY_ENV')
 
   config.x.test_ami_id = ENV['ISUXPORTAL_TEST_AMI_ID']
   config.x.qualify_ami_id = ENV['ISUXPORTAL_QUALIFY_AMI_ID']

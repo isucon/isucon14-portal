@@ -13,6 +13,7 @@
 
     <%- if Rails.application.config.x.sentry.dsn.present? -%>
     <meta name="isux:sentry-dsn" content="<%= Rails.application.config.x.sentry.dsn %>">
+    <meta name="isux:environment" content="<%= Rails.application.config.x.sentry.environment %>">
     <%- end -%>
     <%- if ENV['NEW_RELIC_LICENSE_KEY'].present? %>
     <%= NewRelic::Agent.browser_timing_header(content_security_policy_nonce) %>
