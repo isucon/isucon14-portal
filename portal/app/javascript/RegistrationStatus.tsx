@@ -120,10 +120,12 @@ export class RegistrationStatus extends React.Component<Props, State> {
                 </div>
               </div>
 
-              <div className="field">
-                <label className="label">クーポン</label>
-                {this.renderCoupon()}
-              </div>
+              {this.props.registrationSession.coupon ? (
+                <div className="field">
+                  <label className="label">クーポン</label>
+                  {this.renderCoupon()}
+                </div>
+              ) : null}
 
               <h5 className="title is-5 mt-3">メンバーリスト</h5>
               {this.renderTeamMembers()}
