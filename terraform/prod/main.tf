@@ -11,7 +11,7 @@ module "isuxportal" {
   }
 
   enable_auth         = true
-  enable_auto_scaling = false // ECS 起動後にtrueにする
+  enable_auto_scaling = true
 
   env     = local.env
   project = local.project
