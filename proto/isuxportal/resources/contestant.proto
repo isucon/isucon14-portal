@@ -11,6 +11,7 @@ message Contestant {
     string discord_tag = 2;
     bool is_student = 3;
     string avatar_url = 4;
+    bool is_in_person = 5;
 
     string github_id = 16;
     string discord_id = 17;

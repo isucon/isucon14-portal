@@ -33,6 +33,11 @@ export declare type JoinTeamRequest = Message<"isuxportal.proto.services.registr
    * @generated from field: bool is_student = 4;
    */
   isStudent: boolean;
+
+  /**
+   * @generated from field: bool is_in_person = 5;
+   */
+  isInPerson: boolean;
 };
 
 /**

@@ -16,6 +16,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :discord_tag, :string, 2
       optional :is_student, :bool, 3
       optional :avatar_url, :string, 4
+      optional :is_in_person, :bool, 5
       optional :github_id, :string, 16
       optional :discord_id, :string, 17
       optional :is_ssh_key_registered, :bool, 21

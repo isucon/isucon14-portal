@@ -40,6 +40,8 @@ message UpdateRegistrationRequest {
   string name = 2; // contestant name
   string email_address = 3;
   bool is_student = 4;
+  bool is_in_person = 5;
+  string avatar_url = 6;
 }
 
 message UpdateRegistrationResponse {}
