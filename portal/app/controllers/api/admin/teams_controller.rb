@@ -54,6 +54,7 @@ class Api::Admin::TeamsController < Api::Admin::ApplicationController
         contestant.update!(
           name: cpb.name,
           student: cpb.detail.is_student,
+          in_person: cpb.detail.is_in_person,
           github_id: cpb.detail.github_id,
           github_login: cpb.detail.github_login,
           discord_id: cpb.detail.discord_id,

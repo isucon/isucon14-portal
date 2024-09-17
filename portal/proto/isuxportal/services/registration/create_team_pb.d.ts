@@ -37,6 +37,11 @@ export declare type CreateTeamRequest = Message<"isuxportal.proto.services.regis
   isStudent: boolean;
 
   /**
+   * @generated from field: bool is_in_person = 5;
+   */
+  isInPerson: boolean;
+
+  /**
    * requires bypass token
    *
    * @generated from field: bool hidden = 16;

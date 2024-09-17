@@ -65,6 +65,7 @@ class Api::Registration::SessionsController < Api::Registration::ApplicationCont
       current_contestant.update!(
         name: pb.name,
         student: pb.is_student,
+        in_person: pb.is_in_person,
       )
       if current_team.leader_id == current_contestant.id
         current_team.update!(

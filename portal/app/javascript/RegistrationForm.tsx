@@ -25,6 +25,7 @@ export interface State {
   name: string;
   emailAddress: string;
   isStudent: boolean;
+  isInPerson: boolean;
   requesting: boolean;
   requestError: Error | null;
 }
@@ -37,6 +38,7 @@ export class RegistrationForm extends React.Component<Props, State> {
       name: this.props.session.contestant?.name ?? "",
       emailAddress: this.props.registrationSession.team?.detail?.emailAddress ?? "",
       isStudent: this.props.session.contestant?.detail!.isStudent ?? false,
+      isInPerson: this.props.session.contestant?.detail!.isInPerson ?? false,
       requesting: false,
       requestError: null,
     };
@@ -80,6 +82,7 @@ export class RegistrationForm extends React.Component<Props, State> {
         emailAddress: this.state.emailAddress,
         name: this.state.name,
         isStudent: this.state.isStudent,
+        isInPerson: this.state.isInPerson,
       }),
     );
   }
@@ -91,6 +94,7 @@ export class RegistrationForm extends React.Component<Props, State> {
         teamId: this.props.registrationSession.team!.id,
         name: this.state.name,
         isStudent: this.state.isStudent,
+        isInPerson: this.state.isInPerson,
       }),
     );
   }
@@ -102,6 +106,7 @@ export class RegistrationForm extends React.Component<Props, State> {
         emailAddress: this.state.emailAddress,
         name: this.state.name,
         isStudent: this.state.isStudent,
+        isInPerson: this.state.isInPerson,
       }),
     );
   }
@@ -288,6 +293,20 @@ export class RegistrationForm extends React.Component<Props, State> {
               type="checkbox"
               name="isStudent"
               checked={this.state.isStudent}
+              onChange={this.onChange.bind(this)}
+            />{" "}
+            はい
+          </div>
+        </div>
+
+        <div className="field">
+          <label className="label">オフライン会場での参加を希望しますか?</label>
+          <div className="control">
+            <input
+              className="checkbox"
+              type="checkbox"
+              name="isInPerson"
+              checked={this.state.isInPerson}
               onChange={this.onChange.bind(this)}
             />{" "}
             はい

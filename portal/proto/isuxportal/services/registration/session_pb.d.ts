@@ -172,6 +172,16 @@ export declare type UpdateRegistrationRequest = Message<"isuxportal.proto.servic
    * @generated from field: bool is_student = 4;
    */
   isStudent: boolean;
+
+  /**
+   * @generated from field: bool is_in_person = 5;
+   */
+  isInPerson: boolean;
+
+  /**
+   * @generated from field: string avatar_url = 6;
+   */
+  avatarUrl: string;
 };
 
 /**

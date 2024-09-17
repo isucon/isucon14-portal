@@ -55,6 +55,7 @@ class Contestant < ApplicationRecord
         discord_tag: discord_tag,
         discord_id: discord_id,
         is_student: student,
+        is_in_person: in_person,
         is_ssh_key_registered: !ssh_public_keys.empty?,
         is_discord_guild_member: is_discord_guild_member,
       ),

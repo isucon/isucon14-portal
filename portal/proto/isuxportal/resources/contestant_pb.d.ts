@@ -66,6 +66,11 @@ export declare type Contestant_ContestantDetail = Message<"isuxportal.proto.reso
   avatarUrl: string;
 
   /**
+   * @generated from field: bool is_in_person = 5;
+   */
+  isInPerson: boolean;
+
+  /**
    * @generated from field: string github_id = 16;
    */
   githubId: string;

@@ -39,6 +39,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :name, :string, 2
       optional :email_address, :string, 3
       optional :is_student, :bool, 4
+      optional :is_in_person, :bool, 5
+      optional :avatar_url, :string, 6
     end
     add_message "isuxportal.proto.services.registration.UpdateRegistrationResponse" do
     end

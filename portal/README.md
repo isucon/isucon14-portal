@@ -46,8 +46,7 @@ export DATABASE_URL="mysql2://isuxportal_dev:dbpass@127.0.0.1:3306/isuxportal_de
 ## Run
 
 ```
-# NODE_OPTIONS は OpenSSL 3.x 時のみ
-NODE_OPTIONS=--openssl-legacy-provider npx webpack --progress --watch
+npx webpack --progress --watch
 bundle exec rails s
 ```
 
