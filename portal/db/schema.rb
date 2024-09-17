@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_17_234715) do
+ActiveRecord::Schema.define(version: 2024_09_17_173241) do
 
   create_table "benchmark_executions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(version: 2022_07_17_234715) do
     t.string "github_id", null: false
     t.string "discord_tag", null: false
     t.boolean "is_discord_guild_member", default: false, null: false
+    t.boolean "in_person"
     t.index ["discord_id"], name: "index_contestants_on_discord_id", unique: true
     t.index ["github_id"], name: "index_contestants_on_github_id", unique: true
     t.index ["team_id"], name: "index_contestants_on_team_id"
