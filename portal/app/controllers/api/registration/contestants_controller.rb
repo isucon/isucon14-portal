@@ -19,7 +19,7 @@ class Api::Registration::ContestantsController < Api::Registration::ApplicationC
         name: pb.name,
         student: pb.is_student,
         in_person: pb.is_in_person,
-        avatar_url: github_login.fetch('avatar_url'),
+        avatar_url: pb.avatar_url,
         discord_id: discord_login.fetch('id'),
         discord_tag: discord_login.fetch('tag'),
         github_id: github_login.fetch('id'),

@@ -72,9 +72,9 @@ export class Navbar extends React.Component<Props, State> {
         case Contest_Status.STANDBY:
           return (
             <>
-              <Link className="button is-light" to="/registration">
+              <a className="button is-light" href="/registration">
                 参加登録/修正
-              </Link>
+              </a>
             </>
           );
         case Contest_Status.STARTED:
@@ -88,9 +88,9 @@ export class Navbar extends React.Component<Props, State> {
     } else {
       if (this.props.session.contest?.status === Contest_Status.REGISTRATION) {
         return (
-          <Link className="button is-light" to="/registration">
+          <a className="button is-light" href="/registration">
             参加登録
-          </Link>
+          </a>
         );
       } else {
         return null;

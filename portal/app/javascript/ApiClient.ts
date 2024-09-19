@@ -52,6 +52,7 @@ import {
 import { DashboardResponseSchema } from "../../proto/isuxportal/services/contestant/dashboard_pb";
 import { DashboardResponseSchema as AudienceDashboardResponseSchema } from "../../proto/isuxportal/services/audience/dashboard_pb";
 import { GetCloudFormationResponseSchema } from "../../proto/isuxportal/services/contestant/cloud_formation_pb";
+import { GetAvatarUrlResponseSchema } from "../../proto/isuxportal/services/common/storage_pb";
 
 export class ApiError extends Error {
   public localError: Error;
@@ -126,6 +127,11 @@ export class ApiClient {
   public async getEnvCheckInformation() {
     const resp = await this.request(`${this.baseUrl}/api/registration/env_check`, "GET", null, null);
     return fromBinary(GetEnvCheckInformationResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async getAvatarUrl() {
+    const resp = await this.request(`${this.baseUrl}/api/registration/avatar/url`, "GET", null, null);
+    return fromBinary(GetAvatarUrlResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public async activateCoupon(payload: ActivateCouponRequest) {
