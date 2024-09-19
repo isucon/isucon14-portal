@@ -2,7 +2,9 @@ version: '3'
 
 services:
   app:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
     environment:
       RACK_ENV: development
       RAILS_ENV: development
@@ -34,7 +36,9 @@ services:
       ISUXPORTAL_ADMIN_PASSWORD: pass
     ports:
       - '3000:3000'
-
+    volumes:
+      - ./public:/app/public:ro
+      - ./app:/app/app:ro
   redis:
     image: redis:latest
     expose:
