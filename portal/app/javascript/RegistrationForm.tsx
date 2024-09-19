@@ -1,4 +1,5 @@
 import { ApiClient } from "./ApiClient";
+import AvatarEditor from 'react-avatar-editor'
 import React from "react";
 
 import { ErrorMessage } from "./ErrorMessage";
@@ -26,11 +27,15 @@ export interface State {
   emailAddress: string;
   isStudent: boolean;
   isInPerson: boolean;
+  avatar : string;
+  avatarfile : File | null;
   requesting: boolean;
   requestError: Error | null;
 }
 
 export class RegistrationForm extends React.Component<Props, State> {
+  private editor : React.RefObject<AvatarEditor>;
+  private input : React.RefObject<HTMLInputElement>;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -39,9 +44,16 @@ export class RegistrationForm extends React.Component<Props, State> {
       emailAddress: this.props.registrationSession.team?.detail?.emailAddress ?? "",
       isStudent: this.props.session.contestant?.detail!.isStudent ?? false,
       isInPerson: this.props.session.contestant?.detail!.isInPerson ?? false,
+      avatar: this.props.session.contestant?.detail!.avatarUrl ?? "",
+      avatarfile: null,
       requesting: false,
       requestError: null,
     };
+
+    this.editor = React.createRef();
+    this.input = React.createRef();
+
+    this.onLoad = this.onLoad.bind(this);
   }
 
   public async onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -49,6 +61,12 @@ export class RegistrationForm extends React.Component<Props, State> {
     if (this.state.requesting) return;
     try {
       this.setState({ requesting: true });
+      if (this.state.avatarfile !== null) {
+        const {url, uploadPresigned} = await this.props.client.getAvatarUrl();
+        await this.uploadAvatar(uploadPresigned, this.state.avatarfile);
+        this.setState({ avatar: url });
+      }
+
       if (this.isEditing()) {
         await this.updateRegistration();
       } else {
@@ -74,6 +92,13 @@ export class RegistrationForm extends React.Component<Props, State> {
       [name]: value as unknown,
     } as Pick<State, keyof State>);
   }
+
+  public onLoad(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    this.setState({ avatarfile: file });
+  }
+
 
   createTeam() {
     return this.props.client.createTeam(
@@ -107,8 +132,17 @@ export class RegistrationForm extends React.Component<Props, State> {
         name: this.state.name,
         isStudent: this.state.isStudent,
         isInPerson: this.state.isInPerson,
+        avatarUrl: this.state.avatar,
       }),
     );
+  }
+
+  uploadAvatar(url: string, file: File) {
+    // url に対して PUT リクエストを送信する
+    return fetch(url, {
+      method: "PUT",
+      body: file,
+    });
   }
 
   isEditing() {
@@ -284,19 +318,19 @@ export class RegistrationForm extends React.Component<Props, State> {
             人目以降の登録は、登録後確認できる招待URLを利用して、それぞれ個別に登録してください)。
           </p>
         </div>
-
+       {this.isEditing() ? this.renderAvatar() : null}
         <div className="field">
           <label className="label">学生ですか?</label>
           <div className="control">
             <label>
-            <input
-              className="checkbox"
-              type="checkbox"
-              name="isStudent"
-              checked={this.state.isStudent}
-              onChange={this.onChange.bind(this)}
-            />{" "}
-            はい
+              <input
+                className="checkbox"
+                type="checkbox"
+                name="isStudent"
+                checked={this.state.isStudent}
+                onChange={this.onChange.bind(this)}
+              />{" "}
+              はい
             </label>
           </div>
         </div>
@@ -305,20 +339,45 @@ export class RegistrationForm extends React.Component<Props, State> {
           <label className="label">オフライン会場での参加を希望しますか?</label>
           <div className="control">
             <label>
-            <input
-              className="checkbox"
-              type="checkbox"
-              name="isInPerson"
-              checked={this.state.isInPerson}
-              onChange={this.onChange.bind(this)}
-            />{" "}
-            はい
+              <input
+                className="checkbox"
+                type="checkbox"
+                name="isInPerson"
+                checked={this.state.isInPerson}
+                onChange={this.onChange.bind(this)}
+              />{" "}
+              はい
             </label>
           </div>
         </div>
       </>
     );
   }
+
+  public renderAvatar() {
+    return (
+      <>
+       <div className="field">
+          <label className="label" htmlFor="fieldName">
+            アイコン画像
+          </label>
+          <AvatarEditor
+            ref={this.editor}
+            image={this.state.avatarfile === null ?  this.state.avatar : this.state.avatarfile}
+            border={20}
+            width={170}
+            height={170}
+            color={[255, 255, 255, 0.6]} // RGBA
+          />
+          <label className="file-label">
+            <input className="file-input" type="file" name="resume" accept="image/png, image/jpeg" ref={this.input} onChange={this.onLoad} />
+            <span className="button is-info">変更</span>
+          </label>
+        </div>
+      </>
+    );
+  }
+
 
   public renderError() {
     if (!this.state.requestError) return null;
