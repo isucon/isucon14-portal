@@ -11,5 +11,4 @@ class Api::Registration::AvatarsController < Api::Registration::ApplicationContr
       url: download_url
     )
   end
-
 end

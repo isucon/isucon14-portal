@@ -66,8 +66,7 @@ Rails.application.routes.draw do
       # registration/activate_coupon ActivateCoupon: PUT /api/registration/coupon
       put 'coupon' => 'coupons#update'
       # registration/avatar GetAvatarUrl: GET /api/registration/avatar/url
-      scope path: 'avatar', module: 'avatar' do
-      end
+      get 'avatar/url' => 'avatars#show'
 
     end
 
