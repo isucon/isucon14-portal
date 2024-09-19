@@ -21,6 +21,12 @@ module "isuxportal" {
     portal = module.dns.fqdn.portal
   }
 
+  origins = [
+    "https://${module.dns.fqdn.portal}",
+    "https://${module.dns.fqdn.xx}",
+  ]
+
+
   zone_id = {
     xx     = module.dns.zone_id.xx
     portal = module.dns.zone_id.portal

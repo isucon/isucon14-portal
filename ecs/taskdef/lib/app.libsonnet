@@ -5,6 +5,10 @@
       name: 'ISUXPORTAL_SHORYUKEN_QUEUE',
       value: '{{ tfstate `module.isuxportal.aws_sqs_queue.activejob.name` }}',
     },
+    {
+      name: 'ISUXPORTAL_SHORYUKEN_QUEUE',
+      value: '{{ tfstate `module.isuxportal.aws_s3_bucket.avatars.id` }}',
+    },
       // {
       //   name: 'ISUXPORTAL_TEST_AMI_ID',
       //   value: '{{ tfstate `data.aws_ami.envcheck.id` }}',
