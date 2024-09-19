@@ -88,3 +88,35 @@ resource "aws_s3_bucket_public_access_block" "config" {
   block_public_acls   = true
   block_public_policy = true
 }
+
+
+resource "aws_s3_bucket" "avatars" {
+  bucket = "avatars-${var.env}-${var.project}-${var.isuconx}"
+}
+
+resource "aws_s3_bucket_public_access_block" "avatars" {
+  bucket              = aws_s3_bucket.config.id
+  block_public_acls   = true
+  block_public_policy = false
+}
+
+
+// アバターは全てのユーザーが読み取れるように
+resource "aws_s3_bucket_policy" "avatars" {
+  bucket = aws_s3_bucket.avatars.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          identifiers = ["*"],
+          type        = "*"
+        },
+        Action   = "s3:GetObject"
+        Resource = "*"
+      },
+    ]
+  })
+}
