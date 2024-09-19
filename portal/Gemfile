@@ -40,6 +40,8 @@ gem 'sigdump', require: 'sigdump/setup'
 
 gem 'faker'
 
+gem 'aws-sdk-s3'
+
 group :development, :test do
   gem 'rspec'
   gem 'rspec-rails',  '~> 4'

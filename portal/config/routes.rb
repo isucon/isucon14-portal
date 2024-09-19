@@ -65,6 +65,10 @@ Rails.application.routes.draw do
       get 'env_check', to: 'env_check#show'
       # registration/activate_coupon ActivateCoupon: PUT /api/registration/coupon
       put 'coupon' => 'coupons#update'
+      # registration/avatar GetAvatarUrl: GET /api/registration/avatar/url
+      scope path: 'avatar', module: 'avatar' do
+      end
+
     end
 
     scope path: 'audience', module: 'audience' do
