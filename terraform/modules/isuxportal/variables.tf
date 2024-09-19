@@ -11,6 +11,7 @@ variable "isuconx" {
   description = "isuconxx(xx is a number)"
 }
 
+
 variable "enable_auth" {
   type    = bool
   default = true
@@ -48,4 +49,9 @@ variable "aurora_serverless_configuration" {
     max_capacity = 4
     min_capacity = 0.5
   }
+}
+
+
+variable "origins" {
+  type = list(string)
 }

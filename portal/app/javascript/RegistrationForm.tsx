@@ -27,7 +27,7 @@ export interface State {
   emailAddress: string;
   isStudent: boolean;
   isInPerson: boolean;
-  avatar : string;
+  avatarurl : string;
   avatarfile : File | null;
   requesting: boolean;
   requestError: Error | null;
@@ -44,7 +44,7 @@ export class RegistrationForm extends React.Component<Props, State> {
       emailAddress: this.props.registrationSession.team?.detail?.emailAddress ?? "",
       isStudent: this.props.session.contestant?.detail!.isStudent ?? false,
       isInPerson: this.props.session.contestant?.detail!.isInPerson ?? false,
-      avatar: this.props.session.contestant?.detail!.avatarUrl ?? "",
+      avatarurl: this.props.session.contestant?.detail!.avatarUrl ?? this.props.registrationSession.githubAvatarUrl,
       avatarfile: null,
       requesting: false,
       requestError: null,
@@ -63,8 +63,9 @@ export class RegistrationForm extends React.Component<Props, State> {
       this.setState({ requesting: true });
       if (this.state.avatarfile !== null) {
         const {url, uploadPresigned} = await this.props.client.getAvatarUrl();
-        await this.uploadAvatar(uploadPresigned, this.state.avatarfile);
-        this.setState({ avatar: url });
+        const blob = await this.cropImage();
+        await this.uploadAvatar(uploadPresigned, blob);
+        this.setState({ avatarurl: url });
       }
 
       if (this.isEditing()) {
@@ -99,6 +100,23 @@ export class RegistrationForm extends React.Component<Props, State> {
     this.setState({ avatarfile: file });
   }
 
+  public async cropImage() {
+    if(this.editor === null) return new Blob();
+    const canvas = this.editor.current?.getImageScaledToCanvas()
+    if(canvas === undefined) return new Blob();
+
+    const blob = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error('Failed to convert canvas to Blob.'));
+        }
+      }, 'image/png');
+    });
+    return blob;
+  }
+
 
   createTeam() {
     return this.props.client.createTeam(
@@ -108,6 +126,7 @@ export class RegistrationForm extends React.Component<Props, State> {
         name: this.state.name,
         isStudent: this.state.isStudent,
         isInPerson: this.state.isInPerson,
+        avatarUrl: this.state.avatarurl,
       }),
     );
   }
@@ -120,6 +139,7 @@ export class RegistrationForm extends React.Component<Props, State> {
         name: this.state.name,
         isStudent: this.state.isStudent,
         isInPerson: this.state.isInPerson,
+        avatarUrl: this.state.avatarurl,
       }),
     );
   }
@@ -132,16 +152,19 @@ export class RegistrationForm extends React.Component<Props, State> {
         name: this.state.name,
         isStudent: this.state.isStudent,
         isInPerson: this.state.isInPerson,
-        avatarUrl: this.state.avatar,
+        avatarUrl: this.state.avatarurl,
       }),
     );
   }
 
-  uploadAvatar(url: string, file: File) {
+  uploadAvatar(url: string, data: Blob) {
     // url に対して PUT リクエストを送信する
     return fetch(url, {
       method: "PUT",
-      body: file,
+      body: data,
+      headers: {
+        "Content-Type": "image/png",
+      },
     });
   }
 
@@ -318,7 +341,7 @@ export class RegistrationForm extends React.Component<Props, State> {
             人目以降の登録は、登録後確認できる招待URLを利用して、それぞれ個別に登録してください)。
           </p>
         </div>
-       {this.isEditing() ? this.renderAvatar() : null}
+       {this.renderAvatar()}
         <div className="field">
           <label className="label">学生ですか?</label>
           <div className="control">
@@ -363,7 +386,7 @@ export class RegistrationForm extends React.Component<Props, State> {
           </label>
           <AvatarEditor
             ref={this.editor}
-            image={this.state.avatarfile === null ?  this.state.avatar : this.state.avatarfile}
+            image={this.state.avatarfile === null ?  this.state.avatarurl : this.state.avatarfile}
             border={20}
             width={170}
             height={170}

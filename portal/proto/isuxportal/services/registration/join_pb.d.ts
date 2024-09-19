@@ -38,6 +38,11 @@ export declare type JoinTeamRequest = Message<"isuxportal.proto.services.registr
    * @generated from field: bool is_in_person = 5;
    */
   isInPerson: boolean;
+
+  /**
+   * @generated from field: string avatar_url = 6;
+   */
+  avatarUrl: string;
 };
 
 /**

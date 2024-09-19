@@ -160,6 +160,11 @@ Rails.application.configure do
   config.x.sentry.dsn = ENV.fetch('SENTRY_DSN')
   config.x.sentry.environment = ENV.fetch('MONITOR_ENV')
 
+  config.x.region = ENV['AWS_REGION'] || 'ap-northeast-1'
+
+  config.x.avatar_bucket_name = ENV.fetch('ISUXPORTAL_AVATAR_BUCKET')
+  config.x.avatar_base_path = ENV['ISUXPORTAL_AVATAR_BASE_PATH'] || 'avatars'
+
   config.x.test_ami_id = ENV['ISUXPORTAL_TEST_AMI_ID']
   config.x.qualify_ami_id = ENV['ISUXPORTAL_QUALIFY_AMI_ID']
 

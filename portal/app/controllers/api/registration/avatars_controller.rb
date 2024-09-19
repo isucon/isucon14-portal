@@ -1,4 +1,4 @@
-
+require 'isuxportal/services/common/storage_pb'
 class Api::Registration::AvatarsController < Api::Registration::ApplicationController
 
   def show
