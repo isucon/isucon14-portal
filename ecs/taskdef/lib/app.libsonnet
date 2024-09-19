@@ -6,7 +6,7 @@
       value: '{{ tfstate `module.isuxportal.aws_sqs_queue.activejob.name` }}',
     },
     {
-      name: 'ISUXPORTAL_SHORYUKEN_QUEUE',
+      name: 'ISUXPORTAL_AVATAR_BUCKET',
       value: '{{ tfstate `module.isuxportal.aws_s3_bucket.avatars.id` }}',
     },
       // {
