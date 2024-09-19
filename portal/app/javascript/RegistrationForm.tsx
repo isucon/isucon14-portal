@@ -288,6 +288,7 @@ export class RegistrationForm extends React.Component<Props, State> {
         <div className="field">
           <label className="label">学生ですか?</label>
           <div className="control">
+            <label>
             <input
               className="checkbox"
               type="checkbox"
@@ -296,12 +297,14 @@ export class RegistrationForm extends React.Component<Props, State> {
               onChange={this.onChange.bind(this)}
             />{" "}
             はい
+            </label>
           </div>
         </div>
 
         <div className="field">
           <label className="label">オフライン会場での参加を希望しますか?</label>
           <div className="control">
+            <label>
             <input
               className="checkbox"
               type="checkbox"
@@ -310,6 +313,7 @@ export class RegistrationForm extends React.Component<Props, State> {
               onChange={this.onChange.bind(this)}
             />{" "}
             はい
+            </label>
           </div>
         </div>
       </>
