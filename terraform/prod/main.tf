@@ -46,6 +46,6 @@ module "isuxportal" {
 }
 
 # module "ami" {
-#   source  = "./modules/ami"
+#   source  = "../modules/ami"
 #   isuconx = "isucon14"
 # }
