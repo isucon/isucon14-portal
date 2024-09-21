@@ -1,17 +1,17 @@
-import { ApiClient } from "./ApiClient";
-import AvatarEditor from 'react-avatar-editor'
 import React from "react";
+import AvatarEditor from "react-avatar-editor";
+import { ApiClient } from "./ApiClient";
 
-import { ErrorMessage } from "./ErrorMessage";
+import { create } from "@bufbuild/protobuf";
 import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
+import { CreateTeamRequestSchema } from "../../proto/isuxportal/services/registration/create_team_pb";
+import { JoinTeamRequestSchema } from "../../proto/isuxportal/services/registration/join_pb";
 import {
   GetRegistrationSessionResponse_Status,
   UpdateRegistrationRequestSchema,
   type GetRegistrationSessionResponse,
 } from "../../proto/isuxportal/services/registration/session_pb";
-import { create } from "@bufbuild/protobuf";
-import { CreateTeamRequestSchema } from "../../proto/isuxportal/services/registration/create_team_pb";
-import { JoinTeamRequestSchema } from "../../proto/isuxportal/services/registration/join_pb";
+import { ErrorMessage } from "./ErrorMessage";
 
 export interface Props {
   client: ApiClient;
@@ -27,15 +27,15 @@ export interface State {
   emailAddress: string;
   isStudent: boolean;
   isInPerson: boolean;
-  avatarurl : string;
-  avatarfile : File | null;
+  avatarurl: string;
+  avatarfile: File | null;
   requesting: boolean;
   requestError: Error | null;
 }
 
 export class RegistrationForm extends React.Component<Props, State> {
-  private editor : React.RefObject<AvatarEditor>;
-  private input : React.RefObject<HTMLInputElement>;
+  private editor: React.RefObject<AvatarEditor>;
+  private input: React.RefObject<HTMLInputElement>;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -62,7 +62,7 @@ export class RegistrationForm extends React.Component<Props, State> {
     try {
       this.setState({ requesting: true });
       if (this.state.avatarfile !== null) {
-        const {url, uploadPresigned} = await this.props.client.getAvatarUrl();
+        const { url, uploadPresigned } = await this.props.client.getAvatarUrl();
         const blob = await this.cropImage();
         await this.uploadAvatar(uploadPresigned, blob);
         this.setState({ avatarurl: url });
@@ -101,22 +101,21 @@ export class RegistrationForm extends React.Component<Props, State> {
   }
 
   public async cropImage() {
-    if(this.editor === null) return new Blob();
-    const canvas = this.editor.current?.getImageScaledToCanvas()
-    if(canvas === undefined) return new Blob();
+    if (this.editor === null) return new Blob();
+    const canvas = this.editor.current?.getImageScaledToCanvas();
+    if (canvas === undefined) return new Blob();
 
     const blob = await new Promise<Blob>((resolve, reject) => {
       canvas.toBlob((blob) => {
         if (blob) {
           resolve(blob);
         } else {
-          reject(new Error('Failed to convert canvas to Blob.'));
+          reject(new Error("Failed to convert canvas to Blob."));
         }
-      }, 'image/png');
+      }, "image/png");
     });
     return blob;
   }
-
 
   createTeam() {
     return this.props.client.createTeam(
@@ -179,20 +178,25 @@ export class RegistrationForm extends React.Component<Props, State> {
           <h3 className="title is-3">注意事項</h3>
           <ul>
             <li>
-              ISUCON14 への参加には{" "}
+              ISUCON14 への参加には
               <a href="/terms" target="_blank">
                 参加規約
-              </a>{" "}
+              </a>
               への同意が必要です。
             </li>
             <li>
-              ご登録いただいたチーム名, 代表者名, メンバー名は ISUCON
-              公式サイトおよびポータルなど上で広く公開されます。GitHub
-              アカウントの情報はチームメンバー内で共有されます。
+              ご登録いただいたチーム名、選手名、アイコン画像は、ISUCON
+              公式サイトおよびポータルなど上で広く公開されるほか、入賞時にお送りする記念品等に印字させていただく場合があります。
             </li>
+            <li>チーム名、選手名、アイコン画像に公序良俗に反するものを使わないでください。</li>
             <li>
-              競技進行のため、全参加者はサポート/アナウンス用の Discord サーバー (サポートチャット)
-              への参加が必要です。そのため、Discord アカウントの情報は全参加者にも共有されます。
+              チーム名、選手名に機種依存文字・絵文字・HTMLタグなどが入っていた場合、サイトへの表示時に表現を変えさせていただく場合があります。
+            </li>
+            <li>GitHub アカウントの情報はチームメンバー内で共有されますのであらかじめご了承ください。</li>
+            <li>
+              競技進行のため、全参加者はサポート/アナウンス用の Discord サーバー
+              (サポートチャット)への参加が必要です。Discord
+              アカウントの情報は全参加者にも共有されますのであらかじめご了承ください。
             </li>
             <li>参加登録が完了すると、他のチームへの参加はできなくなります。</li>
             <li>
@@ -203,10 +207,6 @@ export class RegistrationForm extends React.Component<Props, State> {
               参加登録メールなどは送信されません。個別の連絡や、Discord
               が利用できない場合を想定してメールアドレスの記入をお願いしていますが、競技のアナウンスや連絡は、本ポータルサイトあるいは
               Discord 上で行われます。
-            </li>
-            <li>チーム名・代表者名に公序良俗に反する名前は使わないでください。</li>
-            <li>
-              チーム名・代表者名に機種依存文字・絵文字・HTMLタグなどが入っていた場合、サイトへの表示時に表現を変えさせていただく場合があります。
             </li>
           </ul>
         </section>
@@ -323,7 +323,7 @@ export class RegistrationForm extends React.Component<Props, State> {
       <>
         <div className="field">
           <label className="label" htmlFor="fieldName">
-            {!this.props.registrationSession.team ? "代表者名" : "選手名"}
+            {!this.props.registrationSession.team ? "代表" : ""}選手名
           </label>
           <div className="control">
             <input
@@ -341,7 +341,7 @@ export class RegistrationForm extends React.Component<Props, State> {
             人目以降の登録は、登録後確認できる招待URLを利用して、それぞれ個別に登録してください)。
           </p>
         </div>
-       {this.renderAvatar()}
+        {this.renderAvatar()}
         <div className="field">
           <label className="label">学生ですか?</label>
           <div className="control">
@@ -380,27 +380,33 @@ export class RegistrationForm extends React.Component<Props, State> {
   public renderAvatar() {
     return (
       <>
-       <div className="field">
+        <div className="field">
           <label className="label" htmlFor="fieldName">
             アイコン画像
           </label>
           <AvatarEditor
             ref={this.editor}
-            image={this.state.avatarfile === null ?  this.state.avatarurl : this.state.avatarfile}
+            image={this.state.avatarfile === null ? this.state.avatarurl : this.state.avatarfile}
             border={20}
             width={170}
             height={170}
             color={[255, 255, 255, 0.6]} // RGBA
           />
           <label className="file-label">
-            <input className="file-input" type="file" name="resume" accept="image/png, image/jpeg" ref={this.input} onChange={this.onLoad} />
+            <input
+              className="file-input"
+              type="file"
+              name="resume"
+              accept="image/png, image/jpeg"
+              ref={this.input}
+              onChange={this.onLoad}
+            />
             <span className="button is-info">変更</span>
           </label>
         </div>
       </>
     );
   }
-
 
   public renderError() {
     if (!this.state.requestError) return null;
