@@ -108,9 +108,10 @@ export class Navbar extends React.Component<Props, State> {
         </>
       );
     } else {
+      const loginPath = this.loginPath() + (this.props.session.contest?.status === Contest_Status.REGISTRATION ? "registration" : "");
       return (
         <>
-          <a className="button is-light" href={this.loginPath()}>
+          <a className="button is-light" href={loginPath}> 
             ログイン
           </a>
         </>
