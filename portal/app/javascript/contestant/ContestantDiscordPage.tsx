@@ -1,4 +1,4 @@
-import { ApiError, ApiClient } from "../ApiClient";
+import { ApiClient } from "../ApiClient";
 
 import React from "react";
 import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
@@ -14,11 +14,11 @@ export const ContestantDiscordPage: React.FC<Props> = ({ session }) => {
       <header className="mb-2">
         <h1 className="title is-1">Discord サーバ情報</h1>
       </header>
-
       <iframe
-        src={`https://discordapp.com/widget?id=${session.discordServerId}`}
+        src={`https://discord.com/widget?id=${session.discordServerId}&theme=dark`}
         width="350"
         height="500"
+        allowTransparency={true}
         frameBorder={0}
         sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
       ></iframe>
