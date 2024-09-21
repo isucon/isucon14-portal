@@ -37,4 +37,4 @@ vendor/
 .idea/
 .docker/
 
-compose.yaml
+app.env

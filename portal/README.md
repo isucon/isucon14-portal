@@ -1,7 +1,17 @@
 # Isuxportal
 
-## Setup
+## Local Dev Setup
+`app.env.template`をコピーして`app.env`を作成し、環境変数を設定する。
 
+```
+docker compose up -d
+docker compose exec app bundle exec rake db:migrate
+corepack enable yarn
+yarn
+npx webpack --progress --watch
+```
+
+## Setup
 ### Run MySQL on docker-compose
 
 ```
