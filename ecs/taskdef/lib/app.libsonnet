@@ -9,10 +9,10 @@
       name: 'ISUXPORTAL_AVATAR_BUCKET',
       value: '{{ tfstate `module.isuxportal.aws_s3_bucket.avatars.id` }}',
     },
-    {
-      name: 'ISUXPORTAL_TEST_AMI_ID',
-      value: '{{ tfstate `module.ami.data.aws_ami.envcheck.id` }}',
-    },
+    // {
+    //   name: 'ISUXPORTAL_TEST_AMI_ID',
+    //   value: '{{ tfstate `module.ami.data.aws_ami.envcheck.id` }}',
+    // },
       // {
       //   name: 'ISUXPORTAL_QUALIFY_AMI_ID',
       //   value: '{{ tfstate `module.ami.data.aws_ami.qualify.id` }}',
