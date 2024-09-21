@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 )
 
 func (c *checker) checkAll() {
@@ -17,7 +17,7 @@ func (c *checker) checkInstances() {
 		for _, r := range o.Reservations {
 			for _, i := range r.Instances {
 				count++
-				c.checkInstance(i)
+				c.checkInstance(&i)
 			}
 		}
 	}
@@ -26,10 +26,10 @@ func (c *checker) checkInstances() {
 	}
 }
 
-func (c *checker) checkInstance(i *ec2.Instance) {
+func (c *checker) checkInstance(i *types.Instance) {
 	id := *i.InstanceId
-	if *i.InstanceType != "t3.micro" {
-		c.addFailure("%s のインスタンスタイプが %s です (t3.micro である必要があります)", id, *i.InstanceType)
+	if i.InstanceType != types.InstanceTypeT3Micro {
+		c.addFailure("%s のインスタンスタイプが %s です (t3.micro である必要があります)", id, i.InstanceType)
 	}
 	if c.ExpectedAMI != "" && *i.ImageId != c.ExpectedAMI {
 		c.addFailure("%s の AMI が %s です (%s である必要があります)", id, *i.ImageId, c.ExpectedAMI)
@@ -53,18 +53,18 @@ func (c *checker) checkInstance(i *ec2.Instance) {
 func (c *checker) checkVolumes() {
 	for _, o := range c.DescribeVolumes {
 		for _, v := range o.Volumes {
-			c.checkVolume(v)
+			c.checkVolume(&v)
 		}
 	}
 }
 
-func (c *checker) checkVolume(v *ec2.Volume) {
+func (c *checker) checkVolume(v *types.Volume) {
 	id := *v.VolumeId
 	if *v.Size != 8 {
 		c.addFailure("%s のサイズが %d GB です (8 GB である必要があります)", id, *v.Size)
 	}
-	if *v.VolumeType != "gp2" {
-		c.addFailure("%s のタイプが %s です (gp2 である必要があります)", id, *v.VolumeType)
+	if v.VolumeType != types.VolumeTypeGp3 {
+		c.addFailure("%s のタイプが %s です (gp3 である必要があります)", id, v.VolumeType)
 	}
 }
 
@@ -78,7 +78,7 @@ func (c *checker) checkNetworkInterfaces() {
 		}
 	}
 
-	isAllowed := func(i *ec2.NetworkInterface) bool {
+	isAllowed := func(i *types.NetworkInterface) bool {
 		if i.Attachment == nil || i.Attachment.InstanceId == nil {
 			return false
 		}
@@ -88,7 +88,7 @@ func (c *checker) checkNetworkInterfaces() {
 
 	for _, o := range c.DescribeNetworkInterfaces {
 		for _, i := range o.NetworkInterfaces {
-			if !isAllowed(i) {
+			if !isAllowed(&i) {
 				c.addFailure("不明なネットワークインターフェイス (%s) が VPC 内に見つかりました", *i.NetworkInterfaceId)
 			}
 		}
@@ -98,18 +98,18 @@ func (c *checker) checkNetworkInterfaces() {
 func (c *checker) checkSecurityGroups() {
 	for _, out := range c.DescribeSecurityGroups {
 		for _, sg := range out.SecurityGroups {
-			c.checkSecurityGroup(sg)
+			c.checkSecurityGroup(&sg)
 		}
 	}
 
 }
 
-func (c *checker) checkSecurityGroup(sg *ec2.SecurityGroup) {
+func (c *checker) checkSecurityGroup(sg *types.SecurityGroup) {
 	id := *sg.GroupId
 
 	var hasIngressSSH bool
 	for _, p := range sg.IpPermissions {
-		if c.isIngressSSH(p) {
+		if c.isIngressSSH(&p) {
 			hasIngressSSH = true
 			break
 		}
@@ -123,13 +123,13 @@ func (c *checker) checkSecurityGroup(sg *ec2.SecurityGroup) {
 		c.addFailure("%s のルールが不正です", id)
 	}
 	for _, p := range sg.IpPermissionsEgress {
-		if !c.isEgressAll(p) {
+		if !c.isEgressAll(&p) {
 			c.addFailure("%s に不正なルールが見つかりました", id)
 		}
 	}
 }
 
-func (c *checker) isIngressSSH(p *ec2.IpPermission) bool {
+func (c *checker) isIngressSSH(p *types.IpPermission) bool {
 	return p.FromPort != nil && *p.FromPort == 22 &&
 		p.ToPort != nil && *p.ToPort == 22 &&
 		p.IpProtocol != nil && *p.IpProtocol == "tcp" &&
@@ -139,7 +139,7 @@ func (c *checker) isIngressSSH(p *ec2.IpPermission) bool {
 		p.UserIdGroupPairs == nil
 }
 
-func (c *checker) isEgressAll(p *ec2.IpPermission) bool {
+func (c *checker) isEgressAll(p *types.IpPermission) bool {
 	return p.FromPort == nil &&
 		p.ToPort == nil &&
 		p.IpProtocol != nil && *p.IpProtocol == "-1" &&

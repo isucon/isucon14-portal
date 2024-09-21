@@ -1,26 +1,25 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"io"
 	"net"
 	"strings"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
-	"github.com/aws/aws-sdk-go/aws/ec2metadata"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 )
 
-func NewAWSSession() (*session.Session, error) {
-	baseSess, err := session.NewSession()
+func NewAWSSession(ctx context.Context) (aws.Config, error) {
+	cfg, err := config.LoadDefaultConfig(context.Background())
 	if err != nil {
-		return nil, err
+		return aws.Config{}, err
 	}
-	cfg := aws.NewConfig().
-		WithCredentials(ec2rolecreds.NewCredentials(baseSess)).
-		WithRegion("ap-northeast-1")
-	return session.NewSession(cfg)
+	return cfg, nil
 }
 
 func GetAZName(out *ec2.DescribeAvailabilityZonesOutput, id string) string {
@@ -32,11 +31,19 @@ func GetAZName(out *ec2.DescribeAvailabilityZonesOutput, id string) string {
 	return ""
 }
 
-func GetPublicIP(svc *ec2metadata.EC2Metadata) (string, error) {
-	return svc.GetMetadata("public-ipv4")
+func GetPublicIP(ctx context.Context, svc *imds.Client) (string, error) {
+	md, err := svc.GetMetadata(ctx, &imds.GetMetadataInput{
+		Path: "public-ipv4",
+	})
+	if err != nil {
+		return "", err
+	}
+
+	content, _ := io.ReadAll(md.Content)
+	return string(content), nil
 }
 
-func GetVPC(svc *ec2metadata.EC2Metadata) (string, error) {
+func GetVPC(ctx context.Context, svc *imds.Client) (string, error) {
 	s, err := net.Interfaces()
 	if err != nil {
 		return "", err
@@ -44,84 +51,110 @@ func GetVPC(svc *ec2metadata.EC2Metadata) (string, error) {
 	var unexpectedNames []string
 	for _, i := range s {
 		if i.Name == "eth0" || strings.HasPrefix(i.Name, "ens") {
-			return svc.GetMetadata(fmt.Sprintf("network/interfaces/macs/%s/vpc-id", i.HardwareAddr.String()))
+			md, err := svc.GetMetadata(ctx, &imds.GetMetadataInput{
+				Path: fmt.Sprintf("network/interfaces/macs/%s/vpc-id", i.HardwareAddr.String()),
+			})
+			if err != nil {
+				return "", err
+			}
+
+			content, _ := io.ReadAll(md.Content)
+			return string(content), nil
 		}
 		unexpectedNames = append(unexpectedNames, i.Name)
 	}
 	return "", fmt.Errorf("no expected network interface (%v)", unexpectedNames)
 }
 
-func DescribeInstances(svc *ec2.EC2, vpc string) ([]*ec2.DescribeInstancesOutput, error) {
+func DescribeInstances(ctx context.Context, svc *ec2.Client, vpc string) ([]*ec2.DescribeInstancesOutput, error) {
 	var s []*ec2.DescribeInstancesOutput
 
-	err := svc.DescribeInstancesPages(&ec2.DescribeInstancesInput{
-		Filters: []*ec2.Filter{
+	p := ec2.NewDescribeInstancesPaginator(svc, &ec2.DescribeInstancesInput{
+		Filters: []types.Filter{
 			{
 				Name:   aws.String("network-interface.vpc-id"),
-				Values: []*string{aws.String(vpc)},
+				Values: []string{vpc},
 			},
 		},
-	}, func(out *ec2.DescribeInstancesOutput, lastPage bool) bool {
-		s = append(s, out)
-		return true
 	})
-	return s, err
+
+	for p.HasMorePages() {
+		out, err := p.NextPage(ctx)
+		if err != nil {
+			return nil, err
+		}
+		s = append(s, out)
+	}
+
+	return s, nil
 }
 
-func DescribeVolumes(svc *ec2.EC2, instances []*ec2.DescribeInstancesOutput) ([]*ec2.DescribeVolumesOutput, error) {
+func DescribeVolumes(ctx context.Context, svc *ec2.Client, instances []*ec2.DescribeInstancesOutput) ([]*ec2.DescribeVolumesOutput, error) {
 	var s []*ec2.DescribeVolumesOutput
 
-	var instanceIDs []*string
+	var instanceIDs []string
 	for _, out := range instances {
 		for _, res := range out.Reservations {
 			for _, i := range res.Instances {
-				instanceIDs = append(instanceIDs, i.InstanceId)
+				instanceIDs = append(instanceIDs, *i.InstanceId)
 			}
 		}
 	}
 
-	err := svc.DescribeVolumesPages(&ec2.DescribeVolumesInput{
-		Filters: []*ec2.Filter{
+	p := ec2.NewDescribeVolumesPaginator(svc, &ec2.DescribeVolumesInput{
+		Filters: []types.Filter{
 			{
 				Name:   aws.String("attachment.instance-id"),
 				Values: instanceIDs,
 			},
 		},
-	}, func(out *ec2.DescribeVolumesOutput, lastPage bool) bool {
-		s = append(s, out)
-		return true
 	})
-	return s, err
+
+	for p.HasMorePages() {
+		out, err := p.NextPage(ctx)
+		if err != nil {
+			return nil, err
+		}
+		s = append(s, out)
+	}
+
+	return s, nil
 }
 
-func DescribeNetworkInterfaces(svc *ec2.EC2, vpc string) ([]*ec2.DescribeNetworkInterfacesOutput, error) {
+func DescribeNetworkInterfaces(ctx context.Context, svc *ec2.Client, vpc string) ([]*ec2.DescribeNetworkInterfacesOutput, error) {
 	var s []*ec2.DescribeNetworkInterfacesOutput
 
-	err := svc.DescribeNetworkInterfacesPages(&ec2.DescribeNetworkInterfacesInput{
-		Filters: []*ec2.Filter{
+	p := ec2.NewDescribeNetworkInterfacesPaginator(svc, &ec2.DescribeNetworkInterfacesInput{
+		Filters: []types.Filter{
 			{
 				Name:   aws.String("vpc-id"),
-				Values: []*string{aws.String(vpc)},
+				Values: []string{vpc},
 			},
 		},
-	}, func(out *ec2.DescribeNetworkInterfacesOutput, lastPage bool) bool {
-		s = append(s, out)
-		return true
 	})
-	return s, err
+
+	for p.HasMorePages() {
+		out, err := p.NextPage(ctx)
+		if err != nil {
+			return nil, err
+		}
+		s = append(s, out)
+	}
+
+	return s, nil
 }
 
-func DescribeSecurityGroups(svc *ec2.EC2, instances []*ec2.DescribeInstancesOutput) ([]*ec2.DescribeSecurityGroupsOutput, error) {
+func DescribeSecurityGroups(ctx context.Context, svc *ec2.Client, instances []*ec2.DescribeInstancesOutput) ([]*ec2.DescribeSecurityGroupsOutput, error) {
 	var s []*ec2.DescribeSecurityGroupsOutput
 
-	var ids []*string
+	var ids []string
 	idsUnique := make(map[string]struct{})
 	for _, o := range instances {
 		for _, r := range o.Reservations {
 			for _, i := range r.Instances {
 				for _, sg := range i.SecurityGroups {
 					if _, ok := idsUnique[*sg.GroupId]; !ok {
-						ids = append(ids, sg.GroupId)
+						ids = append(ids, *sg.GroupId)
 						idsUnique[*sg.GroupId] = struct{}{}
 					}
 				}
@@ -129,12 +162,17 @@ func DescribeSecurityGroups(svc *ec2.EC2, instances []*ec2.DescribeInstancesOutp
 		}
 	}
 
-	err := svc.DescribeSecurityGroupsPages(&ec2.DescribeSecurityGroupsInput{
+	p := ec2.NewDescribeSecurityGroupsPaginator(svc, &ec2.DescribeSecurityGroupsInput{
 		GroupIds: ids,
-	}, func(out *ec2.DescribeSecurityGroupsOutput, lastPage bool) bool {
-		s = append(s, out)
-		return true
 	})
 
-	return s, err
+	for p.HasMorePages() {
+		out, err := p.NextPage(ctx)
+		if err != nil {
+			return nil, err
+		}
+		s = append(s, out)
+	}
+
+	return s, nil
 }

@@ -2,14 +2,15 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"strconv"
 	"strings"
 
-	"github.com/aws/aws-sdk-go/aws/ec2metadata"
-	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
 )
 
 type CheckConfig struct {
@@ -47,7 +48,7 @@ type Result struct {
 	RawData      string
 }
 
-func Check(cfg CheckConfig) (Result, error) {
+func Check(ctx context.Context, cfg CheckConfig) (Result, error) {
 	buf := new(bytes.Buffer)
 	logger := log.New(buf, "", log.LstdFlags)
 	c := &checker{
@@ -57,7 +58,7 @@ func Check(cfg CheckConfig) (Result, error) {
 		adminLog:    buf,
 		adminLogger: logger,
 	}
-	if err := c.loadAWS(); err != nil {
+	if err := c.loadAWS(ctx); err != nil {
 		c.adminLogger.Printf("loading AWS data: %+v", err)
 		raw, _ := json.Marshal(c)
 		return Result{
@@ -82,40 +83,40 @@ func Check(cfg CheckConfig) (Result, error) {
 	}, nil
 }
 
-func (c *checker) loadAWS() error {
-	sess, err := NewAWSSession()
+func (c *checker) loadAWS(ctx context.Context) error {
+	cfg, err := NewAWSSession(ctx)
 	if err != nil {
 		return fmt.Errorf("creating session: %w", err)
 	}
-	ec2md := ec2metadata.New(sess)
-	ec2client := ec2.New(sess)
+	imdsclient := imds.NewFromConfig(cfg)
+	ec2client := ec2.NewFromConfig(cfg)
 
-	c.InstanceIP, err = GetPublicIP(ec2md)
+	c.InstanceIP, err = GetPublicIP(ctx, imdsclient)
 	if err != nil {
 		return fmt.Errorf("GetPublicIP: %w", err)
 	}
-	c.InstanceVPCID, err = GetVPC(ec2md)
+	c.InstanceVPCID, err = GetVPC(ctx, imdsclient)
 	if err != nil {
 		return fmt.Errorf("GetVPC: %w", err)
 	}
 
-	c.DescribeInstances, err = DescribeInstances(ec2client, c.InstanceVPCID)
+	c.DescribeInstances, err = DescribeInstances(ctx, ec2client, c.InstanceVPCID)
 	if err != nil {
 		return fmt.Errorf("DescribeInstances: %w", err)
 	}
-	c.DescribeVolumes, err = DescribeVolumes(ec2client, c.DescribeInstances)
+	c.DescribeVolumes, err = DescribeVolumes(ctx, ec2client, c.DescribeInstances)
 	if err != nil {
 		return fmt.Errorf("DescribeVolumes: %w", err)
 	}
-	c.DescribeNetworkInterfaces, err = DescribeNetworkInterfaces(ec2client, c.InstanceVPCID)
+	c.DescribeNetworkInterfaces, err = DescribeNetworkInterfaces(ctx, ec2client, c.InstanceVPCID)
 	if err != nil {
 		return fmt.Errorf("DescribeNetworkInterfaces: %w", err)
 	}
-	c.DescribeSecurityGroups, err = DescribeSecurityGroups(ec2client, c.DescribeInstances)
+	c.DescribeSecurityGroups, err = DescribeSecurityGroups(ctx, ec2client, c.DescribeInstances)
 	if err != nil {
 		return fmt.Errorf("DescribeSecurityGroups: %w", err)
 	}
-	c.DescribeAvailabilityZones, err = ec2client.DescribeAvailabilityZones(nil)
+	c.DescribeAvailabilityZones, err = ec2client.DescribeAvailabilityZones(ctx, nil)
 	if err != nil {
 		return fmt.Errorf("DescribeAvailabilityZones: %w", err)
 	}
