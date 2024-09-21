@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  app:
+    platform: linux/amd64
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file:
+      - app.env
+    environment:
+      RACK_ENV: development
+      RAILS_ENV: development
+      DATABASE_URL: 'mysql2://isuxportal_dev@mysql/isuxportal_dev?encoding=utf8mb4&charset=utf8mb4&collation=utf8mb4_general_ci'
+      DATABASE_PASSWORD: dbpass
+      REDIS_URL: 'redis://redis:6379'
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./public:/app/public:ro
+      - ./app:/app/app:ro
+  redis:
+    image: redis:latest
+    expose:
+      - '6379'
+
+  mysql:
+    image: mysql:latest
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: passsss
+      MYSQL_USER: isuxportal_dev
+      MYSQL_PASSWORD: dbpass
+      MYSQL_DATABASE: isuxportal_dev
+    ports:
+      - '3306:3306'
