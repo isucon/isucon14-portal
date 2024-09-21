@@ -48,8 +48,8 @@ resource "aws_cloudfront_distribution" "portal" {
       }
     }
     min_ttl                = 0
-    default_ttl            = var.enable_auth ? 86400 : 31536000 // NOTE: stgで認証を書けているので認証切れた後にキャッシュされないようにしている
-    max_ttl                = var.enable_auth ? 86400 : 31536000
+    default_ttl            = 86400
+    max_ttl                = 86400
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
   }
