@@ -95,9 +95,18 @@ export class ApiClient {
     return fromBinary(GetCurrentSessionResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async getRegistrationSession(query: GetRegistrationSessionQuery) {
-    const queryMessage = toBinary(GetRegistrationSessionQuerySchema, query);
-    const resp = await this.request(`${this.baseUrl}/api/registration/session`, "GET", queryMessage, null);
+  public async getRegistrationSession(query?: GetRegistrationSessionQuery) {
+    const queryMessage: Record<string, string | null> = {};
+    if (query?.teamId) {
+      queryMessage["team_id"] = query?.teamId.toString();
+    }
+    if (query?.inviteToken) {
+      queryMessage["invite_token"] = query?.inviteToken.toString();
+    }
+    if (query?.bypassToken) {
+      queryMessage["by_pass_token"] = query?.bypassToken.toString();
+    }
+    const resp = await this.request(`${this.baseUrl}/api/registration/session`, "GET", queryMessage ?? null, null);
     return fromBinary(GetRegistrationSessionResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 

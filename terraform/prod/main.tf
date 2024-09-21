@@ -10,7 +10,7 @@ module "isuxportal" {
     aws.ue1 = aws.us-east-1
   }
 
-  enable_auth         = true
+  enable_auth         = false
   enable_auto_scaling = true
 
   env     = local.env
@@ -37,7 +37,7 @@ module "isuxportal" {
   aws_admin_role = "AWSReservedSSO_AdministratorAccess_41d64ba53efc15ee"
 
   aurora_serverless_configuration = {
-    max_capacity = 16
+    max_capacity = 128
     min_capacity = 0.5
   }
 

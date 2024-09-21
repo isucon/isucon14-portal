@@ -3,7 +3,7 @@ import { ApiError, ApiClient } from "./ApiClient";
 import React from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
-import { ErrorMessage } from "./ErrorMessage";
+import { AuthError } from "./AuthError";
 
 import { Navbar } from "./Navbar";
 import { TeamList } from "./TeamList";
@@ -56,6 +56,7 @@ export class AudienceApp extends React.Component<Props, State> {
               path="/registration/env_check"
               element={<EnvCheck session={this.props.session} client={this.props.client} />}
             />
+            <Route path="/auth/failure" element={<AuthError />} />
           </Routes>
         </div>
       </BrowserRouter>

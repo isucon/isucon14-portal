@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   end
   get '/auth/github/callback' => 'sessions#github_callback'
   get '/auth/discord/callback' => 'sessions#discord_callback'
+  get '/auth/failure' => 'root#index'
 
   scope path: 'registration', module: 'registration' do
     get '/' => 'registration#index', as: 'registration'

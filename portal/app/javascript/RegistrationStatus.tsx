@@ -1,14 +1,14 @@
-import { ApiClient } from "./ApiClient";
 import React from "react";
+import { ApiClient } from "./ApiClient";
 
-import { ErrorMessage } from "./ErrorMessage";
-import { Link } from "react-router-dom";
-import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
-import type { GetRegistrationSessionResponse } from "../../proto/isuxportal/services/registration/session_pb";
 import { create } from "@bufbuild/protobuf";
-import { ActivateCouponRequestSchema } from "../../proto/isuxportal/services/registration/activate_coupon_pb";
+import { Link } from "react-router-dom";
 import type { Contestant } from "../../proto/isuxportal/resources/contestant_pb";
 import { EnvCheckStatus } from "../../proto/isuxportal/resources/env_check_pb";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
+import { ActivateCouponRequestSchema } from "../../proto/isuxportal/services/registration/activate_coupon_pb";
+import type { GetRegistrationSessionResponse } from "../../proto/isuxportal/services/registration/session_pb";
+import { ErrorMessage } from "./ErrorMessage";
 
 export interface Props {
   client: ApiClient;
@@ -19,6 +19,7 @@ export interface Props {
 }
 
 export interface State {
+  discordInviteUrl: string | undefined;
   error: Error | null;
 }
 
@@ -26,8 +27,17 @@ export class RegistrationStatus extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      discordInviteUrl: undefined,
       error: null,
     };
+  }
+
+  componentDidMount() {
+    fetch(`https://discord.com/api/guilds/${this.props.registrationSession.discordServerId}/widget.json`)
+      .then((response) => response.json())
+      .then(({ instant_invite }: { instant_invite: string }) => {
+        this.setState({ discordInviteUrl: instant_invite });
+      });
   }
 
   onEditButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
@@ -134,10 +144,10 @@ export class RegistrationStatus extends React.Component<Props, State> {
             <section className="column is-6">
               <h4 className="title is-4">Discord</h4>
               <iframe
-                src={`https://discordapp.com/widget?id=${this.props.registrationSession.discordServerId}`}
+                src={`https://discord.com/widget?id=${this.props.registrationSession.discordServerId}&theme=dark`}
                 width="350"
                 height="500"
-                frameBorder={0}
+                allowTransparency={true}
                 sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
               ></iframe>
             </section>
@@ -148,14 +158,19 @@ export class RegistrationStatus extends React.Component<Props, State> {
           <h4 className="title is-4">登録内容の編集</h4>
           <p className="block">
             <div className="buttons">
-              <button className="button is-info" onClick={this.onEditButtonClick.bind(this)}>
+              <button className="button is-primary" onClick={this.onEditButtonClick.bind(this)}>
                 編集
               </button>
-              <a className="button is-light" href={this.discordLoginUrl()}>
-                Discordアカウント変更
-              </a>
             </div>
             選手名・学生申告といった登録内容の修正ができます。チーム名は代表者のみが変更可能です。
+          </p>
+          <p className="block">
+            <div className="buttons">
+              <a className="button is-primary" href={this.discordAuthPath()}>
+                Discord再連携
+              </a>
+            </div>
+            連携しているDiscordのアカウントを変更できます。
           </p>
           <p className="block">
             <button className="button is-danger" onClick={this.onWithdrawButtonClick.bind(this)}>
@@ -175,20 +190,50 @@ export class RegistrationStatus extends React.Component<Props, State> {
     );
   }
 
-  discordLoginUrl() {
+  discordAuthPath() {
     return (document.querySelector('meta[name="isux:discord-auth-path"]') as HTMLMetaElement).content;
   }
 
   renderStatus() {
-    const isDiscordAndSSHDone = this.props.registrationSession.team!.members!.every(
-      (member) => member.detail!.isSshKeyRegistered && member.detail!.isDiscordGuildMember,
+    const isSshKeySynced = this.props.registrationSession.team!.members!.every(
+      (member) => member.detail!.isSshKeyRegistered,
+    );
+    const isDiscordSynced = this.props.registrationSession.team!.members!.every(
+      (member) => member.detail!.isDiscordGuildMember,
     );
     const envCheckStatus = this.props.registrationSession.envCheckStatus;
 
     let message: React.ReactNode = "現時点での準備が整っています。次のアナウンスをお待ちください。";
     let isOk = true;
-    if (!isDiscordAndSSHDone) {
-      message = "参加準備が整っていません。GitHubへのSSH鍵の登録とDiscordサーバーへの参加をしてください。";
+    if (!isDiscordSynced || !isSshKeySynced) {
+      message = (
+        <>
+          参加準備が整っていません。
+          <ul>
+            {!isSshKeySynced && (
+              <li>
+                GitHubからSSHキーを取得できていないメンバーがいます。GitHubにSSHキーを登録していない場合、
+                <a
+                  target="_blank"
+                  href="https://docs.github.com/ja/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account"
+                >
+                  新しいSSHキーを追加
+                </a>
+                し、本サイト (ポータル)に再ログインしてください。
+              </li>
+            )}
+            {!isDiscordSynced && (
+              <li>
+                <a target="_blank" href={this.state.discordInviteUrl}>
+                  Discordサーバーへの参加
+                </a>
+                が完了していないメンバーがいます。参加後しばらく経っても本サイト
+                (ポータル)に反映されない場合、Discordサーバー内 #readme チャンネルのメッセージをご覧ください。
+              </li>
+            )}
+          </ul>
+        </>
+      );
       isOk = false;
     } else if (envCheckStatus !== EnvCheckStatus.PREPARING && envCheckStatus !== EnvCheckStatus.DONE) {
       message = (

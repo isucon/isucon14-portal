@@ -1,12 +1,11 @@
-import { ApiError, ApiClient } from "./ApiClient";
 import * as Rails from "@rails/ujs";
+import { ApiClient } from "./ApiClient";
 
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { ErrorMessage } from "./ErrorMessage";
-import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
 import { Contest_Status } from "../../proto/isuxportal/resources/contest_pb";
+import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
 
 export interface Props {
   session: GetCurrentSessionResponse;
@@ -66,35 +65,21 @@ export class Navbar extends React.Component<Props, State> {
   }
 
   public renderNavbarContestButton() {
-    if (this.props.session.contestant) {
-      switch (this.props.session.contest?.status) {
-        case Contest_Status.REGISTRATION:
-        case Contest_Status.STANDBY:
-          return (
-            <>
-              <a className="button is-light" href="/registration">
-                参加登録/修正
-              </a>
-            </>
-          );
-        case Contest_Status.STARTED:
-        case Contest_Status.FINISHED:
-          return (
-            <a className="button is-light" href="/contestant">
-              選手向けページ
-            </a>
-          );
-      }
-    } else {
-      if (this.props.session.contest?.status === Contest_Status.REGISTRATION) {
+    switch (this.props.session.contest?.status) {
+      case Contest_Status.REGISTRATION:
+      case Contest_Status.STANDBY:
         return (
           <a className="button is-light" href="/registration">
-            参加登録
+            {this.props.session.contestant ? "マイページ" : "参加登録"}
           </a>
         );
-      } else {
-        return null;
-      }
+      case Contest_Status.STARTED:
+      case Contest_Status.FINISHED:
+        return this.props.session.contestant ? (
+          <a className="button is-light" href="/contestant">
+            競技ページ
+          </a>
+        ) : null;
     }
   }
 
@@ -108,9 +93,20 @@ export class Navbar extends React.Component<Props, State> {
         </>
       );
     } else {
+      const replacedLoginPath =
+        this.loginPath()
+          .replace(/back_to=[^&]+&?/, "")
+          .replace(/\?$/, "") +
+        "?back_to=" +
+        encodeURIComponent("/registration");
       return (
         <>
-          <a className="button is-light" href={this.loginPath()}>
+          <a
+            className="button is-light"
+            href={
+              this.props.session.contest?.status === Contest_Status.REGISTRATION ? replacedLoginPath : this.loginPath()
+            }
+          >
             ログイン
           </a>
         </>
