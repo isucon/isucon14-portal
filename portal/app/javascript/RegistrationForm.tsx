@@ -313,6 +313,26 @@ export class RegistrationForm extends React.Component<Props, State> {
             </div>
             <p className="help">確認メールなどは送信されません。</p>
           </div>
+          <div className="field">
+          <label className="label">オフライン会場での参加を希望しますか?</label>
+          <div className="control">
+            <label>
+              <input
+                className="checkbox"
+                type="checkbox"
+                name="isInPerson"
+                checked={this.state.isInPerson}
+                onChange={this.onChange.bind(this)}
+              />{" "}
+              はい
+            </label>
+          </div>
+          <p className="help">
+            <a target="_blank" href="https://www.z-lodge.com">LODGE（ガーデンテラス紀尾井町17F）</a>での参加を希望する場合は、チェックを入れてください。
+            なお、席に限りがありますので、希望者多数の場合は抽選でのご案内となります。
+            詳細は後日当選者のみにご案内いたします。
+          </p>
+        </div>
         </>
       );
     }
@@ -351,22 +371,6 @@ export class RegistrationForm extends React.Component<Props, State> {
                 type="checkbox"
                 name="isStudent"
                 checked={this.state.isStudent}
-                onChange={this.onChange.bind(this)}
-              />{" "}
-              はい
-            </label>
-          </div>
-        </div>
-
-        <div className="field">
-          <label className="label">オフライン会場での参加を希望しますか?</label>
-          <div className="control">
-            <label>
-              <input
-                className="checkbox"
-                type="checkbox"
-                name="isInPerson"
-                checked={this.state.isInPerson}
                 onChange={this.onChange.bind(this)}
               />{" "}
               はい
