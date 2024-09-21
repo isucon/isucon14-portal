@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 )
@@ -27,7 +28,7 @@ func main() {
 	}
 
 	fmt.Println("環境をチェックしています...")
-	result, err := Check(CheckConfig{
+	result, err := Check(context.Background(), CheckConfig{
 		Name: name,
 		AMI:  info.AMI,
 		AZ:   info.AZ,

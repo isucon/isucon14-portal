@@ -105,6 +105,11 @@ func (p *Portal) SendResult(r Result) error {
 		return fmt.Errorf("http status error: %d (%s)", res.StatusCode, string(msg))
 	}
 
-	io.Copy(io.Discard, res.Body)
+	_, err = io.Copy(io.Discard, res.Body)
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
