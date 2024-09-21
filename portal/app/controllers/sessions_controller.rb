@@ -115,4 +115,8 @@ class SessionsController < ApplicationController
       return render status: 404, plain: 'no'
     end
   end
+
+  def failure
+    redirect_to '/auth/failure'
+  end
 end
