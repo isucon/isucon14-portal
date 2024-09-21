@@ -92,6 +92,14 @@ export class Registration extends React.Component<Props, State> {
 
   public renderPhase() {
     if (this.state.registrationSession) {
+      // XXX: If invalid invite token, team.leader is empty.
+      if (this.state.registrationSession.team && !this.state.registrationSession.team.leader) {
+        return (
+          <div className="message is-danger">
+            <div className="message-body">無効な招待 URL です。</div>
+          </div>
+        );
+      }
       const login = (
         <>
           {this.renderTeam()}
