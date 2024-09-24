@@ -40,8 +40,6 @@ module "isuxportal" {
     max_capacity = 4
     min_capacity = 0.5
   }
-
-
 }
 
 # module "ami" {

@@ -31,8 +31,8 @@ resource "aws_ecr_repository" "nginx" {
 
 resource "aws_appautoscaling_target" "app" {
   count              = var.enable_auto_scaling ? 1 : 0
-  min_capacity       = 1
   max_capacity       = 32
+  min_capacity       = 1
   resource_id        = "service/${aws_ecs_cluster.main.name}/app"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"

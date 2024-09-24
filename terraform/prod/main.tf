@@ -37,8 +37,8 @@ module "isuxportal" {
   aws_admin_role = "AWSReservedSSO_AdministratorAccess_41d64ba53efc15ee"
 
   aurora_serverless_configuration = {
-    min_capacity = 4
     max_capacity = 128
+    min_capacity = 0.5
   }
 }
 
