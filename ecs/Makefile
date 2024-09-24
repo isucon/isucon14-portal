@@ -8,7 +8,7 @@ DOCKER_CMD=docker
 export TASKS?=0
 
 
-login: 
+login:
 	aws --profile portal-$(ENV) ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin $(ECR)
 
 build/app:
