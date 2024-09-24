@@ -113,7 +113,6 @@ export class Registration extends React.Component<Props, State> {
         <section className="mt-6">
           <h3 className="title is-3">注意事項</h3>
           <ul>
-            <li>ISUCON14 への参加には への同意が必要です。</li>
             <li>
               ・
               <a href="/terms" target="_blank">
