@@ -110,7 +110,6 @@ resource "aws_rds_cluster" "main" {
     max_capacity = var.aurora_serverless_configuration.max_capacity
     min_capacity = var.aurora_serverless_configuration.min_capacity
   }
-
 }
 
 resource "aws_rds_cluster_instance" "main-1" {

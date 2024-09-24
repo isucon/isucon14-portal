@@ -19,15 +19,16 @@ local app = import 'lib/app.libsonnet';
       },
     },
   ],
-  cpu: '1024',
   executionRoleArn: '{{ tfstate `module.isuxportal.aws_iam_role.ecs-task.arn` }}',
   family: '{{ must_env `ENV` }}-portal-bot',
-  memory: '4096',
+  cpu: '1024',
+  memory: '2048',
   networkMode: 'awsvpc',
   requiresCompatibilities: [
     'FARGATE',
   ],
   runtimePlatform: {
+    cpuArchitecture: 'ARM64',
     operatingSystemFamily: 'LINUX',
   },
   tags: [

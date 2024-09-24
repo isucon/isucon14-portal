@@ -144,6 +144,7 @@ GEM
     ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
+    google-protobuf (3.25.4-aarch64-linux)
     google-protobuf (3.25.4-arm64-darwin)
     google-protobuf (3.25.4-x86_64-darwin)
     google-protobuf (3.25.4-x86_64-linux)
@@ -191,6 +192,8 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (8.7.0)
     nio4r (2.5.8)
+    nokogiri (1.16.7-aarch64-linux)
+      racc (~> 1.4)
     nokogiri (1.16.7-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.16.7-x86_64-darwin)
@@ -339,8 +342,9 @@ GEM
     zeitwerk (2.5.4)
 
 PLATFORMS
+  aarch64-linux-gnu
   universal-darwin
-  x86_64-linux
+  x86_64-linux-gnu
 
 DEPENDENCIES
   active_record_mysql_xverify
@@ -379,4 +383,4 @@ DEPENDENCIES
   web-push
 
 BUNDLED WITH
-   2.3.7
+   2.5.19

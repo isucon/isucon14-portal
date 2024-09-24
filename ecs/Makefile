@@ -1,39 +1,42 @@
 export ENV?=stg
 export TAG?=$(shell git log -1 --format=%H)
-export ECR?=$(shell jq -r '.credHelpers | keys | .[0]' .docker/config.json)
-# export ECR=703671906592.dkr.ecr.ap-northeast-1.amazonaws.com
-export ECR=692859926955.dkr.ecr.ap-northeast-1.amazonaws.com
-export SOPS_KMS_ARN?=arn:aws:kms:ap-northeast-1:692859926955:alias/$(ENV)-portal
-DOCKER_CMD=docker
-export TASKS?=1
+export AWS_PROFILE=portal-$(ENV)
+export AWS_DEFAULT_REGION=ap-northeast-1
+AWS_ACCCOUNT_ID=$(shell aws --profile $(AWS_PROFILE) sts get-caller-identity --query Account --output text)
+S3_BUCKET=config-$(ENV)-portal-isucon14
+ECR_HOST=$(AWS_ACCCOUNT_ID).dkr.ecr.$(AWS_DEFAULT_REGION).amazonaws.com
+SOPS_KMS_ARN=arn:aws:kms:$(AWS_DEFAULT_REGION):$(AWS_ACCCOUNT_ID):alias/$(ENV)-portal
+TASKS?=1
+DOCKER_CMD?=docker
 
-
-login: 
-	aws --profile portal-$(ENV) ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin $(ECR)
+login:
+	aws ecr get-login-password | docker login --username AWS --password-stdin $(ECR_HOST)
 
 build/app:
 	cd ../portal && \
 	$(DOCKER_CMD) build \
+		--platform linux/arm64 \
 		--build-arg ENV=$(ENV) \
-		-t $(ECR)/$(ENV)/portal/app:$(TAG) .
+		-t $(ECR_HOST)/$(ENV)/portal/app:$(TAG) .
 
 build/nginx:
 	cd nginx && \
 	$(DOCKER_CMD) build \
-		-t $(ECR)/$(ENV)/portal/nginx:$(TAG) .
+		--platform linux/arm64 \
+		-t $(ECR_HOST)/$(ENV)/portal/nginx:$(TAG) .
 
 push/%:
-	$(DOCKER_CMD) push $(ECR)/$(ENV)/portal/$*:$(TAG)
+	$(DOCKER_CMD) push $(ECR_HOST)/$(ENV)/portal/$*:$(TAG)
 
 build: build/app build/nginx
 
-push: push/app push/nginx
+push: login push/app push/nginx
 
 create/%:
 	ecspresso deploy --config $*.yml
 
 diff/env: $(ENV).env
-	bash -c 'diff -u <(aws s3 cp s3://config-$(ENV)-portal-isucon14/ecs/$(ENV).env -) $(ENV).env' || exit 0
+	bash -c 'diff -u <(aws s3 cp s3://$(S3_BUCKET)/ecs/$(ENV).env -) $(ENV).env' || exit 0
 
 diff/%: diff/env
 	ecspresso diff --config $*.yml
@@ -42,10 +45,9 @@ verify/%:
 	ecspresso verify --config $*.yml
 
 deploy/env: diff/env
-	aws s3 cp $(ENV).env s3://config-$(ENV)-portal-isucon14/ecs/$(ENV).env
+	aws s3 cp $(ENV).env s3://$(S3_BUCKET)/ecs/$(ENV).env
 
 deploy: deploy/app deploy/worker
-
 
 deploy/%: verify/% deploy/env
 	ecspresso deploy --config $*.yml --no-wait
