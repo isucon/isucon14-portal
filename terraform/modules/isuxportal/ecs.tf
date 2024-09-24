@@ -31,8 +31,8 @@ resource "aws_ecr_repository" "nginx" {
 
 resource "aws_appautoscaling_target" "app" {
   count              = var.enable_auto_scaling ? 1 : 0
+  min_capacity       = 1
   max_capacity       = 32
-  min_capacity       = 2
   resource_id        = "service/${aws_ecs_cluster.main.name}/app"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
@@ -48,8 +48,8 @@ resource "aws_appautoscaling_policy" "app" {
 
   target_tracking_scaling_policy_configuration {
     target_value       = 40
-    scale_out_cooldown = 120
-    scale_in_cooldown  = 300
+    scale_out_cooldown = 2*60
+    scale_in_cooldown  = 60*60
 
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
