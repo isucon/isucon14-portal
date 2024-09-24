@@ -163,7 +163,12 @@ export class Registration extends React.Component<Props, State> {
       );
       switch (this.state.registrationSession.status) {
         case GetRegistrationSessionResponse_Status.NOT_LOGGED_IN:
-          return login;
+          return (
+            <>
+              {login}
+              {disclaimer}
+            </>
+          );
           break;
         case GetRegistrationSessionResponse_Status.CLOSED:
           return (
