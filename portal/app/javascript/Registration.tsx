@@ -164,33 +164,34 @@ export class Registration extends React.Component<Props, State> {
         case GetRegistrationSessionResponse_Status.NOT_LOGGED_IN:
           return (
             <>
-              {login}
               {disclaimer}
+              {login}
             </>
           );
           break;
         case GetRegistrationSessionResponse_Status.CLOSED:
           return (
             <>
-              {login}
-              {disclaimer}
               <div className="message is-danger">
                 <div className="message-body">
                   参加登録を現在受け付けていません (定員到達、締切後、もしくは受付開始前)
                 </div>
               </div>
+              {disclaimer}
+              {login}
             </>
           );
           break;
         case GetRegistrationSessionResponse_Status.NOT_JOINABLE:
           return (
             <>
-              {login}
               <div className="message is-danger">
                 <div className="message-body">
                   招待元のチームメンバー数が上限に達しているため、この招待を利用して参加登録を進めることはできません。
                 </div>
               </div>
+              {disclaimer}
+              {login}
             </>
           );
           break;
@@ -198,8 +199,8 @@ export class Registration extends React.Component<Props, State> {
         case GetRegistrationSessionResponse_Status.JOINABLE:
           return (
             <>
-              {login}
               {disclaimer}
+              {login}
               <RegistrationForm
                 client={this.props.client}
                 session={this.state.session}
