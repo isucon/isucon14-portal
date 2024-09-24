@@ -36,15 +36,16 @@
       ],
     },
   ],
-  cpu: '4096',
   executionRoleArn: '{{ tfstate `module.isuxportal.aws_iam_role.ecs-task.arn` }}',
   family: '{{ must_env `ENV` }}-benchmarker',
+  cpu: '4096',
   memory: '8192',
   networkMode: 'awsvpc',
   requiresCompatibilities: [
     'FARGATE',
   ],
   runtimePlatform: {
+    cpuArchitecture: 'X86_64',
     operatingSystemFamily: 'LINUX',
   },
   tags: [

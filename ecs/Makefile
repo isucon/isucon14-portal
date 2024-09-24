@@ -15,14 +15,14 @@ login:
 build/app:
 	cd ../portal && \
 	$(DOCKER_CMD) build \
-		--platform linux/amd64 \
+		--platform linux/arm64 \
 		--build-arg ENV=$(ENV) \
 		-t $(ECR_HOST)/$(ENV)/portal/app:$(TAG) .
 
 build/nginx:
 	cd nginx && \
 	$(DOCKER_CMD) build \
-		--platform linux/amd64 \
+		--platform linux/arm64 \
 		-t $(ECR_HOST)/$(ENV)/portal/nginx:$(TAG) .
 
 push/%:
