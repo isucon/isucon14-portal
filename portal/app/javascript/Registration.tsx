@@ -1,20 +1,19 @@
-import { ApiError, ApiClient } from "./ApiClient";
+import { ApiClient } from "./ApiClient";
 
 import React from "react";
 
 import { ErrorMessage } from "./ErrorMessage";
 
-import { Navbar } from "./Navbar";
-import { RegistrationLogin } from "./RegistrationLogin";
-import { RegistrationForm } from "./RegistrationForm";
-import { RegistrationStatus } from "./RegistrationStatus";
+import { create } from "@bufbuild/protobuf";
 import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
 import {
   GetRegistrationSessionQuerySchema,
   GetRegistrationSessionResponse_Status,
   type GetRegistrationSessionResponse,
 } from "../../proto/isuxportal/services/registration/session_pb";
-import { create } from "@bufbuild/protobuf";
+import { RegistrationForm } from "./RegistrationForm";
+import { RegistrationLogin } from "./RegistrationLogin";
+import { RegistrationStatus } from "./RegistrationStatus";
 
 export interface Props {
   session: GetCurrentSessionResponse;
@@ -110,6 +109,58 @@ export class Registration extends React.Component<Props, State> {
           />
         </>
       );
+      const disclaimer = (
+        <section className="mt-6">
+          <h3 className="title is-3">注意事項</h3>
+          <ul>
+            <li>ISUCON14 への参加には への同意が必要です。</li>
+            <li>
+              ・
+              <a href="/terms" target="_blank">
+                ISUCON14 参加規約
+              </a>
+              への同意が必要です。
+            </li>
+            <li>・ISUCON14 への参加は1〜3名を1チームとします。</li>
+            <li>・参加メンバーの追加・変更は11月7日(木)19:00まで可能です。</li>
+            <li>・選手の皆さんご自身で用意したDiscord・AWSのアカウントを用いて参加・実施します。</li>
+            <li>・AWSアカウントは代表者のみ必要で、メンバー全員は必要ありません。</li>
+            <li>・AWSはクレジットカードの登録が必要となりますので、学生の方は特にご注意ください。</li>
+            <li>
+              ・ご登録いただいたチーム名、選手名、アイコン画像は、ISUCON
+              公式サイトおよびポータルなど上で広く公開されるほか、入賞時にお送りする記念品等に印字させていただく場合があります。
+            </li>
+            <li>・チーム名、選手名、アイコン画像に公序良俗に反するものを使わないでください。</li>
+            <li>
+              ・チーム名、選手名に機種依存文字・絵文字・HTMLタグなどが入っていた場合、サイトへの表示時に表現を変えさせていただく場合があります。
+            </li>
+            <li>・チーム名は他のチームと重複するものは使用できません。</li>
+            <li>・GitHub アカウントの情報はチームメンバー内で共有されますのであらかじめご了承ください。</li>
+            <li>
+              ・競技進行のため、全参加者はサポート/アナウンス用の Discord サーバー
+              (サポートチャット)への参加が必要です。Discord
+              アカウントの情報は全参加者にも共有されますのであらかじめご了承ください。
+            </li>
+            <li>・参加登録が完了すると、他のチームへの参加はできなくなります。</li>
+            <li>
+              ・1人目 (チーム代表者) の登録後、チームメンバーを招待するための URL を確認することができます。招待 URL
+              を共有し、チームメンバー全員の登録をしてください。
+            </li>
+            <li>
+              ・参加登録メールなどは送信されません。個別の連絡や、Discord
+              が利用できない場合を想定してメールアドレスの記入をお願いしていますが、競技のアナウンスや連絡は、本ポータルサイトあるいは
+              Discord 上で行われます。
+            </li>
+            <li>
+              ・競技終了までは出題内容などのTweet、ブログ掲載、GitHubへの公開等をせず、他者へ漏らさないようお願いいたします。（ただし主催者が
+              X(Twitter)、Web サイトにおいて公開している情報は除きます）
+            </li>
+            <li>
+              ・その他に不正や運営の妨げになると判断した場合は、運営判断で参加をお断りしたり失格とする場合があります。ご注意ください。
+            </li>
+          </ul>
+        </section>
+      );
       switch (this.state.registrationSession.status) {
         case GetRegistrationSessionResponse_Status.NOT_LOGGED_IN:
           return login;
@@ -117,24 +168,25 @@ export class Registration extends React.Component<Props, State> {
         case GetRegistrationSessionResponse_Status.CLOSED:
           return (
             <>
+              {login}
+              {disclaimer}
               <div className="message is-danger">
                 <div className="message-body">
                   参加登録を現在受け付けていません (定員到達、締切後、もしくは受付開始前)
                 </div>
               </div>
-              {login}
             </>
           );
           break;
         case GetRegistrationSessionResponse_Status.NOT_JOINABLE:
           return (
             <>
+              {login}
               <div className="message is-danger">
                 <div className="message-body">
                   招待元のチームメンバー数が上限に達しているため、この招待を利用して参加登録を進めることはできません。
                 </div>
               </div>
-              {login}
             </>
           );
           break;
@@ -143,6 +195,7 @@ export class Registration extends React.Component<Props, State> {
           return (
             <>
               {login}
+              {disclaimer}
               <RegistrationForm
                 client={this.props.client}
                 session={this.state.session}

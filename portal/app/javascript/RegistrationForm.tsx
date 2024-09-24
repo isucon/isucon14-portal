@@ -175,42 +175,6 @@ export class RegistrationForm extends React.Component<Props, State> {
     return (
       <>
         <section className="mt-6">
-          <h3 className="title is-3">注意事項</h3>
-          <ul>
-            <li>
-              ISUCON14 への参加には
-              <a href="/terms" target="_blank">
-                参加規約
-              </a>
-              への同意が必要です。
-            </li>
-            <li>
-              ご登録いただいたチーム名、選手名、アイコン画像は、ISUCON
-              公式サイトおよびポータルなど上で広く公開されるほか、入賞時にお送りする記念品等に印字させていただく場合があります。
-            </li>
-            <li>チーム名、選手名、アイコン画像に公序良俗に反するものを使わないでください。</li>
-            <li>
-              チーム名、選手名に機種依存文字・絵文字・HTMLタグなどが入っていた場合、サイトへの表示時に表現を変えさせていただく場合があります。
-            </li>
-            <li>GitHub アカウントの情報はチームメンバー内で共有されますのであらかじめご了承ください。</li>
-            <li>
-              競技進行のため、全参加者はサポート/アナウンス用の Discord サーバー
-              (サポートチャット)への参加が必要です。Discord
-              アカウントの情報は全参加者にも共有されますのであらかじめご了承ください。
-            </li>
-            <li>参加登録が完了すると、他のチームへの参加はできなくなります。</li>
-            <li>
-              1人目 (チーム代表者) の登録後、チームメンバーを招待するための URL を確認することができます。招待 URL
-              を共有し、チームメンバー全員の登録をしてください。
-            </li>
-            <li>
-              参加登録メールなどは送信されません。個別の連絡や、Discord
-              が利用できない場合を想定してメールアドレスの記入をお願いしていますが、競技のアナウンスや連絡は、本ポータルサイトあるいは
-              Discord 上で行われます。
-            </li>
-          </ul>
-        </section>
-        <section className="mt-6">
           <h3 className="title is-3">{this.isEditing() ? "編集" : "詳細の入力"}</h3>
           <form onSubmit={this.onSubmit.bind(this)}>
             {this.renderTeamFormFields()}
@@ -314,25 +278,28 @@ export class RegistrationForm extends React.Component<Props, State> {
             <p className="help">確認メールなどは送信されません。</p>
           </div>
           <div className="field">
-          <label className="label">オフライン会場での参加を希望しますか?</label>
-          <div className="control">
-            <label>
-              <input
-                className="checkbox"
-                type="checkbox"
-                name="isInPerson"
-                checked={this.state.isInPerson}
-                onChange={this.onChange.bind(this)}
-              />{" "}
-              はい
-            </label>
+            <label className="label">オフライン会場での参加を希望しますか?</label>
+            <div className="control">
+              <label>
+                <input
+                  className="checkbox"
+                  type="checkbox"
+                  name="isInPerson"
+                  checked={this.state.isInPerson}
+                  onChange={this.onChange.bind(this)}
+                />{" "}
+                はい
+              </label>
+            </div>
+            <p className="help">
+              <a target="_blank" href="https://www.z-lodge.com">
+                LODGE（ガーデンテラス紀尾井町17F）
+              </a>
+              での参加を希望する場合は、チェックを入れてください。
+              なお、席に限りがありますので、希望者多数の場合は抽選でのご案内となります。
+              詳細は後日当選者のみにご案内いたします。
+            </p>
           </div>
-          <p className="help">
-            <a target="_blank" href="https://www.z-lodge.com">LODGE（ガーデンテラス紀尾井町17F）</a>での参加を希望する場合は、チェックを入れてください。
-            なお、席に限りがありますので、希望者多数の場合は抽選でのご案内となります。
-            詳細は後日当選者のみにご案内いたします。
-          </p>
-        </div>
         </>
       );
     }
