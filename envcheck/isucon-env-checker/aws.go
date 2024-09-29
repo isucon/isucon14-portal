@@ -15,7 +15,7 @@ import (
 )
 
 func NewAWSSession(ctx context.Context) (aws.Config, error) {
-	cfg, err := config.LoadDefaultConfig(context.Background())
+	cfg, err := config.LoadDefaultConfig(context.Background(), config.WithRegion("ap-northeast-1"))
 	if err != nil {
 		return aws.Config{}, err
 	}
