@@ -99,6 +99,7 @@ resource "aws_lb_listener_rule" "app_without_auth" {
       values = [
         "/api/env_check_info",
         "/api/env_checks",
+        "/api/ssh_public_keys",
       ]
     }
   }
