@@ -1,3 +1,7 @@
+
+export ENV ?= stg
+export AWS_PROFILE ?= portal-$(ENV)
+
 .PHONY: build clean
 build: isucon-env-checker/isucon-env-checker isucon-admin.pub
 	packer build envcheck.pkr.hcl
