@@ -130,21 +130,90 @@ func (c *checker) checkSecurityGroup(sg *types.SecurityGroup) {
 }
 
 func (c *checker) isIngressSSH(p *types.IpPermission) bool {
-	return p.FromPort != nil && *p.FromPort == 22 &&
-		p.ToPort != nil && *p.ToPort == 22 &&
-		p.IpProtocol != nil && *p.IpProtocol == "tcp" &&
-		len(p.IpRanges) == 1 && p.IpRanges[0].CidrIp != nil && *p.IpRanges[0].CidrIp == "0.0.0.0/0" &&
-		p.Ipv6Ranges == nil &&
-		p.PrefixListIds == nil &&
-		p.UserIdGroupPairs == nil
+
+	if p.FromPort == nil || *p.FromPort != 22 {
+		c.addFailure("送信元 Port が不正です, %v", p.FromPort)
+		return false
+	}
+	if p.ToPort == nil || *p.ToPort != 22 {
+		c.addFailure("宛先 Port が不正です, %v", p.ToPort)
+		return false
+	}
+
+	if p.IpProtocol == nil || *p.IpProtocol != "tcp" {
+		c.addFailure("IPプロトコル が不正です, %v", p.IpProtocol)
+		return false
+	}
+
+	if len(p.IpRanges) != 1 {
+		c.addFailure("不正なIPレンジが存在します, %v", p.IpRanges)
+		return false
+	}
+
+	if p.IpRanges[0].CidrIp == nil || *p.IpRanges[0].CidrIp != "0.0.0.0/0" {
+		c.addFailure("IPレンジが不正です, %v", p.IpRanges[0].CidrIp)
+		return false
+	}
+
+	if len(p.Ipv6Ranges) != 0 {
+		c.addFailure("不正なIPv6レンジが存在します, %v", p.Ipv6Ranges)
+		return false
+	}
+
+	if len(p.PrefixListIds) != 0 {
+		c.addFailure("不正なPrefixListIDが存在します, %v", p.PrefixListIds)
+		return false
+	}
+
+	if len(p.UserIdGroupPairs) != 0 {
+		c.addFailure("不正なUserIdGroupPairsが存在します, %v", p.UserIdGroupPairs)
+		return false
+	}
+
+	return true
 }
 
 func (c *checker) isEgressAll(p *types.IpPermission) bool {
-	return p.FromPort == nil &&
-		p.ToPort == nil &&
-		p.IpProtocol != nil && *p.IpProtocol == "-1" &&
-		len(p.IpRanges) == 1 && p.IpRanges[0].CidrIp != nil && *p.IpRanges[0].CidrIp == "0.0.0.0/0" &&
-		p.Ipv6Ranges == nil &&
-		p.PrefixListIds == nil &&
-		p.UserIdGroupPairs == nil
+
+	if p.FromPort != nil {
+		c.addFailure("送信元 Port が不正です, %v", p.FromPort)
+		return false
+	}
+
+	if p.ToPort != nil {
+		c.addFailure("宛先 Port が不正です, %v", p.ToPort)
+		return false
+	}
+
+	if p.IpProtocol == nil || *p.IpProtocol != "-1" {
+		c.addFailure("IPプロトコル が不正です, %v", p.IpProtocol)
+		return false
+	}
+
+	if len(p.IpRanges) != 1 {
+		c.addFailure("IPレンジが不正です, %v", p.IpRanges)
+		return false
+	}
+
+	if p.IpRanges[0].CidrIp == nil || *p.IpRanges[0].CidrIp != "0.0.0.0/0" {
+		c.addFailure("IPレンジが不正です, %v", p.IpRanges[0].CidrIp)
+		return false
+	}
+
+	if len(p.Ipv6Ranges) != 0 {
+		c.addFailure("不正なIPv6レンジが存在します, %v", p.Ipv6Ranges)
+		return false
+	}
+
+	if len(p.PrefixListIds) != 0 {
+		c.addFailure("不正なPrefixListIDが存在します, %v", p.PrefixListIds)
+		return false
+	}
+
+	if len(p.UserIdGroupPairs) != 0 {
+		c.addFailure("不正なUserIdGroupPairsが存在します, %v", p.UserIdGroupPairs)
+		return false
+	}
+
+	return true
 }

@@ -146,7 +146,7 @@ Resources:
         - DeviceName: /dev/sda1
           Ebs:
             VolumeSize: 8
-            VolumeType: gp2
+            VolumeType: gp3
       Tags:
         - Key: Name
           Value: isucon14-envcheck

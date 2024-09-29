@@ -75,6 +75,37 @@ resource "aws_lb_target_group" "app" {
   }
 }
 
+
+
+resource "aws_lb_listener_rule" "app_without_auth" {
+  count        = var.enable_auth ? 1 : 0
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 9
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.app.arn
+  }
+
+  condition {
+    host_header {
+      values = [
+        aws_route53_record.portal.name,
+      ]
+    }
+  }
+  condition {
+    path_pattern {
+      values = [
+        "/api/env_check_info",
+        "/api/env_checks",
+        "/api/ssh_public_keys",
+      ]
+    }
+  }
+}
+
+
 resource "aws_lb_listener_rule" "app" {
   listener_arn = aws_lb_listener.https.arn
   priority     = 10
@@ -108,3 +139,4 @@ resource "aws_lb_listener_rule" "app" {
     }
   }
 }
+
