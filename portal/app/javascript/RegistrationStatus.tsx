@@ -274,27 +274,6 @@ export class RegistrationStatus extends React.Component<Props, State> {
               </button>
             </div>
           </div>
-          <div className="field has-addons">
-            <div className="field-label">
-              <label className="label">さくらインターネット</label>
-            </div>
-            <div className="control is-expanded">
-              <input
-                className="input"
-                type="text"
-                readOnly
-                value={
-                  this.props.registrationSession.coupon?.code ? this.props.registrationSession.coupon?.code[1] : ""
-                }
-                onClick={this.onCopyTargetInputClick.bind(this)}
-              />
-            </div>
-            <div className="control">
-              <button className="button" onClick={this.onCopyCouponButtonClickIndex(1).bind(this)}>
-                <span className="material-icons">content_copy</span>
-              </button>
-            </div>
-          </div>
         </div>
       );
     } else {
