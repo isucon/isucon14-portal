@@ -42,6 +42,12 @@ module "isuxportal" {
   }
 }
 
+module "github" {
+  source           = "../modules/github"
+  github_repos     = ["isucon14", "isucon14-portal"]
+  ecr_repositories = module.isuxportal.ecr_repositories
+}
+
 module "ami" {
   source  = "../modules/ami"
   isuconx = "isucon14"
