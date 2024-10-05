@@ -58,7 +58,7 @@ data "aws_iam_policy_document" "main_policy" {
     resources = ["*"]
   }
 
-  # `docker push` に必要
+  # `docker push/pull` に必要
   statement {
     effect = "Allow"
     actions = [
@@ -67,6 +67,8 @@ data "aws_iam_policy_document" "main_policy" {
       "ecr:InitiateLayerUpload",
       "ecr:BatchCheckLayerAvailability",
       "ecr:PutImage",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
     ]
     resources = var.ecr_repositories
   }
