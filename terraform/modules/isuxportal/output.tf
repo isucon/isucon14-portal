@@ -5,3 +5,16 @@ output "ecr_repositories" {
     aws_ecr_repository.benchmarker.arn,
   ]
 }
+
+output "task_role_arns" {
+  value = [
+    aws_iam_role.ecs-task.arn,
+  ]
+}
+
+output "service_arns" {
+  value = [
+    "${aws_ecs_cluster.main.arn}/*",
+    "${aws_ecs_cluster.benchmarker.arn}/*",
+  ]
+}

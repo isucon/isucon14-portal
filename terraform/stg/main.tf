@@ -46,6 +46,8 @@ module "github" {
   source           = "../modules/github"
   github_repos     = ["isucon14", "isucon14-portal"]
   ecr_repositories = module.isuxportal.ecr_repositories
+  service_arns     = module.isuxportal.service_arns
+  task_role_arns   = module.isuxportal.task_role_arns
 }
 
 module "ami" {

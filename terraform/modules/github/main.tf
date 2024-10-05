@@ -12,8 +12,8 @@ resource "aws_iam_openid_connect_provider" "github_actions" {
   thumbprint_list = data.tls_certificate.github_actions.certificates[*].sha1_fingerprint
 }
 
-resource "aws_iam_role" "main" {
-  name               = "github-actions-ecr-push-example-role"
+resource "aws_iam_role" "push_image" {
+  name               = "github-actions-ecr-push-role"
   assume_role_policy = data.aws_iam_policy_document.main_assume_role_policy.json
 }
 
@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "main_assume_role_policy" {
 
 resource "aws_iam_role_policy" "main" {
   name   = "allow-ecr-push-image"
-  role   = aws_iam_role.main.name
+  role   = aws_iam_role.push_image.name
   policy = data.aws_iam_policy_document.main_policy.json
 }
 
@@ -71,5 +71,63 @@ data "aws_iam_policy_document" "main_policy" {
       "ecr:BatchGetImage",
     ]
     resources = var.ecr_repositories
+  }
+}
+
+resource "aws_iam_role" "update_taskdef" {
+  name               = "github-actions-ecs-update-taskdef-role"
+  assume_role_policy = data.aws_iam_policy_document.update_taskdef_assume_role_policy.json
+}
+
+data "aws_iam_policy_document" "update_taskdef_assume_role_policy" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type        = "Federated"
+      identifiers = [aws_iam_openid_connect_provider.github_actions.arn]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    dynamic "condition" {
+      for_each = var.github_repos
+      content {
+        test     = "StringLike"
+        variable = "token.actions.githubusercontent.com:sub"
+        values   = ["repo:isucon/${condition.value}:*"]
+      }
+    }
+  }
+}
+
+resource "aws_iam_role_policy" "update_taskdef" {
+  name   = "allow-ecs-update-taskdef"
+  role   = aws_iam_role.update_taskdef.name
+  policy = data.aws_iam_policy_document.update_taskdef_policy.json
+}
+
+data "aws_iam_policy_document" "update_taskdef_policy" {
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:RegisterTaskDefinition"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["iam:PassRole"]
+    resources = var.task_role_arns
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:UpdateService", "ecs:DescribeServices"]
+    resources = var.service_arns
   }
 }
