@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/isucon/isucon14-portal/supervisor/dummybench/benchrun"
@@ -13,25 +12,14 @@ import (
 
 func main() {
 	var err error
-	args := os.Args[1:]
 
 	interval := 0.0
 	count := 6
 
-	if len(args) > 0 {
-		interval, err = strconv.ParseFloat(args[0], 64)
-		if err != nil {
-			panic(err)
-		}
-	}
-	if len(args) > 1 {
-		count, err = strconv.Atoi(args[1])
-		if err != nil {
-			panic(err)
-		}
-	}
 	var target string = ""
 	flag.StringVar(&target, "target", "", "target address")
+	flag.IntVar(&count, "count", 6, "count")
+	flag.Float64Var(&interval, "interval", 0.0, "interval")
 
 	fmt.Printf("[stdout] Target: %v\n", benchrun.GetTargetAddress())
 	fmt.Printf("[stdout] All: %v\n", benchrun.GetAllAddresses())
