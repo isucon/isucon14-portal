@@ -5,6 +5,6 @@ on:
       - feat/deploy.bench 
 jobs:
   NOP-Job:
-    runs-on: codebuild-problem-github-actions-${{ github.run_id }}-${{ github.run_attempt }}
+    runs-on: codebuild-portal-github-actions-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - run: echo "nop"
