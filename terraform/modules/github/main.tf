@@ -20,7 +20,7 @@ resource "aws_iam_role" "push_image" {
 data "aws_iam_policy_document" "main_assume_role_policy" {
   statement {
     effect  = "Allow"
-    actions = ["sts:AssumeRoleWithWebIdentity"]
+    actions = ["sts:AssumeRoleWithWebIdentity", "sts:TagSession"]
 
     principals {
       type        = "Federated"
@@ -82,7 +82,7 @@ resource "aws_iam_role" "update_taskdef" {
 data "aws_iam_policy_document" "update_taskdef_assume_role_policy" {
   statement {
     effect  = "Allow"
-    actions = ["sts:AssumeRoleWithWebIdentity"]
+    actions = ["sts:AssumeRoleWithWebIdentity", "sts:TagSession"]
 
     principals {
       type        = "Federated"

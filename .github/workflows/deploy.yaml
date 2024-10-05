@@ -8,6 +8,9 @@ on:
       TAG:
         description: 'tag'
         required: true
+permissions:
+  id-token: write
+  contents: read
 jobs:
   bench:
     runs-on: codebuild-portal-github-actions-${{ github.run_id }}-${{ github.run_attempt }}
