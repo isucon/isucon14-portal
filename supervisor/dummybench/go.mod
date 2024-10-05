@@ -1,6 +1,6 @@
 module github.com/isucon/isucon14-portal/supervisor/dummybench
 
-go 1.23.2
+go 1.22.8
 
 require (
 	github.com/golang/protobuf v1.5.4
