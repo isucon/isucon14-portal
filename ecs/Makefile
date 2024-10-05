@@ -29,7 +29,10 @@ build/benchmarker:
 	cd ../supervisor && \
 	$(DOCKER_CMD) build \
 		--platform linux/arm64 \
-		-t $(ECR_HOST)/$(ENV)/portal/bench:$(TAG) .
+		-t $(ECR_HOST)/$(ENV)/benchmarker:$(TAG) .
+
+push/benchmarker:
+	$(DOCKER_CMD) push $(ECR_HOST)/$(ENV)/benchmarker:$(TAG)
 
 push/%:
 	$(DOCKER_CMD) push $(ECR_HOST)/$(ENV)/portal/$*:$(TAG)
