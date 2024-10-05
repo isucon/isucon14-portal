@@ -21,13 +21,12 @@ jobs:
         with:
           role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
           aws-region: ap-northeast-1
-      - uses: kayac/ecspresso@v2
-        with:
-          version: v2.3.0 
       - name: deploy
         working-directory: ecs
         run: |
-          ecspresso deploy --config benchmarker.yml
+          wget https://github.com/kayac/ecspresso/releases/download/v2.4.1/ecspresso_2.4.1_linux_amd64.tar.gz
+          tar xvf ecspresso_2.4.1_linux_amd64.tar.gz
+          ./ecspresso deploy --config benchmarker.yml
         env:
           TAG: ${{ github.event.inputs.TAG || 'latest' }}
           ENV: stg
