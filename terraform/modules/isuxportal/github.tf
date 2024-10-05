@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "main_assume_role_policy" {
     }
 
     dynamic "condition" {
-      for_each = var.github_repos
+      for_each = ["isucon14", "isucon14-portal"]
       content {
         test     = "StringLike"
         variable = "token.actions.githubusercontent.com:sub"
@@ -70,7 +70,11 @@ data "aws_iam_policy_document" "main_policy" {
       "ecr:GetDownloadUrlForLayer",
       "ecr:BatchGetImage",
     ]
-    resources = var.ecr_repositories
+    resources = [
+      aws_ecr_repository.app.arn,
+      aws_ecr_repository.nginx.arn,
+      aws_ecr_repository.benchmarker.arn,
+    ]
   }
 }
 
@@ -96,7 +100,7 @@ data "aws_iam_policy_document" "update_taskdef_assume_role_policy" {
     }
 
     dynamic "condition" {
-      for_each = var.github_repos
+      for_each = ["isucon14", "isucon14-portal"]
       content {
         test     = "StringLike"
         variable = "token.actions.githubusercontent.com:sub"
@@ -122,12 +126,33 @@ data "aws_iam_policy_document" "update_taskdef_policy" {
   statement {
     effect    = "Allow"
     actions   = ["iam:PassRole"]
-    resources = var.task_role_arns
+    resources = [aws_iam_role.ecs-task.arn]
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = ["ecs:UpdateService", "ecs:DescribeServices"]
+    resources = [
+      "arn:aws:ecs:ap-northeast-1:${data.aws_caller_identity.current.account_id}:service/${var.env}-${var.project}/*",
+      "arn:aws:ecs:ap-northeast-1:${data.aws_caller_identity.current.account_id}:service/${var.env}-benchmarker/*",
+    ]
   }
 
   statement {
     effect    = "Allow"
-    actions   = ["ecs:UpdateService", "ecs:DescribeServices"]
-    resources = var.service_arns
+    actions   = ["s3:GetObject"]
+    resources = ["${var.tfstate_bucket}/*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["application-autoscaling:DescribeScalableTargets"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:TagResource"]
+    resources = ["arn:aws:ecs:ap-northeast-1:${data.aws_caller_identity.current.account_id}:task-definition/*"]
   }
 }

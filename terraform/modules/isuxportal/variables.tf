@@ -55,3 +55,7 @@ variable "aurora_serverless_configuration" {
 variable "origins" {
   type = list(string)
 }
+
+variable "tfstate_bucket" {
+  type = string
+}

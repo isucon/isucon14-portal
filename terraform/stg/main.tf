@@ -40,17 +40,12 @@ module "isuxportal" {
     max_capacity = 4
     min_capacity = 0.5
   }
+  tfstate_bucket = "arn:aws:s3:::tfstate-isucon14-portal-stg"
 }
 
-module "github" {
-  source           = "../modules/github"
-  github_repos     = ["isucon14", "isucon14-portal"]
-  ecr_repositories = module.isuxportal.ecr_repositories
-  service_arns     = module.isuxportal.service_arns
-  task_role_arns   = module.isuxportal.task_role_arns
-}
 
 module "ami" {
   source  = "../modules/ami"
   isuconx = "isucon14"
 }
+
