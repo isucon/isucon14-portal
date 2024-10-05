@@ -19,3 +19,12 @@ plugins:
     out: portal/lib
   - remote: buf.build/grpc/ruby:v1.50.0
     out: portal/lib
+  - remote: buf.build/community/neoeinstein-prost:v0.4.0
+    out: supervisor/gen
+  # - remote: buf.build/community/neoeinstein-prost-crate:v0.4.1
+  #   out: supervisor/gen
+  #   opt:
+  #     - gen_crate=supervisor/Cargo.toml
+  - remote: buf.build/community/neoeinstein-prost-serde:v0.3.1
+    out: supervisor/gen
+
