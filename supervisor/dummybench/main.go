@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
-	isuxportalResources "github.com/isucon/isucon14-portal/proto.go/isuxportal/resources"
 	"github.com/isucon/isucon14-portal/supervisor/dummybench/benchrun"
+	isuxportalResources "github.com/isucon/isucon14-portal/supervisor/dummybench/gen/isuxportal/resources"
 )
 
 func main() {

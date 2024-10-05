@@ -9,7 +9,7 @@ import (
 	"syscall"
 
 	"github.com/golang/protobuf/proto"
-	isuxportalResources "github.com/isucon/isucon14-portal/proto.go/isuxportal/resources"
+	isuxportalResources "github.com/isucon/isucon14-portal/supervisor/dummybench/gen/isuxportal/resources"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 )
 
