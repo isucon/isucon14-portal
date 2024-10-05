@@ -1,13 +1,13 @@
 pub mod isuxportal {
     pub mod proto {
-        include!(concat!(env!("OUT_DIR"), "/isuxportal.proto.rs"));
+        include!("../gen/isuxportal.proto.rs");
         pub mod services {
             pub mod bench {
-                include!(concat!(env!("OUT_DIR"), "/isuxportal.proto.services.bench.rs"));
+                include!("../gen/isuxportal.proto.services.bench.rs");
             }
         }
         pub mod resources {
-            include!(concat!(env!("OUT_DIR"), "/isuxportal.proto.resources.rs"));
+            include!("../gen/isuxportal.proto.resources.rs");
         }
     }
 }
