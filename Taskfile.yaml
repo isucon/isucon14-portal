@@ -1,6 +1,9 @@
 version: "3"
 
 tasks:
+  init:
+    cmds:
+      - pnpm install
   gen:
     cmds:
       - pnpm buf generate
