@@ -13,7 +13,7 @@ WORKDIR /tmp/isucon14-portal/benchmarker/dummybench
 RUN go build -o /usr/local/bin/dummybench /tmp/isucon14-portal/benchmarker/dummybench 
 
 
-FROM scratch
-
+FROM debian:bookworm-slim
+RUN apt-get update && apt install -y openssl
 COPY --from=builder /usr/local/bin/isuxportal-supervisor /usr/local/bin/isuxportal-supervisor
 COPY --from=benchmarker /usr/local/bin/dummybench /usr/local/bin/dummybench
