@@ -45,7 +45,7 @@
     'FARGATE',
   ],
   runtimePlatform: {
-    cpuArchitecture: 'ARM64',
+    cpuArchitecture: 'X86_64',
     operatingSystemFamily: 'LINUX',
   },
   tags: [

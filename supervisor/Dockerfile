@@ -8,5 +8,5 @@ RUN cargo build --release --bin isuxportal-supervisor
 RUN install target/release/isuxportal-supervisor /usr/local/bin/isuxportal-supervisor
 
 
-FROM scrach
+FROM scratch
 COPY --from=builder /usr/local/bin/isuxportal-supervisor /usr/local/bin/isuxportal-supervisor
