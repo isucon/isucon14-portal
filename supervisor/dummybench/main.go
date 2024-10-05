@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"strconv"
@@ -29,11 +30,15 @@ func main() {
 			panic(err)
 		}
 	}
+	var target string = ""
+	flag.StringVar(&target, "target", "", "target address")
 
 	fmt.Printf("[stdout] Target: %v\n", benchrun.GetTargetAddress())
 	fmt.Printf("[stdout] All: %v\n", benchrun.GetAllAddresses())
+	fmt.Printf("[stdout] Target: %v\n", target)
 	fmt.Fprintf(os.Stderr, "[stderr] Target: %v\n", benchrun.GetTargetAddress())
 	fmt.Fprintf(os.Stderr, "[stderr] All: %v\n", benchrun.GetAllAddresses())
+	fmt.Fprintf(os.Stderr, "[stderr] Target: %v\n", target)
 
 	//for i := 1; i <= 1000; i++ {
 	//	fmt.Printf("\xFE\xFF\xF0")
