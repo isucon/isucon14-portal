@@ -31,8 +31,18 @@ build/supervisor:
 		--platform linux/amd64 \
 		-t $(ECR_HOST)/$(ENV)/benchmarker:supervisor .
 
+build/dummy-bench:
+	cd ../supervisor && \
+	$(DOCKER_CMD) build \
+		-f ../supervisor/Dockerfile.dev \
+		--platform linux/amd64 \
+		-t $(ECR_HOST)/$(ENV)/benchmarker:dummy-$(TAG) .
+
 push/supervisor:
 	$(DOCKER_CMD) push $(ECR_HOST)/$(ENV)/benchmarker:supervisor
+
+push/dummy-bench:
+	$(DOCKER_CMD) push $(ECR_HOST)/$(ENV)/benchmarker:dummy-$(TAG)
 
 push/%:
 	$(DOCKER_CMD) push $(ECR_HOST)/$(ENV)/portal/$*:$(TAG)

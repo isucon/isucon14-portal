@@ -17,6 +17,11 @@
     //   name: 'ISUXPORTAL_QUALIFY_AMI_ID',
     //   value: '{{ tfstate `module.ami.data.aws_ami.qualify.id` }}',
     // },
+    // WARN: デバッグのため直打ち!!!
+    {
+      name: 'ISUXPORTAL_QUALIFY_AMI_ID',
+      value: 'ami-0a1cc94772ce49eb3',
+    },
   ],
   environmentFiles: [
     {
