@@ -14,6 +14,13 @@ RUN go build -o /usr/local/bin/dummybench /tmp/isucon14-portal/benchmarker/dummy
 
 
 FROM debian:bookworm-slim
-RUN apt-get update && apt install -y openssl
+RUN apt-get update && apt install -y ca-certificates openssl curl unzip jq
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+  unzip awscliv2.zip && \
+  ./aws/install && \ 
+  rm -rf awscliv2.zip ./aws/
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY --from=builder /usr/local/bin/isuxportal-supervisor /usr/local/bin/isuxportal-supervisor
 COPY --from=benchmarker /usr/local/bin/dummybench /usr/local/bin/dummybench
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["/usr/local/bin/isuxportal-supervisor", "/usr/local/bin/dummybench"]
