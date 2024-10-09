@@ -50,9 +50,10 @@ impl Process {
         fcntl(pipe_i, F_SETFL(flopts)).unwrap();
 
         log::info!(
-            "spawned cmd={} {}, stdout_path={}, stderr_path={}, target_address={}, pid={:?}",
+            "spawned cmd={} {} {}, stdout_path={}, stderr_path={}, target_address={}, pid={:?}",
             &self.exec,
             self.args.clone().join(" "),
+            &["--target", &self.target_address].join(" "),
             &self.stdout_path,
             &self.stderr_path,
             &self.target_address,
