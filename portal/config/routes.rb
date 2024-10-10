@@ -152,6 +152,13 @@ Rails.application.routes.draw do
 
       # admin/dump_leaderboard GetDumpLeaderboard: GET /api/admin/dump_leaderboard
       get 'dump_leaderboard' => 'leaderboard#dump'
+
+      # admin/unprepared_stats/ssh_key GetSSHKeyStats: GET /api/admin/unprepared_stats/ssh_key_stats
+      get 'unprepared_stats/ssh_key_stats' => 'unprepared_stats#ssh_key'
+      # admin/unprepared_stats/discord GetDiscordStats: GET /api/admin/unprepared_stats/discord_stats
+      get 'unprepared_stats/discord_stats' => 'unprepared_stats#discord'
+      # admin/unprepared_stats/env_check GetEnvCheckStats: GET /api/admin/unprepared_stats/env_check_stats
+      get 'unprepared_stats/env_check_stats' => 'unprepared_stats#env_check'
     end
 
     scope path: 'bench', module: 'bench' do
@@ -184,6 +191,7 @@ Rails.application.routes.draw do
     get '/clarifications' => 'root#index'
     get '/clarifications/:id' => 'root#index'
     get '/contestant_instances' => 'root#index'
+    get '/unprepared_stats' => 'root#index'
 
 
     get 'impersonate' => 'impersonate#index', as: :impersonate
@@ -198,9 +206,7 @@ Rails.application.routes.draw do
 
     get 'slacktown' => 'debug#slack'
     get 'sync_all_ssh_key' => 'debug#sync_all_ssh_key'
-    get 'ssh_key_stats' => 'debug#ssh_key_stats'
     get 'sync_all_discord_stats' => 'debug#sync_all_discord_stats'
-    get 'discord_stats' => 'debug#discord_stats'
     get 'long_running_check' => 'debug#long_running_check'
   end
 end

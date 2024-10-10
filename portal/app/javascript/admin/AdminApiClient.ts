@@ -34,6 +34,11 @@ import {
 } from "../../../proto/isuxportal/services/admin/dashboard_pb";
 import { ListContestantInstancesResponseSchema } from "../../../proto/isuxportal/services/admin/contestant_instances_pb";
 import { GetLeaderboardDumpResponseSchema } from "../../../proto/isuxportal/services/admin/leaderboard_dump_pb";
+import {
+  GetDiscordStatsResponseSchema,
+  GetEnvCheckStatsResponseSchema,
+  GetSSHKeyStatsResponseSchema,
+} from "../../../proto/isuxportal/services/admin/unprepared_stats_pb";
 
 export class AdminApiClient {
   public apiClient: ApiClient;
@@ -223,6 +228,21 @@ export class AdminApiClient {
       }
     }
     return result;
+  }
+
+  public async getSSHKeyStats() {
+    const resp = await this.request(`${this.baseUrl}/api/admin/unprepared_stats/ssh_key_stats`, "GET", null, null);
+    return fromBinary(GetSSHKeyStatsResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async getDiscordStats() {
+    const resp = await this.request(`${this.baseUrl}/api/admin/unprepared_stats/discord_stats`, "GET", null, null);
+    return fromBinary(GetDiscordStatsResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async getEnvCheckStats() {
+    const resp = await this.request(`${this.baseUrl}/api/admin/unprepared_stats/env_check_stats`, "GET", null, null);
+    return fromBinary(GetEnvCheckStatsResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public request(path: string, method: string, query: object | null, payload: Uint8Array | null) {

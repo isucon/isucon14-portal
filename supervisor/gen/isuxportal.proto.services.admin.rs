@@ -284,4 +284,56 @@ pub struct UpdateTeamRequest {
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct UpdateTeamResponse {
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct GetSshKeyStatsQuery {
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSshKeyStatsResponse {
+    #[prost(message, repeated, tag="1")]
+    pub items: ::prost::alloc::vec::Vec<get_ssh_key_stats_response::SshKeyUnregisteredTeam>,
+}
+/// Nested message and enum types in `GetSSHKeyStatsResponse`.
+pub mod get_ssh_key_stats_response {
+    #[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct SshKeyUnregisteredTeam {
+        #[prost(message, optional, tag="1")]
+        pub team: ::core::option::Option<super::super::super::resources::Team>,
+        #[prost(int64, repeated, tag="2")]
+        pub unregistered_member_ids: ::prost::alloc::vec::Vec<i64>,
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct GetDiscordStatsQuery {
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDiscordStatsResponse {
+    #[prost(message, repeated, tag="1")]
+    pub items: ::prost::alloc::vec::Vec<get_discord_stats_response::DiscordNotJoinedTeam>,
+}
+/// Nested message and enum types in `GetDiscordStatsResponse`.
+pub mod get_discord_stats_response {
+    #[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct DiscordNotJoinedTeam {
+        #[prost(message, optional, tag="1")]
+        pub team: ::core::option::Option<super::super::super::resources::Team>,
+        #[prost(int64, repeated, tag="2")]
+        pub not_joined_member_ids: ::prost::alloc::vec::Vec<i64>,
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct GetEnvCheckStatsQuery {
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetEnvCheckStatsResponse {
+    #[prost(message, repeated, tag="1")]
+    pub items: ::prost::alloc::vec::Vec<super::super::resources::Team>,
+}
 // @@protoc_insertion_point(module)

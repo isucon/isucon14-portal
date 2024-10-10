@@ -1,0 +1,33 @@
+syntax = "proto3";
+package isuxportal.proto.services.admin;
+
+
+import "isuxportal/resources/team.proto";
+
+message GetSSHKeyStatsQuery {}
+
+message GetSSHKeyStatsResponse {
+  repeated SSHKeyUnregisteredTeam items = 1;
+
+  message SSHKeyUnregisteredTeam {
+    isuxportal.proto.resources.Team team = 1;
+    repeated int64 unregistered_member_ids = 2;
+  }
+}
+
+message GetDiscordStatsQuery {}
+
+message GetDiscordStatsResponse {
+  repeated DiscordNotJoinedTeam items = 1;
+
+  message DiscordNotJoinedTeam {
+    isuxportal.proto.resources.Team team = 1;
+    repeated int64 not_joined_member_ids = 2;
+  }
+}
+
+message GetEnvCheckStatsQuery {}
+
+message GetEnvCheckStatsResponse {
+  repeated isuxportal.proto.resources.Team items = 1;
+}
