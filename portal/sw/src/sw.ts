@@ -1,11 +1,11 @@
 declare var self: ServiceWorkerGlobalScope; export { };
 
-import { skipWaiting, clientsClaim } from "workbox-core";
+import { clientsClaim } from "workbox-core";
 import { openDB } from "idb";
 import { Notification, NotificationSchema } from "../../proto/isuxportal/resources/notification_pb";
 import { fromBinary } from "@bufbuild/protobuf";
 
-skipWaiting();
+self.skipWaiting();
 clientsClaim();
 
 console.log("SW!");
