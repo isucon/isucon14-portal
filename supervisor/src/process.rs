@@ -36,6 +36,7 @@ impl Process {
         let child = tokio::process::Command::new(self.exec.clone())
             .args(self.args.clone())
             .args(&["--target", &self.target_address])
+            .env("ISUXBENCH_TARGET", &self.target_address)
             .env("ISUXBENCH_REPORT_FD", format!("{}", pipe_o))
             .env("ISUXBENCH_ALL_ADDRESSES", all_addresses_string)
             .stdin(std::process::Stdio::null())
