@@ -278,7 +278,7 @@ class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
             {job.team!.id}: {job.team!.name}
           </Link>
         </td>
-        <td>{job.score}</td>
+        <td>{job.score.toString()}</td>
         <td>{job.instanceName}</td>
         <td>
           <BenchmarkJobStatus status={job.status!} />
