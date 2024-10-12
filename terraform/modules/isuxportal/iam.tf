@@ -78,6 +78,7 @@ resource "aws_iam_policy" "ecs-task" {
             "sqs:DeleteMessage",
             "sqs:Get*",
             "ec2:Describe*",
+            "ecs:Describe*",
           ]
           Resource = "*"
         }
