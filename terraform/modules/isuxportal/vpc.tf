@@ -124,6 +124,27 @@ resource "aws_security_group" "internal" {
   }
 }
 
+resource "aws_security_group" "benchmarker" {
+  vpc_id = aws_vpc.main.id
+  name   = "${var.env}-${var.project}-benchmarker"
+
+  ingress {
+    description = "payment service"
+    from_port   = 12345
+    to_port     = 12345
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.env}-${var.project}-benchmarker"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 resource "aws_security_group" "http-https" {
   vpc_id = aws_vpc.main.id
   name   = "${var.env}-${var.project}-http-https"
