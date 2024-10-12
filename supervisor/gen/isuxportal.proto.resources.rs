@@ -228,9 +228,19 @@ pub struct BenchmarkJob {
     pub target: ::core::option::Option<ContestantInstance>,
     #[prost(message, optional, tag="18")]
     pub result: ::core::option::Option<BenchmarkResult>,
+    #[prost(message, optional, tag="19")]
+    pub enqueued_by: ::core::option::Option<benchmark_job::EnqueuedBy>,
 }
 /// Nested message and enum types in `BenchmarkJob`.
 pub mod benchmark_job {
+    #[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct EnqueuedBy {
+        #[prost(string, tag="1")]
+        pub name: ::prost::alloc::string::String,
+        #[prost(string, tag="2")]
+        pub avatar_url: ::prost::alloc::string::String,
+    }
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
     #[repr(i32)]
     pub enum Status {

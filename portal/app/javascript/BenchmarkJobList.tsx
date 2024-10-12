@@ -5,6 +5,7 @@ import { TimeDuration } from "./TimeDuration";
 import { Timestamp } from "./Timestamp";
 import { BenchmarkJobStatus } from "./BenchmarkJobStatus";
 import type { BenchmarkJob } from "../../proto/isuxportal/resources/benchmark_job_pb";
+import { EnqueuedBy } from "./EnqueuedBy";
 
 export interface Props {
   list: BenchmarkJob[];
@@ -28,6 +29,9 @@ export const BenchmarkJobList: React.FC<Props> = (props: Props) => {
         <td>
           <TimeDuration a={job.createdAt!} b={job.finishedAt} />
         </td>
+        <td>
+          {job.enqueuedBy ? <EnqueuedBy enqueuedBy={job.enqueuedBy} /> : null}
+        </td>
       </tr>
     );
   };
@@ -40,6 +44,7 @@ export const BenchmarkJobList: React.FC<Props> = (props: Props) => {
           <th>Status</th>
           <th>Time</th>
           <th>Duration</th>
+          <th>Enqueued by</th>
         </tr>
       </thead>
       <tbody>{props.list.map(renderJob)}</tbody>
