@@ -279,7 +279,9 @@ impl Worker {
 const LOG_MAX: i64 = 48000;
 async fn read_log(path: String) -> Result<String, Error> {
     let mut buf: Vec<u8> = Vec::with_capacity(16000);
-    let mut f = tokio::fs::File::open(path.clone()).await?;
+    let cp_path = path.clone() + ".tmp";
+    tokio::fs::copy(path.clone(), &cp_path).await?;
+    let mut f = tokio::fs::File::open(cp_path).await?;
 
     match f.seek(std::io::SeekFrom::End(-LOG_MAX)).await {
         Ok(_) => {
