@@ -4,6 +4,15 @@ class Api::Contestant::BenchmarkJobsController < Api::Contestant::ApplicationCon
   pb :index, Isuxportal::Proto::Services::Contestant::ListBenchmarkJobsQuery
   def index
     @benchmark_jobs = BenchmarkJob.where(team: current_team).order(id: :desc).joins_score
+
+    status = params[:status]
+    if status.present?
+      status_uppper_symbol = Isuxportal::Proto::Resources::BenchmarkJob::Status.lookup(status.to_i)
+      raise Api::ApplicationController::Error::BadRequest.new("Invalid status") if status_uppper_symbol.nil?
+
+      @benchmark_jobs = @benchmark_jobs.where(status: status_uppper_symbol.to_s.downcase.to_sym)
+    end
+
     @benchmark_jobs = @benchmark_jobs.limit(params[:limit].to_i) if params[:limit].present? && params[:limit].to_i != 0
 
     render protobuf: Isuxportal::Proto::Services::Contestant::ListBenchmarkJobsResponse.new(
