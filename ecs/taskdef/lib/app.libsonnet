@@ -13,10 +13,10 @@
       name: 'ISUXPORTAL_TEST_AMI_ID',
       value: '{{ tfstate `module.ami.data.aws_ami.envcheck.id` }}',
     },
-    // {
-    //   name: 'ISUXPORTAL_QUALIFY_AMI_ID',
-    //   value: '{{ tfstate `module.ami.data.aws_ami.qualify.id` }}',
-    // },
+    {
+      name: 'ISUXPORTAL_QUALIFY_AMI_ID',
+      value: '{{ tfstate `module.ami.data.aws_ami.qualify.id` }}',
+    },
   ],
   environmentFiles: [
     {

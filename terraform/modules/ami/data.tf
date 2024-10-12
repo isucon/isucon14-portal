@@ -7,11 +7,11 @@ data "aws_ami" "envcheck" {
   }
 }
 
-# data "aws_ami" "qualify" {
-#   most_recent = true
-#   owners      = ["self"]
-#   filter {
-#     name   = "tag:Family"
-#     values = ["${var.isuconx}-qualify"]
-#   }
-# }
+data "aws_ami" "qualify" {
+  most_recent = true
+  owners      = ["self"]
+  filter {
+    name   = "tag:Family"
+    values = ["${var.isuconx}"]
+  }
+}
