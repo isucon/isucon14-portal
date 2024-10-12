@@ -6,11 +6,13 @@ import { BrowserRouter, Routes, Route, Link, useParams } from "react-router-dom"
 import { ErrorMessage } from "../ErrorMessage";
 
 import { AdminTeamEdit } from "./AdminTeamEdit";
+import { AdminTeamCloudFormationDownloadButton } from "./AdminTeamCloudFormationDownloadButton";
 import { Timestamp } from "../Timestamp";
 import { AdminTeamTagList } from "./AdminTeamTagList";
 import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
 import type { Team } from "../../../proto/isuxportal/resources/team_pb";
 import type { Contestant } from "../../../proto/isuxportal/resources/contestant_pb";
+import type { EnvCheck } from "../../../proto/isuxportal/resources/env_check_pb";
 
 export interface Props {
   session: GetCurrentSessionResponse;
@@ -20,6 +22,7 @@ export interface Props {
 
 export interface State {
   team: Team | null;
+  envChecks: EnvCheck[] | null;
   error: Error | null;
 }
 
@@ -34,18 +37,29 @@ class AdminTeamDetailInternal extends React.Component<Props, State> {
     super(props);
     this.state = {
       team: null,
+      envChecks: null,
       error: null,
     };
   }
 
   public componentDidMount() {
     this.updateTeamInfo();
+    this.updateEnvCheckList();
   }
 
   async updateTeamInfo() {
     try {
       const resp = await this.props.client.getTeam(this.props.teamId);
       this.setState({ team: resp.team! });
+    } catch (error) {
+      this.setState({ error });
+    }
+  }
+
+  async updateEnvCheckList() {
+    try {
+      const resp = await this.props.client.listEnvChecks(this.props.teamId);
+      this.setState({ envChecks: resp.envChecks });
     } catch (error) {
       this.setState({ error });
     }
@@ -72,6 +86,7 @@ class AdminTeamDetailInternal extends React.Component<Props, State> {
             <>
               {this.renderTeam()}
               {this.renderMembers()}
+              {this.renderEnvChecks()}
             </>
           }
         />
@@ -115,6 +130,18 @@ class AdminTeamDetailInternal extends React.Component<Props, State> {
               <Link to={`/admin/teams/${this.state.team.id}/edit`} className="button is-info">
                 編集
               </Link>
+              <AdminTeamCloudFormationDownloadButton client={this.props.client} teamId={this.state.team.id} type="test">
+                事前チェック CloudFormationのダウンロード
+              </AdminTeamCloudFormationDownloadButton>
+              <AdminTeamCloudFormationDownloadButton
+                client={this.props.client}
+                teamId={this.state.team.id}
+                type="qualify"
+              >
+                問題 CloudFormationのダウンロード
+              </AdminTeamCloudFormationDownloadButton>
+            </div>
+            <div className="buttons">
               <Link to={`/admin/contestant_instances?team_id=${this.state.team.id}`} className="button">
                 Contestant Instances
               </Link>
@@ -163,8 +190,142 @@ class AdminTeamDetailInternal extends React.Component<Props, State> {
     );
   }
 
+  public renderEnvChecks() {
+    const envChecks = this.state.envChecks;
+    let envCheckRows: React.ReactNode = (
+      <tr>
+        <td colSpan={8}>Loading</td>
+      </tr>
+    );
+    if (envChecks) {
+      if (envChecks.length > 0) {
+        envCheckRows = envChecks.map((ec) => <AdminTeamEnvCheckRow envCheck={ec} />);
+      } else {
+        envCheckRows = (
+          <tr>
+            <td colSpan={8}>No result</td>
+          </tr>
+        );
+      }
+    }
+    return (
+      <div className="card mt-4">
+        <div className="card-header">
+          <h5 className="card-header-title is-5">チェッカー結果</h5>
+        </div>
+        <div className="card-content">
+          <p className="subtitle">
+            {this.teamHasPassedPreCheck() ? (
+              <span className="tag is-success">競技環境確認完了済み</span>
+            ) : (
+              <span className="tag is-danger">競技環境確認未完了</span>
+            )}
+          </p>
+          <table className="table is-striped is-fullwidth">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>IP</th>
+                <th>Pass</th>
+                <th>
+                  <abbr title="Message">Msg</abbr>
+                </th>
+                <th>
+                  <abbr title="AdminMessage">AdMsg</abbr>
+                </th>
+                <th>
+                  <abbr title="RawData">Raw</abbr>
+                </th>
+                <th>
+                  <abbr title="CreatedAt">At</abbr>
+                </th>
+              </tr>
+            </thead>
+            <tbody>{envCheckRows}</tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
+
+  teamHasPassedPreCheck() {
+    return this.state.envChecks?.some((envCheck) => envCheck.name === "test-ssh" && envCheck.passed);
+  }
+
   public renderError() {
     if (!this.state.error) return;
     return <ErrorMessage error={this.state.error} />;
   }
 }
+
+const AdminTeamEnvCheckRow = ({ envCheck }: { envCheck: EnvCheck }) => {
+  type ModalName = "" | "message" | "adminMessage" | "rawData";
+  const [openModalName, setOpenModalName] = useState<ModalName>("");
+  const name = envCheck.name?.startsWith("qualify") ? (
+    <span className="tag is-info">{envCheck.name}</span>
+  ) : (
+    <span className="tag is-light">{envCheck.name}</span>
+  );
+  const passed = envCheck.passed ? (
+    <span className="tag is-success">
+      <span className="material-icons-outlined">check</span>
+    </span>
+  ) : (
+    <span className="tag is-danger">
+      <span className="material-icons-outlined">close</span>
+    </span>
+  );
+  const selectContent = (name: Exclude<ModalName, "">) => {
+    switch (name) {
+      case "message":
+        return envCheck.message;
+      case "adminMessage":
+        return envCheck.adminMessage;
+      case "rawData":
+        return envCheck.rawData;
+    }
+    const check: never = name;
+    throw new Error(`Unexpected openModalName: ${name}`);
+  };
+  const renderModal = () => {
+    if (openModalName === "") return null;
+    const content = selectContent(openModalName);
+    return (
+      <div className="modal is-active">
+        <div className="modal-background"></div>
+        <div className="modal-content">
+          <pre>{content}</pre>
+        </div>
+        <button className="modal-close is-large" aria-label="close" onClick={() => setOpenModalName("")}></button>
+      </div>
+    );
+  };
+  return (
+    <tr key={envCheck.id.toString()}>
+      <td>{envCheck.id.toString()}</td>
+      <td>{name}</td>
+      <td>{envCheck.ipAddress}</td>
+      <td>{passed}</td>
+      <td onClick={() => setOpenModalName("message")}>
+        <button className="button is-small">
+          <span className="material-icons-outlined">launch</span>
+        </button>
+      </td>
+      <td onClick={() => setOpenModalName("adminMessage")}>
+        <button className="button is-small">
+          <span className="material-icons-outlined">launch</span>
+        </button>
+      </td>
+      <td onClick={() => setOpenModalName("rawData")}>
+        <button className="button is-small">
+          <span className="material-icons-outlined">launch</span>
+        </button>
+      </td>
+      <td>
+        <Timestamp timestamp={envCheck.createdAt!} />
+      </td>
+      {renderModal()}
+    </tr>
+  );
+};
