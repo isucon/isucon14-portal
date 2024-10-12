@@ -20,7 +20,7 @@
     // WARN: デバッグのため直打ち!!!
     {
       name: 'ISUXPORTAL_QUALIFY_AMI_ID',
-      value: 'ami-0a1cc94772ce49eb3',
+      value: 'ami-0b9388802426d469b',
     },
   ],
   environmentFiles: [
