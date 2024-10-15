@@ -279,9 +279,12 @@ impl Worker {
 const LOG_MAX: i64 = 48000;
 async fn read_log(path: String) -> Result<String, Error> {
     let mut buf: Vec<u8> = Vec::with_capacity(16000);
+    log::info!("Reading log: {}", path);
     let cp_path = path.clone() + ".tmp";
     tokio::fs::copy(path.clone(), &cp_path).await?;
-    let mut f = tokio::fs::File::open(cp_path).await?;
+    log::info!("Copied log: {} -> {}", path, cp_path);
+    let mut f = tokio::fs::File::open(&cp_path).await?;
+    log::info!("Opened log: {}", &cp_path);
 
     match f.seek(std::io::SeekFrom::End(-LOG_MAX)).await {
         Ok(_) => {
@@ -292,12 +295,16 @@ async fn read_log(path: String) -> Result<String, Error> {
         }
         Err(e) => {
             if e.kind() != std::io::ErrorKind::InvalidInput {
+                log::error!("Failed to seek log: {}", e);
                 return Err(Error::IoError(e));
             }
         }
     }
-    f.read_to_end(&mut buf).await?;
+    log::info!("Seeked log: {}", &cp_path);
+    let bytes_read = f.read_to_end(&mut buf).await?;
+    log::info!("Read {} bytes from log: {}", bytes_read, &cp_path);
     let ret = String::from_utf8_lossy(buf.as_slice()).into_owned();
+    log::info!("Read log: {}", ret.len());
     return Ok(ret);
 }
 
