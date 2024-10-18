@@ -91,6 +91,9 @@ revisions/%:
 run:
 	ecspresso --config app.yml run --latest-task-definition --overrides-file=overrides.jsonnet --wait-until running
 
+env:
+	sops $(ENV).encrypted.env
+
 $(ENV).env: $(ENV).encrypted.env
 	sops -d $(ENV).encrypted.env > $(ENV).env
 
