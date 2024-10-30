@@ -110,12 +110,13 @@ export const ScoreGraph: React.FC<Props> = ({ teams, contest, width, teamId }) =
       while (tsPtr < timestamps.length) {
         const ts = timestamps[tsPtr];
 
+        // TODO: デフォルトでout of indexになってるのをやめる
         const score = scores[scorePtr];
         const scoreNext = scores[scorePtr + 1];
 
         //console.log({team: item.team!.id!, tsPtr: tsPtr, scorePtr: scorePtr, now: ts, cur: scores[scorePtr]?.markedAt?.seconds!, next: scoreNext?.markedAt?.seconds! });
 
-        const markedAt = score.markedAt!.seconds;
+        const markedAt = score?.markedAt!.seconds;
         if (!score || (score && ts >= markedAt)) {
           if (scoreNext && ts >= markedAt) {
             scorePtr++;
