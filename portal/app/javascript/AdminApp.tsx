@@ -16,6 +16,7 @@ import { AdminClarificationList } from "./admin/AdminClarificationList";
 import { AdminClarificationDetail } from "./admin/AdminClarificationDetail";
 import { AdminContestantInstanceList } from "./admin/AdminContestantInstanceList";
 import { AdminDashboard } from "./admin/AdminDashboard";
+import { AdminUnpreparedStats } from "./admin/AdminUnpreparedStats";
 
 export interface Props {
   session: GetCurrentSessionResponse;
@@ -80,6 +81,11 @@ export class AdminApp extends React.Component<Props, State> {
                       Teams
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink to="/admin/unprepared_stats" className={({ isActive }) => (isActive ? "is-active" : "")}>
+                      Unprepared stats
+                    </NavLink>
+                  </li>
                 </ul>
               </aside>
             </div>
@@ -120,6 +126,10 @@ export class AdminApp extends React.Component<Props, State> {
                     element={
                       <AdminContestantInstanceList session={this.props.session} client={this.state.adminClient} />
                     }
+                  />
+                  <Route
+                    path="/admin/unprepared_stats"
+                    element={<AdminUnpreparedStats session={this.props.session} client={this.state.adminClient} />}
                   />
                 </Routes>
               </main>
