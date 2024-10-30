@@ -1,11 +1,11 @@
 declare var self: ServiceWorkerGlobalScope; export { };
 
-import { skipWaiting, clientsClaim } from "workbox-core";
+import { clientsClaim } from "workbox-core";
 import { openDB } from "idb";
 import { Notification, NotificationSchema } from "../../proto/isuxportal/resources/notification_pb";
 import { fromBinary } from "@bufbuild/protobuf";
 
-skipWaiting();
+self.skipWaiting();
 clientsClaim();
 
 console.log("SW!");
@@ -19,7 +19,7 @@ const openDb = () => openDB("isuxportal-swKnownNotifications", 3, {
 
 self.addEventListener('activate', (e) => {
   console.log("SW! activate");
-  if (new Date().getTime() > 1672498800000) { // 2023/1/1 00:00:00 JST
+  if (new Date().getTime() > 1735657200000) { // 2025/1/1 00:00:00 JST
     self.registration.unregister();
     return;
   }

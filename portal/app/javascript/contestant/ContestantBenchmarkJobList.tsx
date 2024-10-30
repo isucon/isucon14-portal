@@ -47,23 +47,14 @@ export class ContestantBenchmarkJobList extends React.Component<Props, State> {
   public render() {
     return (
       <>
-        <Routes>
-          <Route
-            path="/contestant/benchmark_jobs"
-            element={
-              <>
-                <header>
-                  <h1 className="title is-1">Benchmark Jobs</h1>
-                </header>
-                <main>
-                  {this.renderForm()}
-                  {this.renderError()}
-                  {this.renderList()}
-                </main>
-              </>
-            }
-          />
-        </Routes>
+        <header>
+          <h1 className="title is-1">Benchmark Jobs</h1>
+        </header>
+        <main>
+          {this.renderForm()}
+          {this.renderError()}
+          {this.renderList()}
+        </main>
       </>
     );
   }

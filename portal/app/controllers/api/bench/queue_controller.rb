@@ -7,8 +7,9 @@ class Api::Bench::QueueController < Api::Bench::ApplicationController
   def receive
     loop do
       # TODO: dedicated benchmarkers and shared benchmarkers
-      scope = BenchmarkJob.where(status: :pending).order(id: :desc) # TODO: order by land
+      scope = BenchmarkJob.where(status: :pending).order(id: :asc)
       scope = scope.where(team_id: pb.team_id) if pb.team_id > 0
+      scope = scope.where(instance_name: pb.instance_name) if pb.instance_name.present?
 
       ApplicationRecord.transaction do
         job = scope.first

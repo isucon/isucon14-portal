@@ -27,5 +27,3 @@ locals {
   env     = "stg"
   project = "portal"
 }
-
-

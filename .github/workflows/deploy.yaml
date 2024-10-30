@@ -1,0 +1,30 @@
+name: deploy benchmarker
+on:
+  workflow_dispatch:
+    inputs:
+      TAG:
+        description: 'tag'
+        required: true
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  bench:
+    runs-on: codebuild-portal-github-actions-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure AWS credentials from IAM Role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ap-northeast-1
+      - name: deploy
+        working-directory: ecs
+        # sudoがない環境なので公式GitHub Actionsは使えない
+        run: |
+          wget https://github.com/kayac/ecspresso/releases/download/v2.4.1/ecspresso_2.4.1_linux_amd64.tar.gz
+          tar xvf ecspresso_2.4.1_linux_amd64.tar.gz
+          ./ecspresso deploy --config benchmarker.yml --no-wait
+        env:
+          TAG: ${{ github.event.inputs.TAG || 'latest' }}
+          ENV: stg

@@ -25,6 +25,15 @@ build/nginx:
 		--platform linux/arm64 \
 		-t $(ECR_HOST)/$(ENV)/portal/nginx:$(TAG) .
 
+build/supervisor:
+	cd ../supervisor && \
+	$(DOCKER_CMD) build \
+		--platform linux/amd64 \
+		-t $(ECR_HOST)/$(ENV)/benchmarker:supervisor .
+
+push/supervisor:
+	$(DOCKER_CMD) push $(ECR_HOST)/$(ENV)/benchmarker:supervisor
+
 push/%:
 	$(DOCKER_CMD) push $(ECR_HOST)/$(ENV)/portal/$*:$(TAG)
 
