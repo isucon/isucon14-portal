@@ -15,6 +15,7 @@
       assignPublicIp: 'ENABLED',
       securityGroups: [
         "{{ tfstate `module.isuxportal.aws_security_group.internal.id` }}",
+        "{{ tfstate `module.isuxportal.aws_security_group.benchmarker.id` }}",
       ],
       subnets: [
         "{{ tfstate `module.isuxportal.aws_subnet.az-a-benchmarker.id` }}",
