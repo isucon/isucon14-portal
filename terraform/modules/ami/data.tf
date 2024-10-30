@@ -1,9 +1,9 @@
 data "aws_ami" "envcheck" {
   most_recent = true
-  owners      = ["self"]
+  owners      = var.ami_account_ids
   filter {
-    name   = "tag:Family"
-    values = ["${var.isuconx}-envcheck"]
+    name   = "name"
+    values = ["${var.isuconx}-envcheck-*"]
   }
 }
 

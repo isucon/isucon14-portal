@@ -42,7 +42,10 @@ module "isuxportal" {
   }
 }
 
-# module "ami" {
-#   source  = "../modules/ami"
-#   isuconx = "isucon14"
-# }
+module "ami" {
+  source  = "../modules/ami"
+  isuconx = "isucon14"
+  ami_account_ids = [
+    "692859926955"
+  ]
+}
