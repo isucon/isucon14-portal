@@ -104,36 +104,19 @@ export const ScoreGraph: React.FC<Props> = ({ teams, contest, width, teamId }) =
     targetTeams.forEach((item, idx) => {
       const scores = item.scoreHistory?.scores || [];
       const lastTs = scores.length > 0 ? scores[scores.length - 1]?.markedAt!.seconds : 0;
-      const series = [];
-      let tsPtr = 0;
+      const series: number[] = [];
       let scorePtr = -1;
-      while (tsPtr < timestamps.length) {
-        const ts = timestamps[tsPtr];
-
-        // TODO: デフォルトでout of indexになってるのをやめる
-        const score = scores[scorePtr];
+      for (const ts of timestamps) {
         const scoreNext = scores[scorePtr + 1];
-
-        //console.log({team: item.team!.id!, tsPtr: tsPtr, scorePtr: scorePtr, now: ts, cur: scores[scorePtr]?.markedAt?.seconds!, next: scoreNext?.markedAt?.seconds! });
-
-        const markedAt = score?.markedAt!.seconds;
-        if (!score || (score && ts >= markedAt)) {
-          if (scoreNext && ts >= markedAt) {
-            scorePtr++;
-          }
+        if (scoreNext && ts >= scoreNext.markedAt!.seconds) {
+          scorePtr++;
         }
 
-        //if (lastTs && lastTs < ts) {
-        //  series.push(null);
-        //} else {
         if (scorePtr >= 0) {
           series.push(Number(scores[scorePtr].score));
         } else {
           series.push(0);
         }
-        //}
-
-        tsPtr++;
       }
       d.push(series);
     });
