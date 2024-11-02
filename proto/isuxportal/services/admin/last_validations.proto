@@ -1,0 +1,9 @@
+syntax = "proto3";
+package isuxportal.proto.services.admin;
+
+
+message TriggerEnvCheckRequest {
+  // limit to top-N teams (filter student teams?)
+}
+
+message TriggerEnvCheckResponse {}
