@@ -190,6 +190,7 @@ Rails.application.routes.draw do
     get '/benchmark_jobs/:id' => 'root#index'
     get '/clarifications' => 'root#index'
     get '/clarifications/:id' => 'root#index'
+    get '/last_validations' => 'root#index'
     get '/contestant_instances' => 'root#index'
     get '/unprepared_stats' => 'root#index'
 
