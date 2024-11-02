@@ -33,6 +33,7 @@ gem 'octokit'
 gem 'web-push'
 gem 'aws-sdk-ec2'
 gem 'listen'
+gem 'net-ssh'
 
 gem 'rack-timeout'
 gem 'newrelic_rpm'
