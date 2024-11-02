@@ -147,6 +147,9 @@ Rails.application.routes.draw do
       # admin/clarifications CreateClarification: POST /api/admin/clarifications
       resources :clarifications, only: %i(index show update create)
 
+      # admin/last_validations TriggerEnvCheck: POST /api/admin/last_validations/env_check
+      post 'last_validations/env_check' => 'last_validations#trigger_env_check'
+
       # admin/contestant_instances ListContestantInstances: GET /api/admin/contestant_instances
       resources :contestant_instances, only: %i(index)
 
