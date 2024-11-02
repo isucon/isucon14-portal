@@ -190,6 +190,15 @@ pub struct ListEnvChecksResponse {
     #[prost(message, repeated, tag="1")]
     pub env_checks: ::prost::alloc::vec::Vec<super::super::resources::EnvCheck>,
 }
+/// limit to top-N teams (filter student teams?)
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TriggerEnvCheckRequest {
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TriggerEnvCheckResponse {
+}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetLeaderboardDumpQuery {
