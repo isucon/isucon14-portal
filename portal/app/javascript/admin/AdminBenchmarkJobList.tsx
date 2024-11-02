@@ -275,7 +275,7 @@ class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
         </td>
         <td>
           <Link to={`/admin/teams/${encodeURIComponent(job.team!.id!.toString())}`}>
-            {job.team!.id}: {job.team!.name}
+            {job.team!.name} (#{job.team!.id.toString()})
           </Link>
         </td>
         <td>{job.score.toString()}</td>
