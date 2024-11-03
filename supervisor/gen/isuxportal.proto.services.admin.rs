@@ -199,6 +199,15 @@ pub struct TriggerEnvCheckRequest {
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TriggerEnvCheckResponse {
 }
+/// limit to top-N teams (filter student teams?)
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TriggerInstanceRestartRequest {
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TriggerInstanceRestartResponse {
+}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetLeaderboardDumpQuery {

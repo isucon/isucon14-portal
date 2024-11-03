@@ -36,3 +36,29 @@ export declare type TriggerEnvCheckResponse = Message<"isuxportal.proto.services
  */
 export declare const TriggerEnvCheckResponseSchema: GenMessage<TriggerEnvCheckResponse>;
 
+/**
+ * limit to top-N teams (filter student teams?)
+ *
+ * @generated from message isuxportal.proto.services.admin.TriggerInstanceRestartRequest
+ */
+export declare type TriggerInstanceRestartRequest = Message<"isuxportal.proto.services.admin.TriggerInstanceRestartRequest"> & {
+};
+
+/**
+ * Describes the message isuxportal.proto.services.admin.TriggerInstanceRestartRequest.
+ * Use `create(TriggerInstanceRestartRequestSchema)` to create a new message.
+ */
+export declare const TriggerInstanceRestartRequestSchema: GenMessage<TriggerInstanceRestartRequest>;
+
+/**
+ * @generated from message isuxportal.proto.services.admin.TriggerInstanceRestartResponse
+ */
+export declare type TriggerInstanceRestartResponse = Message<"isuxportal.proto.services.admin.TriggerInstanceRestartResponse"> & {
+};
+
+/**
+ * Describes the message isuxportal.proto.services.admin.TriggerInstanceRestartResponse.
+ * Use `create(TriggerInstanceRestartResponseSchema)` to create a new message.
+ */
+export declare const TriggerInstanceRestartResponseSchema: GenMessage<TriggerInstanceRestartResponse>;
+

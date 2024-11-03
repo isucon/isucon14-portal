@@ -9,6 +9,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "isuxportal.proto.services.admin.TriggerEnvCheckResponse" do
     end
+    add_message "isuxportal.proto.services.admin.TriggerInstanceRestartRequest" do
+    end
+    add_message "isuxportal.proto.services.admin.TriggerInstanceRestartResponse" do
+    end
   end
 end
 
@@ -18,6 +22,8 @@ module Isuxportal
       module Admin
         TriggerEnvCheckRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.TriggerEnvCheckRequest").msgclass
         TriggerEnvCheckResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.TriggerEnvCheckResponse").msgclass
+        TriggerInstanceRestartRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.TriggerInstanceRestartRequest").msgclass
+        TriggerInstanceRestartResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.TriggerInstanceRestartResponse").msgclass
       end
     end
   end

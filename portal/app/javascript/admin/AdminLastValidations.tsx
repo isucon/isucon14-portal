@@ -9,22 +9,39 @@ export interface Props {
 }
 
 export const AdminLastValidations: React.FC<Props> = (props: Props) => {
-  const [requesting, setRequesting] = React.useState(false);
+  const [requestingTriggerEnvCheck, setRequestingTriggerEnvCheck] = React.useState(false);
   const [triggerEnvCheckResult, setTriggerEnvCheckResult] = React.useState<true | Error | null>(null);
 
   const onTriggerEnvCheckClick = useCallback(async () => {
-    if (requesting) return;
+    if (requestingTriggerEnvCheck) return;
 
-    setRequesting(true);
+    setRequestingTriggerEnvCheck(true);
     try {
       await props.client.triggerEnvCheck();
       setTriggerEnvCheckResult(true);
     } catch (e) {
       setTriggerEnvCheckResult(e);
     } finally {
+      setRequestingTriggerEnvCheck(false);
+    }
+  }, [requestingTriggerEnvCheck, props.client]);
+
+  const [requestingTriggerInstanceRestart, setRequesting] = React.useState(false);
+  const [triggerInstanceRestartResult, setTriggerInstanceRestartResult] = React.useState<true | Error | null>(null);
+
+  const onTriggerInstanceRestartClick = useCallback(async () => {
+    if (requestingTriggerInstanceRestart) return;
+
+    setRequesting(true);
+    try {
+      await props.client.triggerInstanceRestart();
+      setTriggerInstanceRestartResult(true);
+    } catch (e) {
+      setTriggerInstanceRestartResult(e);
+    } finally {
       setRequesting(false);
     }
-  }, [requesting, props.client]);
+  }, [requestingTriggerInstanceRestart, props.client]);
 
   return (
     <>
@@ -32,20 +49,39 @@ export const AdminLastValidations: React.FC<Props> = (props: Props) => {
         <h1 className="title is-1">Last Validations</h1>
       </header>
       <main className="mt-5">
-        {triggerEnvCheckResult !== true && triggerEnvCheckResult ? (
-          <ErrorMessage error={triggerEnvCheckResult} />
-        ) : null}
-        <div className="is-flex is-align-items-center">
-          <button className="button is-light" onClick={onTriggerEnvCheckClick}>
-            Trigger Env Check on All Teams
-          </button>
-          {triggerEnvCheckResult === true ? (
-            <span className="icon ml-2">
-              <i className="material-icons-outlined" aria-hidden={"true"}>
-                check
-              </i>
-            </span>
+        <div className="block">
+          {triggerEnvCheckResult !== true && triggerEnvCheckResult ? (
+            <ErrorMessage error={triggerEnvCheckResult} />
           ) : null}
+          <div className="is-flex is-align-items-center">
+            <button className="button is-light" onClick={onTriggerEnvCheckClick}>
+              Trigger Env Check on All Teams
+            </button>
+            {triggerEnvCheckResult === true ? (
+              <span className="icon ml-2">
+                <i className="material-icons-outlined" aria-hidden={"true"}>
+                  check
+                </i>
+              </span>
+            ) : null}
+          </div>
+        </div>
+        <div className="block">
+          {triggerInstanceRestartResult !== true && triggerInstanceRestartResult ? (
+            <ErrorMessage error={triggerInstanceRestartResult} />
+          ) : null}
+          <div className="is-flex is-align-items-center">
+            <button className="button is-light" onClick={onTriggerInstanceRestartClick}>
+              Trigger Instance Restart on All Teams
+            </button>
+            {triggerInstanceRestartResult === true ? (
+              <span className="icon ml-2">
+                <i className="material-icons-outlined" aria-hidden={"true"}>
+                  check
+                </i>
+              </span>
+            ) : null}
+          </div>
         </div>
       </main>
     </>
