@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { BenchmarkJobStatus } from "./BenchmarkJobStatus";
 import { Timestamp } from "./Timestamp";
-import type { BenchmarkJob } from "../../proto/isuxportal/resources/benchmark_job_pb";
+import { BenchmarkJob_Status, type BenchmarkJob } from "../../proto/isuxportal/resources/benchmark_job_pb";
 import type { Team } from "../../proto/isuxportal/resources/team_pb";
 
 export interface Props {
@@ -62,7 +62,7 @@ const renderTeam = (team: Team) => {
   );
 };
 
-const renderJobResult = (job: BenchmarkJob) => {
+const renderJobResult = (job: BenchmarkJob, admin: boolean) => {
   if (!job.result) return;
   const { result } = job;
   return (
@@ -85,6 +85,14 @@ const renderJobResult = (job: BenchmarkJob) => {
             )
           ) : null}
         </p>
+        {job.status === BenchmarkJob_Status.ERRORED ? (
+          <div className="message is-danger">
+            <div className="message-body">
+              ベンチマーカーでエラーが発生しました。
+              {admin ? "" : "しばらく経って運営からアナウンスがない場合は、質問でご確認ください。"}
+            </div>
+          </div>
+        ) : null}
         <p>
           <b>Marked At:</b> <Timestamp timestamp={result.markedAt!} />
         </p>
@@ -145,7 +153,7 @@ export const BenchmarkJobDetail: React.FC<Props> = (props: Props) => {
       <section>
         {renderJobSummary(job, !!props.admin)}
         {props.admin ? renderTeam(job.team!) : null}
-        {renderJobResult(job)}
+        {renderJobResult(job, !!props.admin)}
         {renderJobExecution(job, !!props.admin)}
       </section>
     </>
