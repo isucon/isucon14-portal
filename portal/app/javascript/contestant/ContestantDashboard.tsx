@@ -63,7 +63,7 @@ export const ContestantDashboard: React.FC<Props> = (props: Props) => {
     if (requestingJobs) return;
     setRequestingJobs(true);
     return client
-      .listBenchmarkJobs(5)
+      .listBenchmarkJobs(undefined, 5)
       .then((r) => {
         setJobs(r.jobs);
         setError(null);

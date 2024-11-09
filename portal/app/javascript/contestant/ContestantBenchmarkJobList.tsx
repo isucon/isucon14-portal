@@ -1,7 +1,7 @@
-import { ApiError, ApiClient } from "../ApiClient";
+import { ApiClient } from "../ApiClient";
 
 import React from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { ErrorMessage } from "../ErrorMessage";
@@ -11,10 +11,12 @@ import { BenchmarkJobList } from "../BenchmarkJobList";
 import { ContestantBenchmarkJobForm } from "./ContestantBenchmarkJobForm";
 import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
 import type { ListBenchmarkJobsResponse } from "../../../proto/isuxportal/services/contestant/benchmark_pb";
+import { BenchmarkJob_Status } from "../../../proto/isuxportal/resources/benchmark_job_pb";
 
 export interface Props {
   session: GetCurrentSessionResponse;
   client: ApiClient;
+  status: string;
 }
 
 export interface State {
@@ -22,7 +24,13 @@ export interface State {
   error: Error | null;
 }
 
-export class ContestantBenchmarkJobList extends React.Component<Props, State> {
+export const ContestantBenchmarkJobList = (props: Omit<Props, "status">) => {
+  const [searchParams] = useSearchParams();
+  const status = searchParams.get("status") ?? "";
+  return <ContestantBenchmarkJobListInternal {...props} status={status} />;
+};
+
+class ContestantBenchmarkJobListInternal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -33,6 +41,10 @@ export class ContestantBenchmarkJobList extends React.Component<Props, State> {
 
   public componentDidMount() {
     this.updateList();
+  }
+
+  public componentDidUpdate(prevProps: Props) {
+    if (prevProps !== this.props) this.updateList();
   }
 
   async updateList() {
@@ -52,6 +64,7 @@ export class ContestantBenchmarkJobList extends React.Component<Props, State> {
         </header>
         <main>
           {this.renderForm()}
+          {this.renderFilter()}
           {this.renderError()}
           {this.renderList()}
         </main>
@@ -64,6 +77,10 @@ export class ContestantBenchmarkJobList extends React.Component<Props, State> {
     return <ErrorMessage error={this.state.error} />;
   }
 
+  renderFilter() {
+    return <ListFilter status={this.props.status} />;
+  }
+
   renderForm() {
     return <ContestantBenchmarkJobForm session={this.props.session} client={this.props.client} />;
   }
@@ -73,3 +90,49 @@ export class ContestantBenchmarkJobList extends React.Component<Props, State> {
     return <BenchmarkJobList list={this.state.list.jobs} />;
   }
 }
+
+const ListFilter = ({ status }: { status: string }) => {
+  let [, setSearchParams] = useSearchParams();
+  const { register, handleSubmit } = useForm({
+    defaultValues: { status },
+  });
+  const onSubmit = handleSubmit((data) => {
+    setSearchParams((params) => {
+      params.set("status", data.status ?? "");
+      return params;
+    });
+  });
+
+  return (
+    <div className="block has-background-info-light card mt-5">
+      <div className="card-content">
+        <form onSubmit={onSubmit}>
+          <div className="columns">
+            <div className="column is-3 field">
+              <label className="has-text-info-dark label" htmlFor="ContestantBenchmarkJobListFilter-status">
+                Status
+              </label>
+              <div className="control">
+                <div className="select" id="ContestantBenchmarkJobListFilter-status">
+                  <select {...register("status")}>
+                    <option value={""}>-----</option>
+                    <option value={BenchmarkJob_Status.PENDING.toString()}>PENDING</option>
+                    <option value={BenchmarkJob_Status.RUNNING.toString()}>RUNNING</option>
+                    <option value={BenchmarkJob_Status.ERRORED.toString()}>ERRORED</option>
+                    <option value={BenchmarkJob_Status.CANCELLED.toString()}>CANCELLED</option>
+                    <option value={BenchmarkJob_Status.FINISHED.toString()}>FINISHED</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className="column is-3 field">
+              <button className="button is-link" type="submit">
+                Filter
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};

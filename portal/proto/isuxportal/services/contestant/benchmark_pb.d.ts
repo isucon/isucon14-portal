@@ -4,7 +4,7 @@
 
 import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
 import type { Message } from "@bufbuild/protobuf";
-import type { BenchmarkJob } from "../../resources/benchmark_job_pb";
+import type { BenchmarkJob, BenchmarkJob_Status } from "../../resources/benchmark_job_pb";
 
 /**
  * Describes the file isuxportal/services/contestant/benchmark.proto.
@@ -19,6 +19,13 @@ export declare type ListBenchmarkJobsQuery = Message<"isuxportal.proto.services.
    * @generated from field: int64 limit = 1;
    */
   limit: bigint;
+
+  /**
+   * optional filter by status
+   *
+   * @generated from field: isuxportal.proto.resources.BenchmarkJob.Status status = 2;
+   */
+  status: BenchmarkJob_Status;
 };
 
 /**
