@@ -37,6 +37,7 @@ class Api::Contestant::BenchmarkJobsController < Api::Contestant::ApplicationCon
       team: current_team,
       instance_name: current_team.availability_zone,
       target: ContestantInstance.find_by!(team: current_team, id: pb.target_id),
+      enqueued_by: current_contestant,
     )
     render protobuf: Isuxportal::Proto::Services::Contestant::EnqueueBenchmarkJobResponse.new(
       job: @benchmark_job.to_pb(admin: false, detail: true)

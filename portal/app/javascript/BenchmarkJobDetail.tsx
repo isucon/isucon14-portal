@@ -5,6 +5,7 @@ import { BenchmarkJobStatus } from "./BenchmarkJobStatus";
 import { Timestamp } from "./Timestamp";
 import type { BenchmarkJob } from "../../proto/isuxportal/resources/benchmark_job_pb";
 import type { Team } from "../../proto/isuxportal/resources/team_pb";
+import { EnqueuedBy } from "./EnqueuedBy";
 
 export interface Props {
   job: BenchmarkJob;
@@ -27,6 +28,9 @@ const renderJobSummary = (job: BenchmarkJob, admin: boolean) => {
         </p>
         <p>
           <b>Status:</b> <BenchmarkJobStatus status={job.status!} />
+        </p>
+        <p>
+          <b>Enqueued By:</b> {job.enqueuedBy ? <EnqueuedBy enqueuedBy={job.enqueuedBy} /> : "Unknown"}
         </p>
         <p>
           <b>Enqueued At:</b> <Timestamp timestamp={job.createdAt!} />

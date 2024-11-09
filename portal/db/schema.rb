@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_09_17_173241) do
+ActiveRecord::Schema.define(version: 2024_10_12_172159) do
 
   create_table "benchmark_executions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2024_09_17_173241) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "target_id"
+    t.integer "enqueued_by"
     t.index ["instance_name", "id"], name: "index_benchmark_jobs_on_instance_name_and_id"
     t.index ["status", "team_id", "id"], name: "index_benchmark_jobs_on_status_and_team_id_and_id"
     t.index ["team_id", "id"], name: "index_benchmark_jobs_on_team_id_and_id"
