@@ -89,13 +89,14 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
     answer: string;
     question: string;
     teamId: string;
-    unansweredOnly: boolean;
+    disclose: boolean;
   }>({
     shouldUnregister: false,
     defaultValues: {
       answer: "",
       question: "",
       teamId: "",
+      disclose: false,
     },
   });
 
@@ -105,11 +106,17 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
       console.log(data);
 
       const teamIdString = data.teamId;
-      let teamId;
+      let teamId: bigint;
       if (teamIdString === "") {
-        teamId = 0;
+        if (!data.disclose) {
+          throw new Error( "teamIdが空のときはDiscloseがチェックされている必要があります");
+        }
+        teamId = 0n;
       } else if (/^\d+$/.test(teamIdString)) {
-        teamId = parseInt(teamIdString, 10);
+        if (data.disclose) {
+          throw new Error("teamIdが指定されているときはDiscloseがチェックされていない必要があります");
+        }
+        teamId = BigInt(teamIdString);
       } else {
         throw new Error(`Invalid teamId: ${teamIdString}`);
       }
@@ -118,7 +125,7 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
         create(CreateClarificationRequestSchema, {
           answer: data.answer,
           question: data.question,
-          teamId: data.teamId !== "" ? BigInt(data.teamId) : 0n,
+          teamId: teamId,
         }),
       );
       props.onSubmit(resp.clarification!);
@@ -179,8 +186,13 @@ const ClarForm: React.FC<FormProps> = (props: FormProps) => {
                 type="text"
                 id="AdminClarificationListForm-teamId"
                 {...register("teamId")}
-                placeholder="optional; disclosed to the all teams if not set"
               />
+            </div>
+            <div className="control">
+              <label className="checkbox">
+                <input type="checkbox" {...register("disclose")} />
+                Disclose (Visible to all teams)
+              </label>
             </div>
           </div>
           <div className="field">
