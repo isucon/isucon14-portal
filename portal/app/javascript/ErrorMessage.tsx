@@ -1,5 +1,6 @@
 import { ApiError } from "./ApiClient";
 import React from "react";
+import * as Sentry from '@sentry/browser';
 
 export interface Props {
   error: Error | ApiError;
@@ -17,7 +18,7 @@ export class ErrorMessage extends React.Component<Props, State> {
     if (!(this.props.error instanceof ApiError)) {
       console.error(this.props.error);
     }
-    // TODO: raven
+    Sentry.captureException(this.props.error);
   }
 
   public render() {
