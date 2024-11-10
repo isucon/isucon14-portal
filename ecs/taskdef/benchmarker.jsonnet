@@ -24,14 +24,14 @@
       stopTimeout: 120,
       ulimits: [
         {
-          softLimit: 10000,
+          softLimit: 100000,
           name: 'nofile',
-          hardLimit: 10000,
+          hardLimit: 100000,
         },
         {
-          softLimit: 10000,
+          softLimit: 100000,
           name: 'nproc',
-          hardLimit: 10000,
+          hardLimit: 100000,
         },
       ],
     },
