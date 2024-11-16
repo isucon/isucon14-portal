@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_09_17_173241) do
+ActiveRecord::Schema.define(version: 2024_11_16_113729) do
 
   create_table "benchmark_executions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
@@ -132,6 +132,22 @@ ActiveRecord::Schema.define(version: 2024_09_17_173241) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["team_id", "final"], name: "index_extra_time_assignments_on_team_id_and_final", unique: true
     t.index ["team_id"], name: "index_extra_time_assignments_on_team_id"
+  end
+
+  create_table "instance_command_execute_request_results", primary_key: ["instance_command_execute_request_id", "contestant_instance_id"], charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.integer "instance_command_execute_request_id", null: false
+    t.integer "contestant_instance_id", null: false
+    t.text "output"
+    t.integer "exit_code"
+    t.datetime "finished_at", precision: 6
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "instance_command_execute_requests", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.text "command"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
