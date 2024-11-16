@@ -418,6 +418,32 @@ impl EnvCheckStatus {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct InstanceCommandExecuteRequest {
+    #[prost(int64, tag="1")]
+    pub id: i64,
+    #[prost(string, tag="2")]
+    pub command: ::prost::alloc::string::String,
+    #[prost(message, optional, tag="3")]
+    pub created_at: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(int64, tag="4")]
+    pub total_target_count: i64,
+    #[prost(int64, tag="5")]
+    pub total_finished_count: i64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct InstanceCommandExecuteRequestResult {
+    #[prost(message, optional, tag="1")]
+    pub target: ::core::option::Option<ContestantInstance>,
+    #[prost(string, tag="2")]
+    pub output: ::prost::alloc::string::String,
+    #[prost(int32, tag="3")]
+    pub exit_code: i32,
+    #[prost(message, optional, tag="4")]
+    pub finished_at: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LeaderboardItem {
     #[prost(message, optional, tag="2")]
     pub best_score: ::core::option::Option<leaderboard_item::LeaderboardScore>,

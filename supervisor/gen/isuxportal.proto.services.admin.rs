@@ -209,6 +209,28 @@ pub struct TriggerInstanceRestartRequest {
 pub struct TriggerInstanceRestartResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ListInstanceCommandExecuteRequestsRequest {
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListInstanceCommandExecuteRequestsResponse {
+    #[prost(message, repeated, tag="1")]
+    pub requests: ::prost::alloc::vec::Vec<super::super::resources::InstanceCommandExecuteRequest>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct GetInstanceCommandExecuteRequestRequest {
+    #[prost(int64, tag="1")]
+    pub request_id: i64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetInstanceCommandExecuteRequestResponse {
+    #[prost(message, repeated, tag="1")]
+    pub results: ::prost::alloc::vec::Vec<super::super::resources::InstanceCommandExecuteRequestResult>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetLeaderboardDumpQuery {
     /// ISO8601 or "qualify-end"

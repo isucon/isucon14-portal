@@ -3,6 +3,7 @@
 
 require 'google/protobuf'
 
+require 'isuxportal/resources/instance_command_execute_request_pb'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("isuxportal/services/admin/last_validations.proto", :syntax => :proto3) do
     add_message "isuxportal.proto.services.admin.TriggerEnvCheckRequest" do
@@ -12,6 +13,17 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "isuxportal.proto.services.admin.TriggerInstanceRestartRequest" do
     end
     add_message "isuxportal.proto.services.admin.TriggerInstanceRestartResponse" do
+    end
+    add_message "isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsRequest" do
+    end
+    add_message "isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsResponse" do
+      repeated :requests, :message, 1, "isuxportal.proto.resources.InstanceCommandExecuteRequest"
+    end
+    add_message "isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestRequest" do
+      optional :request_id, :int64, 1
+    end
+    add_message "isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestResponse" do
+      repeated :results, :message, 1, "isuxportal.proto.resources.InstanceCommandExecuteRequestResult"
     end
   end
 end
@@ -24,6 +36,10 @@ module Isuxportal
         TriggerEnvCheckResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.TriggerEnvCheckResponse").msgclass
         TriggerInstanceRestartRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.TriggerInstanceRestartRequest").msgclass
         TriggerInstanceRestartResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.TriggerInstanceRestartResponse").msgclass
+        ListInstanceCommandExecuteRequestsRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsRequest").msgclass
+        ListInstanceCommandExecuteRequestsResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsResponse").msgclass
+        GetInstanceCommandExecuteRequestRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestRequest").msgclass
+        GetInstanceCommandExecuteRequestResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestResponse").msgclass
       end
     end
   end

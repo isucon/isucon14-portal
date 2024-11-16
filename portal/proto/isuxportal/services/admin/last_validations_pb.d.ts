@@ -4,6 +4,7 @@
 
 import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
 import type { Message } from "@bufbuild/protobuf";
+import type { InstanceCommandExecuteRequest, InstanceCommandExecuteRequestResult } from "../../resources/instance_command_execute_request_pb";
 
 /**
  * Describes the file isuxportal/services/admin/last_validations.proto.
@@ -61,4 +62,64 @@ export declare type TriggerInstanceRestartResponse = Message<"isuxportal.proto.s
  * Use `create(TriggerInstanceRestartResponseSchema)` to create a new message.
  */
 export declare const TriggerInstanceRestartResponseSchema: GenMessage<TriggerInstanceRestartResponse>;
+
+/**
+ * @generated from message isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsRequest
+ */
+export declare type ListInstanceCommandExecuteRequestsRequest = Message<"isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsRequest"> & {
+};
+
+/**
+ * Describes the message isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsRequest.
+ * Use `create(ListInstanceCommandExecuteRequestsRequestSchema)` to create a new message.
+ */
+export declare const ListInstanceCommandExecuteRequestsRequestSchema: GenMessage<ListInstanceCommandExecuteRequestsRequest>;
+
+/**
+ * @generated from message isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsResponse
+ */
+export declare type ListInstanceCommandExecuteRequestsResponse = Message<"isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsResponse"> & {
+  /**
+   * @generated from field: repeated isuxportal.proto.resources.InstanceCommandExecuteRequest requests = 1;
+   */
+  requests: InstanceCommandExecuteRequest[];
+};
+
+/**
+ * Describes the message isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsResponse.
+ * Use `create(ListInstanceCommandExecuteRequestsResponseSchema)` to create a new message.
+ */
+export declare const ListInstanceCommandExecuteRequestsResponseSchema: GenMessage<ListInstanceCommandExecuteRequestsResponse>;
+
+/**
+ * @generated from message isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestRequest
+ */
+export declare type GetInstanceCommandExecuteRequestRequest = Message<"isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestRequest"> & {
+  /**
+   * @generated from field: int64 request_id = 1;
+   */
+  requestId: bigint;
+};
+
+/**
+ * Describes the message isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestRequest.
+ * Use `create(GetInstanceCommandExecuteRequestRequestSchema)` to create a new message.
+ */
+export declare const GetInstanceCommandExecuteRequestRequestSchema: GenMessage<GetInstanceCommandExecuteRequestRequest>;
+
+/**
+ * @generated from message isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestResponse
+ */
+export declare type GetInstanceCommandExecuteRequestResponse = Message<"isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestResponse"> & {
+  /**
+   * @generated from field: repeated isuxportal.proto.resources.InstanceCommandExecuteRequestResult results = 1;
+   */
+  results: InstanceCommandExecuteRequestResult[];
+};
+
+/**
+ * Describes the message isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestResponse.
+ * Use `create(GetInstanceCommandExecuteRequestResponseSchema)` to create a new message.
+ */
+export declare const GetInstanceCommandExecuteRequestResponseSchema: GenMessage<GetInstanceCommandExecuteRequestResponse>;
 
