@@ -147,6 +147,9 @@ Rails.application.routes.draw do
       # admin/clarifications CreateClarification: POST /api/admin/clarifications
       resources :clarifications, only: %i(index show update create)
 
+      # admin/instance_command_execute_requests ListInstanceCommandExecuteRequests: GET /api/admin/instance_command_execute_requests
+      # admin/instance_command_execute_requests GetInstanceCommandExecuteRequest: GET /api/admin/instance_command_execute_requests/:id
+      resources :instance_command_execute_requests, only: %i(index show)
       # admin/last_validations TriggerEnvCheck: POST /api/admin/last_validations/env_check
       post 'last_validations/env_check' => 'last_validations#trigger_env_check'
       # admin/last_validations TriggerInstanceRestart: POST /api/admin/last_validations/instance_restart
