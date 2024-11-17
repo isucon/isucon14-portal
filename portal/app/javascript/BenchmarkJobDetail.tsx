@@ -90,7 +90,7 @@ const renderJobResult = (job: BenchmarkJob, admin: boolean) => {
           ) : null}
         </p>
         {job.status === BenchmarkJob_Status.ERRORED ? (
-          <div className="message is-danger">
+          <div className="message is-danger my-2">
             <div className="message-body">
               ベンチマーカーでエラーが発生しました。
               {admin ? "" : "しばらく経って運営からアナウンスがない場合は、質問でご確認ください。"}
