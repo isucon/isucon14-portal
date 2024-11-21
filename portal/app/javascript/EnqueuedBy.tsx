@@ -7,8 +7,8 @@ export interface Props {
 
 export const EnqueuedBy: React.FC<Props> = (props: Props) => {
   return (
-    <div>
-      <img src={props.enqueuedBy.avatarUrl} width="32" height="32" /> {props.enqueuedBy.name}
+    <div className="is-flex is-align-items-center">
+      <img src={props.enqueuedBy.avatarUrl} width="24" height="24" className="mr-1" /> {props.enqueuedBy.name}
     </div>
   );
 };
