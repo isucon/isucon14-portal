@@ -12,11 +12,12 @@ import { ContestantBenchmarkJobForm } from "./ContestantBenchmarkJobForm";
 import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
 import type { ListBenchmarkJobsResponse } from "../../../proto/isuxportal/services/contestant/benchmark_pb";
 import { BenchmarkJob_Status } from "../../../proto/isuxportal/resources/benchmark_job_pb";
+import { parseBenchmarkJobStatus } from "../benchmarkJobStatus";
 
 export interface Props {
   session: GetCurrentSessionResponse;
   client: ApiClient;
-  status: string;
+  status: BenchmarkJob_Status | null;
 }
 
 export interface State {
@@ -26,7 +27,7 @@ export interface State {
 
 export const ContestantBenchmarkJobList = (props: Omit<Props, "status">) => {
   const [searchParams] = useSearchParams();
-  const status = searchParams.get("status") ?? "";
+  const status = parseBenchmarkJobStatus(searchParams.get("status"));
   return <ContestantBenchmarkJobListInternal {...props} status={status} />;
 };
 
@@ -49,7 +50,7 @@ class ContestantBenchmarkJobListInternal extends React.Component<Props, State> {
 
   async updateList() {
     try {
-      const list = await this.props.client.listBenchmarkJobs();
+      const list = await this.props.client.listBenchmarkJobs(this.props.status ?? undefined);
       this.setState({ list });
     } catch (error) {
       this.setState({ error });
@@ -78,7 +79,7 @@ class ContestantBenchmarkJobListInternal extends React.Component<Props, State> {
   }
 
   renderFilter() {
-    return <ListFilter status={this.props.status} />;
+    return <ListFilter status={this.props.status?.toString()} />;
   }
 
   renderForm() {
@@ -91,7 +92,7 @@ class ContestantBenchmarkJobListInternal extends React.Component<Props, State> {
   }
 }
 
-const ListFilter = ({ status }: { status: string }) => {
+const ListFilter = ({ status }: { status: string | undefined }) => {
   let [, setSearchParams] = useSearchParams();
   const { register, handleSubmit } = useForm({
     defaultValues: { status },
