@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../ErrorMessage";
 import { TimeDuration } from "../TimeDuration";
 import { Timestamp } from "../Timestamp";
-import { BenchmarkJobStatus } from "../BenchmarkJobStatus";
+import { BenchmarkJobStatus, parseBenchmarkJobStatus } from "../BenchmarkJobStatus";
 
 import { AdminBenchmarkJobForm } from "./AdminBenchmarkJobForm";
 import ReactPaginate from "react-paginate";
@@ -15,7 +15,6 @@ import { BenchmarkJob_Status, type BenchmarkJob } from "../../../proto/isuxporta
 import type { ListBenchmarkJobsResponse } from "../../../proto/isuxportal/services/admin/benchmark_pb";
 import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
 import { EnqueuedBy } from "../EnqueuedBy";
-import { parseBenchmarkJobStatus } from "../benchmarkJobStatus";
 
 type ListFilterProps = {
   teamId: string | null;

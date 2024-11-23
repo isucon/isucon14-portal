@@ -12,7 +12,7 @@ import { ContestantBenchmarkJobForm } from "./ContestantBenchmarkJobForm";
 import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
 import type { ListBenchmarkJobsResponse } from "../../../proto/isuxportal/services/contestant/benchmark_pb";
 import { BenchmarkJob_Status } from "../../../proto/isuxportal/resources/benchmark_job_pb";
-import { parseBenchmarkJobStatus } from "../benchmarkJobStatus";
+import { parseBenchmarkJobStatus } from "../BenchmarkJobStatus";
 
 export interface Props {
   session: GetCurrentSessionResponse;
