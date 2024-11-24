@@ -5,7 +5,7 @@ class Api::Contestant::CloudFormationsController < Api::Contestant::ApplicationC
   def show
     raise ActiveRecord::RecordNotFound, "no cloudformation template for final" if Rails.application.config.x.contest.final
 
-    template = CloudFormation.qualify_template(current_team)
+    template = CloudFormation.contest_template(current_team)
 
     render protobuf: Isuxportal::Proto::Services::Contestant::GetCloudFormationResponse.new(
       template: template,
