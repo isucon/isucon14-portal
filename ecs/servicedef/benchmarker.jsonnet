@@ -5,7 +5,7 @@
       rollback: true,
     },
     maximumPercent: 200,
-    minimumHealthyPercent: 50,
+    minimumHealthyPercent: 100,
   },
   enableECSManagedTags: true,
   enableExecuteCommand: true,
