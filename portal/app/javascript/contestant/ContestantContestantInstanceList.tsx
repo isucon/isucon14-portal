@@ -75,7 +75,7 @@ export const ContestantContestantInstanceList: React.FC<Props> = ({ session, cli
           <a
             className={`button is-info ${template === "" ? "is-loading" : ""}`}
             href={templateBase64}
-            download="qualify_cloudformation.yaml"
+            download="contest_cloudformation.yaml"
           >
             CloudFormation テンプレートをダウンロード
           </a>

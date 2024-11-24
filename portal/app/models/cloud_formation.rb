@@ -4,7 +4,7 @@ require 'json'
 
 module CloudFormation
   TEST_ERB = ERB.new(File.read(File.join(File.dirname(__FILE__), './cf_templates/test.yaml.erb')))
-  QUALIFY_ERB = ERB.new(File.read(File.join(File.dirname(__FILE__), './cf_templates/qualify.yaml.erb')))
+  CONTEST_ERB = ERB.new(File.read(File.join(File.dirname(__FILE__), './cf_templates/contest.yaml.erb')))
 
   def self.template(erb, b)
     erb.result(b)
@@ -30,7 +30,7 @@ module CloudFormation
     end
   end
 
-  def self.qualify_template(team)
+  def self.contest_template(team)
     zone_id = team.availability_zone
     token = create_token(
       team,
@@ -41,7 +41,7 @@ module CloudFormation
     ami_id = Rails.application.config.x.qualify_ami_id
 
     unless zone_id.nil?
-      template(QUALIFY_ERB, binding)
+      template(CONTEST_ERB, binding)
     else
       raise "Availability Zone should be set to team"
     end
