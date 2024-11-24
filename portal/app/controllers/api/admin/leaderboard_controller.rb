@@ -7,7 +7,7 @@ class Api::Admin::LeaderboardController < Api::Admin::ApplicationController
     raise Api::ApplicationController::Error::BadRequest if whenParam.blank?
 
     time = case whenParam
-      when "qualify-end"
+      when "contest-end"
         Rails.application.config.x.contest.contest_end
       else
         begin

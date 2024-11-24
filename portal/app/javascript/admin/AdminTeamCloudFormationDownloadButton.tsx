@@ -3,7 +3,7 @@ import React from "react";
 export interface Props {
   client: AdminApiClient;
   teamId: bigint;
-  type: "test" | "qualify";
+  type: "test" | "contest";
 }
 export interface State {}
 export class AdminTeamCloudFormationDownloadButton extends React.Component<Props, State> {

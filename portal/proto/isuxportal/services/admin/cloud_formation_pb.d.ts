@@ -20,7 +20,7 @@ export declare type GetCloudFormationQuery = Message<"isuxportal.proto.services.
   id: bigint;
 
   /**
-   * query parameter. "test" | "qualify"
+   * query parameter. "test" | "contest"
    *
    * @generated from field: string type = 2;
    */
