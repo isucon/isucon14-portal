@@ -6,7 +6,7 @@ require 'isuxportal/services/admin/dashboard_pb'
 
 class UpdateContestantDashboardJob < ApplicationJob
   def perform(team: nil, now: nil, frozen: Contest.contest_frozen?(now || Time.zone.now))
-    round = Rails.application.config.x.contest.final ? "final" : "qualify"
+    round = Rails.application.config.x.contest.final ? "final" : "contest"
 
     Rails.logger.info("leaderboard")
     lb = Contest.leaderboard(history: false, now: now)

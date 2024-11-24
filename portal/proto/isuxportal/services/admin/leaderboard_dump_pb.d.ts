@@ -18,7 +18,7 @@ export declare const file_isuxportal_services_admin_leaderboard_dump: GenFile;
  */
 export declare type GetLeaderboardDumpQuery = Message<"isuxportal.proto.services.admin.GetLeaderboardDumpQuery"> & {
   /**
-   * ISO8601 or "qualify-end"
+   * ISO8601 or "contest-end"
    *
    * @generated from field: string when = 1;
    */

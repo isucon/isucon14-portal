@@ -75,7 +75,7 @@ export class AdminApiClient {
     return fromBinary(UpdateTeamResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async getCloudFormation(id: bigint, type: "test" | "qualify") {
+  public async getCloudFormation(id: bigint, type: "test" | "contest") {
     const resp = await this.request(
       `${this.baseUrl}/api/admin/teams/${encodeURIComponent(id.toString())}/cloud_formation?type=${encodeURIComponent(type)}`,
       "GET",
@@ -201,7 +201,7 @@ export class AdminApiClient {
     return fromBinary(ListContestantInstancesResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async getDumpLeaderboard(date: Date | "qualify-end") {
+  public async getDumpLeaderboard(date: Date | "contest-end") {
     const resp = await this.request(
       `${this.baseUrl}/api/admin/dump_leaderboard`,
       "GET",
