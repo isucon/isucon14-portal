@@ -433,14 +433,20 @@ pub struct InstanceCommandExecuteRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct InstanceCommandExecuteRequestResult {
-    #[prost(message, optional, tag="1")]
+    #[prost(int64, tag="1")]
+    pub id: i64,
+    #[prost(message, optional, tag="2")]
     pub target: ::core::option::Option<ContestantInstance>,
-    #[prost(string, tag="2")]
-    pub output: ::prost::alloc::string::String,
     #[prost(int32, tag="3")]
     pub exit_code: i32,
     #[prost(message, optional, tag="4")]
     pub finished_at: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct InstanceCommandExecuteRequestResultOutput {
+    #[prost(string, tag="1")]
+    pub output: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

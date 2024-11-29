@@ -53,14 +53,14 @@ export declare const InstanceCommandExecuteRequestSchema: GenMessage<InstanceCom
  */
 export declare type InstanceCommandExecuteRequestResult = Message<"isuxportal.proto.resources.InstanceCommandExecuteRequestResult"> & {
   /**
-   * @generated from field: isuxportal.proto.resources.ContestantInstance target = 1;
+   * @generated from field: int64 id = 1;
    */
-  target?: ContestantInstance;
+  id: bigint;
 
   /**
-   * @generated from field: string output = 2;
+   * @generated from field: isuxportal.proto.resources.ContestantInstance target = 2;
    */
-  output: string;
+  target?: ContestantInstance;
 
   /**
    * @generated from field: int32 exit_code = 3;
@@ -78,4 +78,20 @@ export declare type InstanceCommandExecuteRequestResult = Message<"isuxportal.pr
  * Use `create(InstanceCommandExecuteRequestResultSchema)` to create a new message.
  */
 export declare const InstanceCommandExecuteRequestResultSchema: GenMessage<InstanceCommandExecuteRequestResult>;
+
+/**
+ * @generated from message isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput
+ */
+export declare type InstanceCommandExecuteRequestResultOutput = Message<"isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput"> & {
+  /**
+   * @generated from field: string output = 1;
+   */
+  output: string;
+};
+
+/**
+ * Describes the message isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput.
+ * Use `create(InstanceCommandExecuteRequestResultOutputSchema)` to create a new message.
+ */
+export declare const InstanceCommandExecuteRequestResultOutputSchema: GenMessage<InstanceCommandExecuteRequestResultOutput>;
 

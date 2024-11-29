@@ -20,10 +20,16 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       repeated :requests, :message, 1, "isuxportal.proto.resources.InstanceCommandExecuteRequest"
     end
     add_message "isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestRequest" do
-      optional :request_id, :int64, 1
+      optional :id, :int64, 1
     end
     add_message "isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestResponse" do
       repeated :results, :message, 1, "isuxportal.proto.resources.InstanceCommandExecuteRequestResult"
+    end
+    add_message "isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestOutputRequest" do
+      optional :id, :int64, 1
+    end
+    add_message "isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestOutputResponse" do
+      optional :output, :message, 1, "isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput"
     end
   end
 end
@@ -40,6 +46,8 @@ module Isuxportal
         ListInstanceCommandExecuteRequestsResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsResponse").msgclass
         GetInstanceCommandExecuteRequestRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestRequest").msgclass
         GetInstanceCommandExecuteRequestResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestResponse").msgclass
+        GetInstanceCommandExecuteRequestOutputRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestOutputRequest").msgclass
+        GetInstanceCommandExecuteRequestOutputResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestOutputResponse").msgclass
       end
     end
   end

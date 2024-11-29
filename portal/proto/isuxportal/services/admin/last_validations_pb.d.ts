@@ -4,7 +4,7 @@
 
 import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
 import type { Message } from "@bufbuild/protobuf";
-import type { InstanceCommandExecuteRequest, InstanceCommandExecuteRequestResult } from "../../resources/instance_command_execute_request_pb";
+import type { InstanceCommandExecuteRequest, InstanceCommandExecuteRequestResult, InstanceCommandExecuteRequestResultOutput } from "../../resources/instance_command_execute_request_pb";
 
 /**
  * Describes the file isuxportal/services/admin/last_validations.proto.
@@ -96,9 +96,9 @@ export declare const ListInstanceCommandExecuteRequestsResponseSchema: GenMessag
  */
 export declare type GetInstanceCommandExecuteRequestRequest = Message<"isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestRequest"> & {
   /**
-   * @generated from field: int64 request_id = 1;
+   * @generated from field: int64 id = 1;
    */
-  requestId: bigint;
+  id: bigint;
 };
 
 /**
@@ -122,4 +122,36 @@ export declare type GetInstanceCommandExecuteRequestResponse = Message<"isuxport
  * Use `create(GetInstanceCommandExecuteRequestResponseSchema)` to create a new message.
  */
 export declare const GetInstanceCommandExecuteRequestResponseSchema: GenMessage<GetInstanceCommandExecuteRequestResponse>;
+
+/**
+ * @generated from message isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestOutputRequest
+ */
+export declare type GetInstanceCommandExecuteRequestOutputRequest = Message<"isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestOutputRequest"> & {
+  /**
+   * @generated from field: int64 id = 1;
+   */
+  id: bigint;
+};
+
+/**
+ * Describes the message isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestOutputRequest.
+ * Use `create(GetInstanceCommandExecuteRequestOutputRequestSchema)` to create a new message.
+ */
+export declare const GetInstanceCommandExecuteRequestOutputRequestSchema: GenMessage<GetInstanceCommandExecuteRequestOutputRequest>;
+
+/**
+ * @generated from message isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestOutputResponse
+ */
+export declare type GetInstanceCommandExecuteRequestOutputResponse = Message<"isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestOutputResponse"> & {
+  /**
+   * @generated from field: isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput output = 1;
+   */
+  output?: InstanceCommandExecuteRequestResultOutput;
+};
+
+/**
+ * Describes the message isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestOutputResponse.
+ * Use `create(GetInstanceCommandExecuteRequestOutputResponseSchema)` to create a new message.
+ */
+export declare const GetInstanceCommandExecuteRequestOutputResponseSchema: GenMessage<GetInstanceCommandExecuteRequestOutputResponse>;
 

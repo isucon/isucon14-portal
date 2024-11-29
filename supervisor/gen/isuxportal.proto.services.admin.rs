@@ -222,13 +222,25 @@ pub struct ListInstanceCommandExecuteRequestsResponse {
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GetInstanceCommandExecuteRequestRequest {
     #[prost(int64, tag="1")]
-    pub request_id: i64,
+    pub id: i64,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetInstanceCommandExecuteRequestResponse {
     #[prost(message, repeated, tag="1")]
     pub results: ::prost::alloc::vec::Vec<super::super::resources::InstanceCommandExecuteRequestResult>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct GetInstanceCommandExecuteRequestOutputRequest {
+    #[prost(int64, tag="1")]
+    pub id: i64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetInstanceCommandExecuteRequestOutputResponse {
+    #[prost(message, optional, tag="1")]
+    pub output: ::core::option::Option<super::super::resources::InstanceCommandExecuteRequestResultOutput>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
