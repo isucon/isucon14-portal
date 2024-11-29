@@ -13,7 +13,7 @@ class Api::Admin::InstanceCommandExecuteRequestsController < Api::Admin::Applica
   pb :show, Isuxportal::Proto::Services::Admin::GetInstanceCommandExecuteRequestRequest
   def show
     render protobuf: Isuxportal::Proto::Services::Admin::GetInstanceCommandExecuteRequestResponse.new(
-      results: InstanceCommandExecuteRequestResult.include(:contestant_instance).find(params[:request_id]).map do |result|
+      results: InstanceCommandExecuteRequestResult.include(:contestant_instance).where(instance_command_execute_request_id: params[:request_id]).map do |result|
         result.to_pb
       end,
     )
