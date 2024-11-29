@@ -23,7 +23,7 @@ message ListInstanceCommandExecuteRequestsResponse {
 }
 
 message GetInstanceCommandExecuteRequestRequest {
-  int64 request_id = 1;
+  int64 id = 1;
 }
 
 message GetInstanceCommandExecuteRequestResponse {
