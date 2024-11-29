@@ -29,3 +29,11 @@ message GetInstanceCommandExecuteRequestRequest {
 message GetInstanceCommandExecuteRequestResponse {
   repeated isuxportal.proto.resources.InstanceCommandExecuteRequestResult results = 1;
 }
+
+message GetInstanceCommandExecuteRequestOutputRequest {
+  int64 id = 1;
+}
+
+message GetInstanceCommandExecuteRequestOutputResponse {
+  isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput output = 1;
+}
