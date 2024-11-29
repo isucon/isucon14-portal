@@ -18,4 +18,11 @@ class Api::Admin::InstanceCommandExecuteRequestsController < Api::Admin::Applica
       end,
     )
   end
+
+  pb :output, Isuxportal::Proto::Services::Admin::GetInstanceCommandExecuteRequestOutputRequest
+  def output
+    render protobuf: Isuxportal::Proto::Services::Admin::GetInstanceCommandExecuteRequestOutputRequest.new(
+      output: InstanceCommandExecuteRequestResult.find(params[:id]).output,
+    )
+  end
 end

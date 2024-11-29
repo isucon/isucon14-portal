@@ -4,6 +4,7 @@ import type { AdminApiClient } from "./AdminApiClient";
 import { ErrorMessage } from "../ErrorMessage";
 import type { InstanceCommandExecuteRequest } from "../../../proto/isuxportal/resources/instance_command_execute_request_pb";
 import { Timestamp } from "../Timestamp";
+import { Link } from "react-router-dom";
 
 export interface Props {
   session: GetCurrentSessionResponse;
@@ -116,12 +117,12 @@ const InstanceCommandExecuteRequests = (props: { client: AdminApiClient }) => {
         <tr>
           <td colSpan={6}>Loading</td>
         </tr>
+      ) : requests && requests.length > 0 ? (
+        requests.map((request) => <InstanceCommandExecuteRequestRow request={request} key={request.id.toString()} />)
       ) : (
-        (requests?.map((request) => <InstanceCommandExecuteRequestRow request={request} />) ?? (
-          <tr>
-            <td colSpan={6}>No result</td>
-          </tr>
-        ))
+        <tr>
+          <td colSpan={6}>No result</td>
+        </tr>
       ),
     [requesting, requests],
   );
@@ -144,10 +145,11 @@ const InstanceCommandExecuteRequests = (props: { client: AdminApiClient }) => {
 };
 
 const InstanceCommandExecuteRequestRow = ({ request }: { request: InstanceCommandExecuteRequest }) => {
-  // TODO: get details by getInstanceCommandExecuteRequest
   return (
     <tr>
-      <td>{request.id.toString()}</td>
+      <td>
+        <Link to={`/admin/last_validations/command_result/${request.id.toString()}`}>{request.id.toString()}</Link>
+      </td>
       <td>
         <code>{request.command}</code>
       </td>
