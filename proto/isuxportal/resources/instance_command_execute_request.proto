@@ -1,0 +1,26 @@
+syntax = "proto3";
+package isuxportal.proto.resources;
+
+
+import "isuxportal/resources/contestant_instance.proto";
+
+import "google/protobuf/timestamp.proto";
+
+message InstanceCommandExecuteRequest {
+  int64 id = 1;
+  string command = 2;
+  google.protobuf.Timestamp created_at = 3;
+  int64 total_target_count = 4;
+  int64 total_finished_count = 5;
+}
+
+message InstanceCommandExecuteRequestResult {
+  int64 id = 1;
+  isuxportal.proto.resources.ContestantInstance target = 2;
+  int32 exit_code = 3;
+  google.protobuf.Timestamp finished_at = 4;
+}
+
+message InstanceCommandExecuteRequestResultOutput {
+  string output = 1;
+}

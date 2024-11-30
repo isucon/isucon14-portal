@@ -18,6 +18,7 @@ import { AdminLastValidations } from "./admin/AdminLastValidations";
 import { AdminContestantInstanceList } from "./admin/AdminContestantInstanceList";
 import { AdminDashboard } from "./admin/AdminDashboard";
 import { AdminUnpreparedStats } from "./admin/AdminUnpreparedStats";
+import { AdminLastValidationsCommandResult } from "./admin/AdminLastValidationsCommandResult";
 
 export interface Props {
   session: GetCurrentSessionResponse;
@@ -130,6 +131,12 @@ export class AdminApp extends React.Component<Props, State> {
                   <Route
                     path="/admin/last_validations"
                     element={<AdminLastValidations session={this.props.session} client={this.state.adminClient} />}
+                  />
+                  <Route
+                    path="/admin/last_validations/command_result/:id"
+                    element={
+                      <AdminLastValidationsCommandResult session={this.props.session} client={this.state.adminClient} />
+                    }
                   />
                   <Route
                     path="/admin/contestant_instances"

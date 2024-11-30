@@ -39,7 +39,13 @@ import {
   GetEnvCheckStatsResponseSchema,
   GetSSHKeyStatsResponseSchema,
 } from "../../../proto/isuxportal/services/admin/unprepared_stats_pb";
-import { TriggerEnvCheckResponseSchema, TriggerInstanceRestartResponseSchema } from "../../../proto/isuxportal/services/admin/last_validations_pb";
+import {
+  GetInstanceCommandExecuteRequestOutputResponseSchema,
+  GetInstanceCommandExecuteRequestResponseSchema,
+  ListInstanceCommandExecuteRequestsResponseSchema,
+  TriggerEnvCheckResponseSchema,
+  TriggerInstanceRestartResponseSchema,
+} from "../../../proto/isuxportal/services/admin/last_validations_pb";
 
 export class AdminApiClient {
   public apiClient: ApiClient;
@@ -244,6 +250,31 @@ export class AdminApiClient {
   public async getEnvCheckStats() {
     const resp = await this.request(`${this.baseUrl}/api/admin/unprepared_stats/env_check_stats`, "GET", null, null);
     return fromBinary(GetEnvCheckStatsResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async listInstanceCommandExecuteRequests() {
+    const resp = await this.request(`${this.baseUrl}/api/admin/instance_command_execute_requests`, "GET", null, null);
+    return fromBinary(ListInstanceCommandExecuteRequestsResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async getInstanceCommandExecuteRequest(id: bigint) {
+    const resp = await this.request(
+      `${this.baseUrl}/api/admin/instance_command_execute_requests/${encodeURIComponent(id.toString())}`,
+      "GET",
+      null,
+      null,
+    );
+    return fromBinary(GetInstanceCommandExecuteRequestResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async getInstanceCommandExecuteRequestOutput(id: bigint) {
+    const resp = await this.request(
+      `${this.baseUrl}/api/admin/instance_command_execute_requests/_/${encodeURIComponent(id.toString())}/output`,
+      "GET",
+      null,
+      null,
+    );
+    return fromBinary(GetInstanceCommandExecuteRequestOutputResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public async triggerEnvCheck() {
