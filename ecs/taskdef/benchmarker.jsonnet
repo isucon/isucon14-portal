@@ -22,6 +22,9 @@
         initProcessEnabled: true,
       },
       stopTimeout: 120,
+      restartPolicy: {
+        enabled: true,
+      },
       ulimits: [
         {
           softLimit: 100000,
