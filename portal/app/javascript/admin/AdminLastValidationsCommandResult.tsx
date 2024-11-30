@@ -165,7 +165,7 @@ const InstanceCommandExecuteResultRow = ({
           <Link to={`/admin/teams/${result.target!.teamId.toString()}`}>{result.target!.teamId.toString()}</Link>
         </td>
       ) : null}
-      <td>{result.target!.number.toString()}</td>
+      <td>{result.target!.number.toString()} ({result.target!.publicIpv4Address})</td>
       <td className={result.exitCode != 0 ? "has-text-danger" : ""}>{result.exitCode.toString()}</td>
       <td>
         {result.finishedAt ? (
