@@ -32,7 +32,10 @@ export const AdminLastValidations: React.FC<Props> = (props: Props) => {
 
 const CommandTriggerForm = (props: { client: AdminApiClient }) => {
   const [rawTeamIds, setRawTeamIds] = useState("");
-  const teamIds = useMemo(() => rawTeamIds.trim() === "" ? [] : rawTeamIds.split(",").map((v) => BigInt(v.trim())), [rawTeamIds]);
+  const teamIds = useMemo(
+    () => (rawTeamIds.trim() === "" ? [] : rawTeamIds.split(",").map((v) => BigInt(v.trim()))),
+    [rawTeamIds],
+  );
 
   const [requestingTriggerEnvCheck, setRequestingTriggerEnvCheck] = React.useState(false);
   const [triggerEnvCheckResult, setTriggerEnvCheckResult] = React.useState<true | Error | null>(null);
@@ -97,7 +100,7 @@ const CommandTriggerForm = (props: { client: AdminApiClient }) => {
                 >
                   Trigger Env Check
                 </button>
-                {triggerInstanceRestartResult === true ? (
+                {triggerEnvCheckResult === true ? (
                   <span className="icon ml-2">
                     <i className="material-icons-outlined" aria-hidden={"true"}>
                       check
