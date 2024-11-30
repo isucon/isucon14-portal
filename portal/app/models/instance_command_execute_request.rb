@@ -5,8 +5,6 @@ class InstanceCommandExecuteRequest < ApplicationRecord
 
   has_many :instance_command_execute_request_results, dependent: :destroy
 
-  scope :finished, -> { where.not(finished_at: nil) }
-
   def to_pb
     Isuxportal::Proto::Resources::InstanceCommandExecuteRequest.new(
       id: id,

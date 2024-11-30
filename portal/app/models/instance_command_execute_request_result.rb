@@ -4,6 +4,8 @@ class InstanceCommandExecuteRequestResult < ApplicationRecord
   belongs_to :instance_command_execute_request
   belongs_to :contestant_instance
 
+  scope :finished, -> { where.not(finished_at: nil) }
+
   def to_pb
     Isuxportal::Proto::Resources::InstanceCommandExecuteRequestResult.new(
       id: id,
