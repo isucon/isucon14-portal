@@ -16,7 +16,7 @@ class MaintainDiscordContestantRolesJob < ApplicationJob
       Rails.logger.info Discordrb::API::Server.remove_member_role(discord_token, server_id, user_id, role)
     end
 
-    if contestant && roles_to_add.include?(basic_role)
+    if contestant&.team&.visible && roles_to_add.include?(basic_role)
       nick = "#{contestant.name} (#{contestant.team.name})"[0,32]
       Rails.logger.info "update_member(nick): contestant=#{contestant.id} discord_id=#{contestant.discord_id} discord_tag=#{contestant.discord_tag}, nick=#{nick}"
       Rails.logger.info Discordrb::API::Server.update_member(discord_token, server_id, contestant.discord_id, nick: nick)
