@@ -161,7 +161,7 @@ const InstanceCommandExecuteRequestRow = ({ request }: { request: InstanceComman
       <td>
         {request.totalTargetCount === 0n
           ? "---"
-          : (Number(request.totalFinishedCount / request.totalTargetCount) * 100).toFixed(2)}
+          : ((Number(request.totalFinishedCount) / Number(request.totalTargetCount)) * 100).toFixed(2)}
         %
       </td>
     </tr>
