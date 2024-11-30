@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_16_113729) do
+ActiveRecord::Schema.define(version: 2024_11_30_031659) do
 
   create_table "benchmark_executions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2024_11_16_113729) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "target_id"
+    t.integer "enqueued_by_id"
     t.index ["instance_name", "id"], name: "index_benchmark_jobs_on_instance_name_and_id"
     t.index ["status", "team_id", "id"], name: "index_benchmark_jobs_on_status_and_team_id_and_id"
     t.index ["team_id", "id"], name: "index_benchmark_jobs_on_team_id_and_id"
@@ -134,7 +135,7 @@ ActiveRecord::Schema.define(version: 2024_11_16_113729) do
     t.index ["team_id"], name: "index_extra_time_assignments_on_team_id"
   end
 
-  create_table "instance_command_execute_request_results", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "instance_command_execute_request_results", primary_key: ["instance_command_execute_request_id", "contestant_instance_id"], charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.integer "instance_command_execute_request_id", null: false
     t.integer "contestant_instance_id", null: false
     t.text "output"
@@ -142,6 +143,7 @@ ActiveRecord::Schema.define(version: 2024_11_16_113729) do
     t.datetime "finished_at", precision: 6
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["instance_command_execute_request_id", "contestant_instance_id"], name: "index_command_execute_results_on_request_id_and_ci_id", unique: true
   end
 
   create_table "instance_command_execute_requests", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
