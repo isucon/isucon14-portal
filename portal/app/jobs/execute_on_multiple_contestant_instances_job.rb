@@ -2,12 +2,15 @@ class ExecuteOnMultipleContestantInstancesJob < ApplicationJob
   def perform(team_ids, command)
     request = InstanceCommandExecuteRequest.create!(command: command)
 
+    now = Time.current
     contestant_instances = ContestantInstance.where(team_id: team_ids).order(team_id: :asc)
     InstanceCommandExecuteRequestResult.insert_all!(
       contestant_instances.map do |ci|
         {
           instance_command_execute_request_id: request.id,
           contestant_instance_id: ci.id,
+          created_at: now,
+          updated_at: now,
         }
       end
     )
