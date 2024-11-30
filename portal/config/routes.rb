@@ -149,6 +149,8 @@ Rails.application.routes.draw do
 
       # admin/last_validations TriggerEnvCheck: POST /api/admin/last_validations/env_check
       post 'last_validations/env_check' => 'last_validations#trigger_env_check'
+      # admin/last_validations TriggerInstanceRestart: POST /api/admin/last_validations/instance_restart
+      post 'last_validations/instance_restart' => 'last_validations#trigger_instance_restart'
 
       # admin/contestant_instances ListContestantInstances: GET /api/admin/contestant_instances
       resources :contestant_instances, only: %i(index)

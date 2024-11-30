@@ -8,7 +8,7 @@ import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv1";
  * Describes the file isuxportal/services/admin/last_validations.proto.
  */
 export const file_isuxportal_services_admin_last_validations = /*@__PURE__*/
-  fileDesc("CjBpc3V4cG9ydGFsL3NlcnZpY2VzL2FkbWluL2xhc3RfdmFsaWRhdGlvbnMucHJvdG8SH2lzdXhwb3J0YWwucHJvdG8uc2VydmljZXMuYWRtaW4iGAoWVHJpZ2dlckVudkNoZWNrUmVxdWVzdCIZChdUcmlnZ2VyRW52Q2hlY2tSZXNwb25zZUKyAgojY29tLmlzdXhwb3J0YWwucHJvdG8uc2VydmljZXMuYWRtaW5CFExhc3RWYWxpZGF0aW9uc1Byb3RvUAFaVWdpdGh1Yi5jb20vaXN1Y29uL2lzdWNvbjE0LXBvcnRhbC9zdXBlcnZpc29yL2R1bW15YmVuY2gvZ2VuL2lzdXhwb3J0YWwvc2VydmljZXMvYWRtaW6iAgRJUFNBqgIfSXN1eHBvcnRhbC5Qcm90by5TZXJ2aWNlcy5BZG1pbsoCH0lzdXhwb3J0YWxcUHJvdG9cU2VydmljZXNcQWRtaW7iAitJc3V4cG9ydGFsXFByb3RvXFNlcnZpY2VzXEFkbWluXEdQQk1ldGFkYXRh6gIiSXN1eHBvcnRhbDo6UHJvdG86OlNlcnZpY2VzOjpBZG1pbmIGcHJvdG8z");
+  fileDesc("CjBpc3V4cG9ydGFsL3NlcnZpY2VzL2FkbWluL2xhc3RfdmFsaWRhdGlvbnMucHJvdG8SH2lzdXhwb3J0YWwucHJvdG8uc2VydmljZXMuYWRtaW4iGAoWVHJpZ2dlckVudkNoZWNrUmVxdWVzdCIZChdUcmlnZ2VyRW52Q2hlY2tSZXNwb25zZSIfCh1UcmlnZ2VySW5zdGFuY2VSZXN0YXJ0UmVxdWVzdCIgCh5UcmlnZ2VySW5zdGFuY2VSZXN0YXJ0UmVzcG9uc2VCsgIKI2NvbS5pc3V4cG9ydGFsLnByb3RvLnNlcnZpY2VzLmFkbWluQhRMYXN0VmFsaWRhdGlvbnNQcm90b1ABWlVnaXRodWIuY29tL2lzdWNvbi9pc3Vjb24xNC1wb3J0YWwvc3VwZXJ2aXNvci9kdW1teWJlbmNoL2dlbi9pc3V4cG9ydGFsL3NlcnZpY2VzL2FkbWluogIESVBTQaoCH0lzdXhwb3J0YWwuUHJvdG8uU2VydmljZXMuQWRtaW7KAh9Jc3V4cG9ydGFsXFByb3RvXFNlcnZpY2VzXEFkbWlu4gIrSXN1eHBvcnRhbFxQcm90b1xTZXJ2aWNlc1xBZG1pblxHUEJNZXRhZGF0YeoCIklzdXhwb3J0YWw6OlByb3RvOjpTZXJ2aWNlczo6QWRtaW5iBnByb3RvMw");
 
 /**
  * Describes the message isuxportal.proto.services.admin.TriggerEnvCheckRequest.
@@ -23,4 +23,18 @@ export const TriggerEnvCheckRequestSchema = /*@__PURE__*/
  */
 export const TriggerEnvCheckResponseSchema = /*@__PURE__*/
   messageDesc(file_isuxportal_services_admin_last_validations, 1);
+
+/**
+ * Describes the message isuxportal.proto.services.admin.TriggerInstanceRestartRequest.
+ * Use `create(TriggerInstanceRestartRequestSchema)` to create a new message.
+ */
+export const TriggerInstanceRestartRequestSchema = /*@__PURE__*/
+  messageDesc(file_isuxportal_services_admin_last_validations, 2);
+
+/**
+ * Describes the message isuxportal.proto.services.admin.TriggerInstanceRestartResponse.
+ * Use `create(TriggerInstanceRestartResponseSchema)` to create a new message.
+ */
+export const TriggerInstanceRestartResponseSchema = /*@__PURE__*/
+  messageDesc(file_isuxportal_services_admin_last_validations, 3);
 

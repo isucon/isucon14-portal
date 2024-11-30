@@ -39,7 +39,7 @@ import {
   GetEnvCheckStatsResponseSchema,
   GetSSHKeyStatsResponseSchema,
 } from "../../../proto/isuxportal/services/admin/unprepared_stats_pb";
-import { TriggerEnvCheckResponseSchema } from "../../../proto/isuxportal/services/admin/last_validations_pb";
+import { TriggerEnvCheckResponseSchema, TriggerInstanceRestartResponseSchema } from "../../../proto/isuxportal/services/admin/last_validations_pb";
 
 export class AdminApiClient {
   public apiClient: ApiClient;
@@ -249,6 +249,11 @@ export class AdminApiClient {
   public async triggerEnvCheck() {
     const resp = await this.request(`${this.baseUrl}/api/admin/last_validations/env_check`, "POST", null, null);
     return fromBinary(TriggerEnvCheckResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async triggerInstanceRestart() {
+    const resp = await this.request(`${this.baseUrl}/api/admin/last_validations/instance_restart`, "POST", null, null);
+    return fromBinary(TriggerInstanceRestartResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public request(path: string, method: string, query: object | null, payload: Uint8Array | null) {

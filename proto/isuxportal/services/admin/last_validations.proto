@@ -7,3 +7,9 @@ message TriggerEnvCheckRequest {
 }
 
 message TriggerEnvCheckResponse {}
+
+message TriggerInstanceRestartRequest {
+  // limit to top-N teams (filter student teams?)
+}
+
+message TriggerInstanceRestartResponse {}
