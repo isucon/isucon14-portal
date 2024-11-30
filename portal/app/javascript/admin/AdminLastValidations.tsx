@@ -38,65 +38,39 @@ const CommandTriggerForm = (props: { client: AdminApiClient }) => {
     [rawTeamIds],
   );
 
-  const [requestingTriggerEnvCheck, setRequestingTriggerEnvCheck] = React.useState(false);
   const [triggerEnvCheckResult, setTriggerEnvCheckResult] = React.useState<true | Error | null>(null);
-
-  const onTriggerEnvCheckClick = useCallback(async () => {
-    if (requestingTriggerEnvCheck) return;
-
-    if (teamIds.length === 0 && !confirm('全チームに実行しますか？')) {
+  const triggerEnvCheckClick = useCallback(async () => {
+    if (teamIds.length === 0 && !confirm("全チームに実行しますか？")) {
       return;
     }
-    setRequestingTriggerEnvCheck(true);
-    try {
-      await props.client.triggerEnvCheck(create(TriggerEnvCheckRequestSchema, { teamIds }));
-      setTriggerEnvCheckResult(true);
-    } catch (e) {
-      setTriggerEnvCheckResult(e);
-    } finally {
-      setRequestingTriggerEnvCheck(false);
-    }
-  }, [requestingTriggerEnvCheck, teamIds, props.client]);
+    await props.client.triggerEnvCheck(create(TriggerEnvCheckRequestSchema, { teamIds }));
+  }, [teamIds, props.client]);
 
-  const [requestingTriggerInstanceRestart, setRequestingTriggerInstanceRestart] = React.useState(false);
   const [triggerInstanceRestartResult, setTriggerInstanceRestartResult] = React.useState<true | Error | null>(null);
-
-  const onTriggerInstanceRestartClick = useCallback(async () => {
-    if (requestingTriggerInstanceRestart) return;
-
-    if (teamIds.length === 0 && !confirm('全チームに実行しますか？')) {
+  const triggerInstanceRestartClick = useCallback(async () => {
+    if (teamIds.length === 0 && !confirm("全チームに実行しますか？")) {
       return;
     }
-    setRequestingTriggerInstanceRestart(true);
-    try {
-      await props.client.triggerInstanceRestart(create(TriggerInstanceRestartRequestSchema, { teamIds }));
-      setTriggerInstanceRestartResult(true);
-    } catch (e) {
-      setTriggerInstanceRestartResult(e);
-    } finally {
-      setRequestingTriggerInstanceRestart(false);
-    }
-  }, [requestingTriggerInstanceRestart, teamIds, props.client]);
+    await props.client.triggerInstanceRestart(create(TriggerInstanceRestartRequestSchema, { teamIds }));
+  }, [teamIds, props.client]);
 
-  const [requestingTriggerBenchmarks, setRequestingTriggerBenchmarks] = React.useState(false);
   const [triggerBenchmarksResult, setTriggerBenchmarksResult] = React.useState<true | Error | null>(null);
-
-  const onTriggerBenchmarksClick = useCallback(async () => {
-    if (requestingTriggerBenchmarks) return;
-
-    if (teamIds.length === 0 && !confirm('全チームに実行しますか？')) {
+  const triggerBenchmarksClick = useCallback(async () => {
+    if (teamIds.length === 0 && !confirm("全チームに実行しますか？")) {
       return;
     }
-    setRequestingTriggerBenchmarks(true);
-    try {
-      await props.client.triggerBenchmarks(create(TriggerBenchmarksRequestSchema, { teamIds }));
-      setTriggerBenchmarksResult(true);
-    } catch (e) {
-      setTriggerBenchmarksResult(e);
-    } finally {
-      setRequestingTriggerBenchmarks(false);
+    await props.client.triggerBenchmarks(create(TriggerBenchmarksRequestSchema, { teamIds, postValidation: false }));
+  }, [teamIds, props.client]);
+
+  const [triggerPostValidationBenchmarksResult, setTriggerPostValidationBenchmarksResult] = React.useState<
+    true | Error | null
+  >(null);
+  const triggerPostValidationBenchmarksClick = useCallback(async () => {
+    if (teamIds.length === 0 && !confirm("全チームに実行しますか？")) {
+      return;
     }
-  }, [requestingTriggerBenchmarks, teamIds, props.client]);
+    await props.client.triggerBenchmarks(create(TriggerBenchmarksRequestSchema, { teamIds, postValidation: true }));
+  }, [teamIds, props.client]);
 
   return (
     <div className="card">
@@ -118,57 +92,31 @@ const CommandTriggerForm = (props: { client: AdminApiClient }) => {
               </div>
             </div>
             <div className="column is-3 field">
-              <div className="is-flex is-align-items-center">
-                <button
-                  className="button is-light"
-                  type="button"
-                  disabled={requestingTriggerEnvCheck}
-                  onClick={onTriggerEnvCheckClick}
-                >
-                  Trigger Env Check
-                </button>
-                {triggerEnvCheckResult === true ? (
-                  <span className="icon ml-2">
-                    <i className="material-icons-outlined" aria-hidden={"true"}>
-                      check
-                    </i>
-                  </span>
-                ) : null}
-              </div>
-              <div className="is-flex is-align-items-center mt-1">
-                <button
-                  className="button is-light"
-                  type="button"
-                  disabled={requestingTriggerInstanceRestart}
-                  onClick={onTriggerInstanceRestartClick}
-                >
-                  Trigger Instance Restart
-                </button>
-                {triggerInstanceRestartResult === true ? (
-                  <span className="icon ml-2">
-                    <i className="material-icons-outlined" aria-hidden={"true"}>
-                      check
-                    </i>
-                  </span>
-                ) : null}
-              </div>
-              <div className="is-flex is-align-items-center mt-1">
-                <button
-                  className="button is-light"
-                  type="button"
-                  disabled={requestingTriggerBenchmarks}
-                  onClick={onTriggerBenchmarksClick}
-                >
-                  Trigger Benchmarks
-                </button>
-                {triggerBenchmarksResult === true ? (
-                  <span className="icon ml-2">
-                    <i className="material-icons-outlined" aria-hidden={"true"}>
-                      check
-                    </i>
-                  </span>
-                ) : null}
-              </div>
+              <TriggerButton
+                buttonLabel="Trigger Env Check"
+                func={triggerEnvCheckClick}
+                first
+                result={triggerEnvCheckResult}
+                setResult={setTriggerEnvCheckResult}
+              />
+              <TriggerButton
+                buttonLabel="Trigger Instance Restart"
+                func={triggerInstanceRestartClick}
+                result={triggerInstanceRestartResult}
+                setResult={setTriggerInstanceRestartResult}
+              />
+              <TriggerButton
+                buttonLabel="Trigger Benchmarks"
+                func={triggerBenchmarksClick}
+                result={triggerBenchmarksResult}
+                setResult={setTriggerBenchmarksResult}
+              />
+              <TriggerButton
+                buttonLabel="Trigger Post Validation Benchmarks"
+                func={triggerPostValidationBenchmarksClick}
+                result={triggerPostValidationBenchmarksResult}
+                setResult={setTriggerPostValidationBenchmarksResult}
+              />
             </div>
           </div>
           {triggerEnvCheckResult !== true && triggerEnvCheckResult ? (
@@ -180,8 +128,56 @@ const CommandTriggerForm = (props: { client: AdminApiClient }) => {
           {triggerBenchmarksResult !== true && triggerBenchmarksResult ? (
             <ErrorMessage error={triggerBenchmarksResult} />
           ) : null}
+          {triggerPostValidationBenchmarksResult !== true && triggerPostValidationBenchmarksResult ? (
+            <ErrorMessage error={triggerPostValidationBenchmarksResult} />
+          ) : null}
         </form>
       </div>
+    </div>
+  );
+};
+
+const TriggerButton = ({
+  buttonLabel,
+  func,
+  first = false,
+  result,
+  setResult,
+}: {
+  buttonLabel: string;
+  func: () => Promise<void>;
+  first?: boolean;
+  result: true | Error | null;
+  setResult: (e: true | Error | null) => void;
+}) => {
+  const [requesting, setRequesting] = React.useState(false);
+
+  const onClick = useCallback(async () => {
+    if (requesting) return;
+
+    setRequesting(true);
+    try {
+      await func();
+      setResult(true);
+    } catch (e) {
+      setResult(e);
+    } finally {
+      setRequesting(false);
+    }
+  }, [requesting, func]);
+
+  return (
+    <div className={`is-flex is-align-items-center ${first ? "" : "mt-1"}`}>
+      <button className="button is-light" type="button" disabled={requesting} onClick={onClick}>
+        {buttonLabel}
+      </button>
+      {result === true ? (
+        <span className="icon ml-2">
+          <i className="material-icons-outlined" aria-hidden={"true"}>
+            check
+          </i>
+        </span>
+      ) : null}
     </div>
   );
 };

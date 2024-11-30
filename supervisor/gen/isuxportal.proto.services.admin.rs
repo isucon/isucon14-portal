@@ -215,6 +215,8 @@ pub struct TriggerInstanceRestartResponse {
 pub struct TriggerBenchmarksRequest {
     #[prost(int64, repeated, tag="1")]
     pub team_ids: ::prost::alloc::vec::Vec<i64>,
+    #[prost(bool, tag="2")]
+    pub post_validation: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]

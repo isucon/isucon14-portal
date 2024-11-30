@@ -240,6 +240,7 @@ class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
             <th>Time</th>
             <th>Duration</th>
             <th>Enqueued by</th>
+            <th>Post Validation</th>
           </tr>
         </thead>
         <tbody>{this.state.list.jobs!.map((job, i) => this.renderJob(job, i))}</tbody>
@@ -271,6 +272,7 @@ class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
           <TimeDuration a={job.createdAt!} b={job.finishedAt} />
         </td>
         <td>{job.enqueuedBy ? <EnqueuedBy enqueuedBy={job.enqueuedBy} /> : null}</td>
+        <td>{job.postValidation ? "Yes" : "No"}</td>
       </tr>
     );
   }

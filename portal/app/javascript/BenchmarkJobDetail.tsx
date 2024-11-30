@@ -32,6 +32,11 @@ const renderJobSummary = (job: BenchmarkJob, admin: boolean) => {
         <p>
           <b>Enqueued By:</b> {job.enqueuedBy ? <EnqueuedBy enqueuedBy={job.enqueuedBy} /> : "Unknown"}
         </p>
+        {admin ? (
+          <p>
+            <b>Is Post Validation:</b> {job.postValidation ? "Yes" : "No"}
+          </p>
+        ) : null}
         <p>
           <b>Enqueued At:</b> <Timestamp timestamp={job.createdAt!} />
         </p>

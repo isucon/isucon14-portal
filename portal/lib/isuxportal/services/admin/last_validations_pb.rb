@@ -18,6 +18,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "isuxportal.proto.services.admin.TriggerBenchmarksRequest" do
       repeated :team_ids, :int64, 1
+      optional :post_validation, :bool, 2
     end
     add_message "isuxportal.proto.services.admin.TriggerBenchmarksResponse" do
     end

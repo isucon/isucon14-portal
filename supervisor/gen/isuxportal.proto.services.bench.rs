@@ -32,6 +32,8 @@ pub mod receive_benchmark_job_response {
         pub description_human: ::prost::alloc::string::String,
         #[prost(string, repeated, tag="5")]
         pub all_ipv4_addresses: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+        #[prost(string, repeated, tag="6")]
+        pub extra_command_args: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
