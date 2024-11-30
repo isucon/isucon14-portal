@@ -35,7 +35,7 @@ class Api::Admin::LastValidationsController < Api::Admin::ApplicationController
       next unless last_benchmark_job;
       next if last_benchmark_job.benchmark_result.passed;
 
-      BenchmarkJob.create!(team_id: team_id, target_id: last_benchmark_job.target_id)
+      BenchmarkJob.create!(team_id: team_id, target_id: last_benchmark_job.target_id, instance_name: last_benchmark_job.instance_name)
     end
 
     render protobuf: Isuxportal::Proto::Services::Admin::TriggerBenchmarksResponse.new()
