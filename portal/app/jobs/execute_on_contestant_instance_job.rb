@@ -8,7 +8,7 @@ class ExecuteOnContestantInstanceJob < ApplicationJob
     begin
       result = nil
       Net::SSH.start(instance_ip, 'isuadmin', :keys => [private_key_path], :config => false, :timeout => 5, :verify_host_key => :never, :non_interactive => true) do |ssh|
-        result = ssh.exec!(request.command)
+        result = ssh.exec!(command)
       end
 
       Rails.logger.info "ExecuteOnContestantInstanceJob: team_id=#{team_id} instance_ip=#{instance_ip} command=#{command} result=#{result}"
