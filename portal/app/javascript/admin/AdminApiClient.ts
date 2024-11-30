@@ -43,10 +43,13 @@ import {
   GetInstanceCommandExecuteRequestOutputResponseSchema,
   GetInstanceCommandExecuteRequestResponseSchema,
   ListInstanceCommandExecuteRequestsResponseSchema,
+  TriggerBenchmarksRequestSchema,
+  TriggerBenchmarksResponseSchema,
   TriggerEnvCheckRequestSchema,
   TriggerEnvCheckResponseSchema,
   TriggerInstanceRestartRequestSchema,
   TriggerInstanceRestartResponseSchema,
+  type TriggerBenchmarksRequest,
   type TriggerEnvCheckRequest,
   type TriggerInstanceRestartRequest,
 } from "../../../proto/isuxportal/services/admin/last_validations_pb";
@@ -291,6 +294,12 @@ export class AdminApiClient {
     const payloadMessage = toBinary(TriggerInstanceRestartRequestSchema, payload);
     const resp = await this.request(`${this.baseUrl}/api/admin/last_validations/instance_restart`, "POST", null, payloadMessage);
     return fromBinary(TriggerInstanceRestartResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async triggerBenchmarks(payload: TriggerBenchmarksRequest) {
+    const payloadMessage = toBinary(TriggerBenchmarksRequestSchema, payload);
+    const resp = await this.request(`${this.baseUrl}/api/admin/last_validations/benchmarks`, "POST", null, payloadMessage);
+    return fromBinary(TriggerBenchmarksResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public request(path: string, method: string, query: object | null, payload: Uint8Array | null) {

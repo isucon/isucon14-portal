@@ -16,6 +16,12 @@ message TriggerInstanceRestartRequest {
 
 message TriggerInstanceRestartResponse {}
 
+message TriggerBenchmarksRequest {
+  repeated int64 team_ids = 1;
+}
+
+message TriggerBenchmarksResponse {}
+
 message ListInstanceCommandExecuteRequestsRequest {}
 
 message ListInstanceCommandExecuteRequestsResponse {
