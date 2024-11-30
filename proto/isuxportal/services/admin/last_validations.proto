@@ -5,13 +5,13 @@ package isuxportal.proto.services.admin;
 import "isuxportal/resources/instance_command_execute_request.proto";
 
 message TriggerEnvCheckRequest {
-  // limit to top-N teams (filter student teams?)
+  repeated int64 team_ids = 1;
 }
 
 message TriggerEnvCheckResponse {}
 
 message TriggerInstanceRestartRequest {
-  // limit to top-N teams (filter student teams?)
+  repeated int64 team_ids = 1;
 }
 
 message TriggerInstanceRestartResponse {}

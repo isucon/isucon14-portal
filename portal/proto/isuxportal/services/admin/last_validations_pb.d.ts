@@ -12,11 +12,13 @@ import type { InstanceCommandExecuteRequest, InstanceCommandExecuteRequestResult
 export declare const file_isuxportal_services_admin_last_validations: GenFile;
 
 /**
- * limit to top-N teams (filter student teams?)
- *
  * @generated from message isuxportal.proto.services.admin.TriggerEnvCheckRequest
  */
 export declare type TriggerEnvCheckRequest = Message<"isuxportal.proto.services.admin.TriggerEnvCheckRequest"> & {
+  /**
+   * @generated from field: repeated int64 team_ids = 1;
+   */
+  teamIds: bigint[];
 };
 
 /**
@@ -38,11 +40,13 @@ export declare type TriggerEnvCheckResponse = Message<"isuxportal.proto.services
 export declare const TriggerEnvCheckResponseSchema: GenMessage<TriggerEnvCheckResponse>;
 
 /**
- * limit to top-N teams (filter student teams?)
- *
  * @generated from message isuxportal.proto.services.admin.TriggerInstanceRestartRequest
  */
 export declare type TriggerInstanceRestartRequest = Message<"isuxportal.proto.services.admin.TriggerInstanceRestartRequest"> & {
+  /**
+   * @generated from field: repeated int64 team_ids = 1;
+   */
+  teamIds: bigint[];
 };
 
 /**

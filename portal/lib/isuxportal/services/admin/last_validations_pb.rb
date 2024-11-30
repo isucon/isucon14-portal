@@ -7,10 +7,12 @@ require 'isuxportal/resources/instance_command_execute_request_pb'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("isuxportal/services/admin/last_validations.proto", :syntax => :proto3) do
     add_message "isuxportal.proto.services.admin.TriggerEnvCheckRequest" do
+      repeated :team_ids, :int64, 1
     end
     add_message "isuxportal.proto.services.admin.TriggerEnvCheckResponse" do
     end
     add_message "isuxportal.proto.services.admin.TriggerInstanceRestartRequest" do
+      repeated :team_ids, :int64, 1
     end
     add_message "isuxportal.proto.services.admin.TriggerInstanceRestartResponse" do
     end
