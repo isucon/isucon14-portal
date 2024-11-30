@@ -9,7 +9,7 @@
         },
       ],
       essential: true,
-      image: '{{ tfstate `module.isuxportal.aws_ecr_repository.benchmarker.repository_url` }}:4ba50754c8481e1f1ce2cb14217ec880b8ef94da',
+      image: '{{ tfstate `module.isuxportal.aws_ecr_repository.benchmarker.repository_url` }}:{{ must_env `TAG` }}',
       logConfiguration: {
         logDriver: 'awslogs',
         options: {
