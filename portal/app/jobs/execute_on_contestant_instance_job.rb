@@ -1,12 +1,11 @@
 class ExecuteOnContestantInstanceJob < ApplicationJob
   def perform(request_result_id)
+    request_result = InstanceCommandExecuteRequestResult.includes(:contestant_instance, :instance_command_execute_request).find(request_result_id)
+    team_id = request_result.contestant_instance.team_id
+    instance_ip = request_result.contestant_instance.public_ipv4_address
+    command = request_result.instance_command_execute_request.command
+
     begin
-      request_result = InstanceCommandExecuteRequestResult.includes(:contestant_instance, :instance_command_execute_request).find(request_result_id)
-
-      team_id = request_result.contestant_instance.team_id
-      instance_ip = request_result.contestant_instance.public_ipv4_address
-      command = request_result.instance_command_execute_request.command
-
       result = nil
       Net::SSH.start(instance_ip, 'isucon-admin', :keys => [private_key_path], :config => false) do |ssh|
         result = ssh.exec!(request.command)
