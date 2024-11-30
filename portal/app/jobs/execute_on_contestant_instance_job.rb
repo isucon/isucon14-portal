@@ -7,7 +7,7 @@ class ExecuteOnContestantInstanceJob < ApplicationJob
 
     begin
       result = nil
-      Net::SSH.start(instance_ip, 'isucon-admin', :keys => [private_key_path], :config => false) do |ssh|
+      Net::SSH.start(instance_ip, 'isucon-admin', :keys => [private_key_path], :config => false, :timeout => 5, :verify_host_key => :never, :non_interactive => true) do |ssh|
         result = ssh.exec!(request.command)
       end
 
