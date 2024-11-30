@@ -7,13 +7,14 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../ErrorMessage";
 import { TimeDuration } from "../TimeDuration";
 import { Timestamp } from "../Timestamp";
-import { BenchmarkJobStatus } from "../BenchmarkJobStatus";
+import { BenchmarkJobStatus, parseBenchmarkJobStatus } from "../BenchmarkJobStatus";
 
 import { AdminBenchmarkJobForm } from "./AdminBenchmarkJobForm";
 import ReactPaginate from "react-paginate";
 import { BenchmarkJob_Status, type BenchmarkJob } from "../../../proto/isuxportal/resources/benchmark_job_pb";
 import type { ListBenchmarkJobsResponse } from "../../../proto/isuxportal/services/admin/benchmark_pb";
 import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
+import { EnqueuedBy } from "../EnqueuedBy";
 
 type ListFilterProps = {
   teamId: string | null;
@@ -111,27 +112,6 @@ export interface State {
   pageCount: bigint;
   currentPage: number;
 }
-
-const parseBenchmarkJobStatus = (statusString: string | null): BenchmarkJob_Status | null => {
-  if (statusString === null || statusString === "") return null;
-
-  const status = +statusString;
-
-  switch (status) {
-    case BenchmarkJob_Status.PENDING:
-      return BenchmarkJob_Status.PENDING;
-    case BenchmarkJob_Status.RUNNING:
-      return BenchmarkJob_Status.RUNNING;
-    case BenchmarkJob_Status.ERRORED:
-      return BenchmarkJob_Status.ERRORED;
-    case BenchmarkJob_Status.CANCELLED:
-      return BenchmarkJob_Status.CANCELLED;
-    case BenchmarkJob_Status.FINISHED:
-      return BenchmarkJob_Status.FINISHED;
-  }
-  console.warn("Unexpected status", status);
-  return null;
-};
 
 export const AdminBenchmarkJobList = (props: Omit<Props, "teamId" | "status" | "failedOnly">) => {
   const [query] = useSearchParams();
@@ -259,6 +239,7 @@ class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
             <th>Status</th>
             <th>Time</th>
             <th>Duration</th>
+            <th>Enqueued by</th>
           </tr>
         </thead>
         <tbody>{this.state.list.jobs!.map((job, i) => this.renderJob(job, i))}</tbody>
@@ -289,6 +270,7 @@ class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
         <td>
           <TimeDuration a={job.createdAt!} b={job.finishedAt} />
         </td>
+        <td>{job.enqueuedBy ? <EnqueuedBy enqueuedBy={job.enqueuedBy} /> : null}</td>
       </tr>
     );
   }

@@ -36,4 +36,10 @@ message BenchmarkJob {
   // target & result & execution are only available at GetBenchmarkJobResponse
   ContestantInstance target = 17;
   BenchmarkResult result = 18;
+
+  message EnqueuedBy {
+    string name = 1;
+    string avatar_url = 2;
+  }
+  EnqueuedBy enqueued_by = 19;
 }

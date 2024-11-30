@@ -88,6 +88,11 @@ export declare type BenchmarkJob = Message<"isuxportal.proto.resources.Benchmark
    * @generated from field: isuxportal.proto.resources.BenchmarkResult result = 18;
    */
   result?: BenchmarkResult;
+
+  /**
+   * @generated from field: isuxportal.proto.resources.BenchmarkJob.EnqueuedBy enqueued_by = 19;
+   */
+  enqueuedBy?: BenchmarkJob_EnqueuedBy;
 };
 
 /**
@@ -95,6 +100,27 @@ export declare type BenchmarkJob = Message<"isuxportal.proto.resources.Benchmark
  * Use `create(BenchmarkJobSchema)` to create a new message.
  */
 export declare const BenchmarkJobSchema: GenMessage<BenchmarkJob>;
+
+/**
+ * @generated from message isuxportal.proto.resources.BenchmarkJob.EnqueuedBy
+ */
+export declare type BenchmarkJob_EnqueuedBy = Message<"isuxportal.proto.resources.BenchmarkJob.EnqueuedBy"> & {
+  /**
+   * @generated from field: string name = 1;
+   */
+  name: string;
+
+  /**
+   * @generated from field: string avatar_url = 2;
+   */
+  avatarUrl: string;
+};
+
+/**
+ * Describes the message isuxportal.proto.resources.BenchmarkJob.EnqueuedBy.
+ * Use `create(BenchmarkJob_EnqueuedBySchema)` to create a new message.
+ */
+export declare const BenchmarkJob_EnqueuedBySchema: GenMessage<BenchmarkJob_EnqueuedBy>;
 
 /**
  * @generated from enum isuxportal.proto.resources.BenchmarkJob.Status

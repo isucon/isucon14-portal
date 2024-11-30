@@ -4,7 +4,7 @@ class Api::EnvChecksController < Api::ApplicationController
   before_action :require_valid_checker_token
 
   TEST_AMI_IDS = Rails.application.config.x.test_ami_id.nil? ? [] : [Rails.application.config.x.test_ami_id]
-  QUALIFY_AMI_IDS = [Rails.application.config.x.qualify_ami_id]
+  CONTEST_AMI_IDS = [Rails.application.config.x.qualify_ami_id]
 
   def create
     team_id = @payload[:team_id]
@@ -23,9 +23,9 @@ class Api::EnvChecksController < Api::ApplicationController
     )
     @env_check.save!
 
-    if name.start_with?("qualify")
-      if name != "qualify-unknown"
-        nameNum = name.delete_prefix("qualify").to_i
+    if name.start_with?("contest")
+      if name != "contest-unknown"
+        nameNum = name.delete_prefix("contest").to_i
         instance = ContestantInstance.find_or_initialize_by(
           team_id: team_id,
           number: nameNum,
@@ -37,9 +37,9 @@ class Api::EnvChecksController < Api::ApplicationController
 
         unless Contest.contest_end?
           instance.update!(
-            cloud_id: "qualify-#{team_id}-#{nameNum}", # dummy
+            cloud_id: "contest-#{team_id}-#{nameNum}", # dummy
             status: Isuxportal::Proto::Resources::ContestantInstance::Status::RUNNING,
-            private_ipv4_address: "isuports-#{nameNum}.t.isucon.dev",
+            private_ipv4_address: "isuride-#{nameNum}.xiv.isucon.net",
             public_ipv4_address: public_ip_address,
           )
         end
@@ -57,8 +57,8 @@ class Api::EnvChecksController < Api::ApplicationController
     ami_ids = case params[:name]
       when "test-boot", "test-ssh"
         TEST_AMI_IDS
-      when "qualify"
-        QUALIFY_AMI_IDS
+      when "contest"
+        CONTEST_AMI_IDS
       else
         return render status: :bad_request, body: "unknown name param"
       end

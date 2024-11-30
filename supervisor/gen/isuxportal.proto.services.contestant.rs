@@ -5,6 +5,9 @@
 pub struct ListBenchmarkJobsQuery {
     #[prost(int64, tag="1")]
     pub limit: i64,
+    /// optional filter by status
+    #[prost(enumeration="super::super::resources::benchmark_job::Status", tag="2")]
+    pub status: i32,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

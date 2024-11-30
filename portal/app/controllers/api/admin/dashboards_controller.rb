@@ -6,7 +6,7 @@ class Api::Admin::DashboardsController < Api::Admin::ApplicationController
   def show
     expires_in 15.seconds, public: false
 
-    final = Rails.application.config.x.contest.final ? "final" : "qualify"
+    final = Rails.application.config.x.contest.final ? "final" : "contest"
     clar_count = Clarification.unanswered.requested.count
     cache_sum, cache = Rails.cache.read("leaderboard-v2:#{final}:admin")
     render protobuf: Isuxportal::Proto::Services::Admin::DashboardResponse.new(
@@ -19,7 +19,7 @@ class Api::Admin::DashboardsController < Api::Admin::ApplicationController
   pb :show_solo, Isuxportal::Proto::Services::Admin::SoloDashboardQuery
   def show_solo
     expires_in 20.seconds, public: false
-    round = Rails.application.config.x.contest.final ? "final" : "qualify"
+    round = Rails.application.config.x.contest.final ? "final" : "contest"
 
     id = params[:id]
     cache_sum, cache = Rails.cache.read("dashboard-v2:#{round}:admin:team-#{id}")

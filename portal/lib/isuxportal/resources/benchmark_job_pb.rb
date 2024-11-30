@@ -23,6 +23,11 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :team, :message, 16, "isuxportal.proto.resources.Team"
       optional :target, :message, 17, "isuxportal.proto.resources.ContestantInstance"
       optional :result, :message, 18, "isuxportal.proto.resources.BenchmarkResult"
+      optional :enqueued_by, :message, 19, "isuxportal.proto.resources.BenchmarkJob.EnqueuedBy"
+    end
+    add_message "isuxportal.proto.resources.BenchmarkJob.EnqueuedBy" do
+      optional :name, :string, 1
+      optional :avatar_url, :string, 2
     end
     add_enum "isuxportal.proto.resources.BenchmarkJob.Status" do
       value :PENDING, 0
@@ -38,6 +43,7 @@ module Isuxportal
   module Proto
     module Resources
       BenchmarkJob = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.resources.BenchmarkJob").msgclass
+      BenchmarkJob::EnqueuedBy = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.resources.BenchmarkJob.EnqueuedBy").msgclass
       BenchmarkJob::Status = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.resources.BenchmarkJob.Status").enummodule
     end
   end

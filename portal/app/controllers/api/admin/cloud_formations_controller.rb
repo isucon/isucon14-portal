@@ -9,8 +9,8 @@ class Api::Admin::CloudFormationsController < Api::Admin::ApplicationController
     template = case params[:type]
     when "test"
       CloudFormation.test_template(team)
-    when "qualify"
-      CloudFormation.qualify_template(team)
+    when "contest"
+      CloudFormation.contest_template(team)
     else
       raise "Unexpected type: #{params[:type]}"
     end
