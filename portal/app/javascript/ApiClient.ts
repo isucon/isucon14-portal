@@ -53,6 +53,7 @@ import { DashboardResponseSchema } from "../../proto/isuxportal/services/contest
 import { DashboardResponseSchema as AudienceDashboardResponseSchema } from "../../proto/isuxportal/services/audience/dashboard_pb";
 import { GetCloudFormationResponseSchema } from "../../proto/isuxportal/services/contestant/cloud_formation_pb";
 import { GetAvatarUrlResponseSchema } from "../../proto/isuxportal/services/common/storage_pb";
+import type { BenchmarkJob_Status } from "../../proto/isuxportal/resources/benchmark_job_pb";
 
 export class ApiError extends Error {
   public localError: Error;
@@ -149,13 +150,12 @@ export class ApiClient {
     return fromBinary(ActivateCouponResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async listBenchmarkJobs(limit?: number) {
-    const resp = await this.request(
-      `${this.baseUrl}/api/contestant/benchmark_jobs?limit=${limit?.toString() || "0"}`,
-      "GET",
-      null,
-      null,
-    );
+  public async listBenchmarkJobs(status?: BenchmarkJob_Status, limit?: number) {
+    const query: Record<string, string> = {
+      status: status?.toString() ?? "",
+      limit: limit?.toString() || "0",
+    };
+    const resp = await this.request(`${this.baseUrl}/api/contestant/benchmark_jobs`, "GET", query, null);
     return fromBinary(ListBenchmarkJobsResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 

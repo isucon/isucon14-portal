@@ -64,7 +64,7 @@ export const ContestantContestantInstanceList: React.FC<Props> = ({ session, cli
         <tbody>{(session.contestantInstances || []).map((ci) => renderRow(ci))}</tbody>
       </table>
 
-      {false && (
+      {true && (
         <>
           <header>
             <h1 className="title is-1">CloudFormation テンプレート</h1>
@@ -75,7 +75,7 @@ export const ContestantContestantInstanceList: React.FC<Props> = ({ session, cli
           <a
             className={`button is-info ${template === "" ? "is-loading" : ""}`}
             href={templateBase64}
-            download="qualify_cloudformation.yaml"
+            download="contest_cloudformation.yaml"
           >
             CloudFormation テンプレートをダウンロード
           </a>

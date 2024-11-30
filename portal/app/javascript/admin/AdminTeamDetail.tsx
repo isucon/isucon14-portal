@@ -136,7 +136,7 @@ class AdminTeamDetailInternal extends React.Component<Props, State> {
               <AdminTeamCloudFormationDownloadButton
                 client={this.props.client}
                 teamId={this.state.team.id}
-                type="qualify"
+                type="contest"
               >
                 問題 CloudFormationのダウンロード
               </AdminTeamCloudFormationDownloadButton>
@@ -262,7 +262,7 @@ class AdminTeamDetailInternal extends React.Component<Props, State> {
 const AdminTeamEnvCheckRow = ({ envCheck }: { envCheck: EnvCheck }) => {
   type ModalName = "" | "message" | "adminMessage" | "rawData";
   const [openModalName, setOpenModalName] = useState<ModalName>("");
-  const name = envCheck.name?.startsWith("qualify") ? (
+  const name = envCheck.name?.startsWith("contest") ? (
     <span className="tag is-info">{envCheck.name}</span>
   ) : (
     <span className="tag is-light">{envCheck.name}</span>

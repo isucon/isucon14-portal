@@ -82,7 +82,7 @@ export class AdminTeamList extends React.Component<Props, State> {
     return (
       <tr key={team.teamId.toString()}>
         <td>{team.teamId.toString()}</td>
-        <td>
+        <td className="isux-word-break-all">
           <Link to={`/admin/teams/${encodeURIComponent(team.teamId.toString())}`}>{team.name}</Link>
         </td>
         <td>

@@ -4,7 +4,7 @@ class Api::Admin::UnpreparedStatsController < Api::Admin::ApplicationController
   pb :ssh_key, Isuxportal::Proto::Services::Admin::GetSSHKeyStatsQuery
   def ssh_key
     items = []
-    Team.active.includes(members: :ssh_public_keys).find_in_batches do |batch|
+    Team.visible.active.includes(members: :ssh_public_keys).find_in_batches do |batch|
       batch.each do |team|
         members_wo_ssh_keys = team.members.select{ |c| c.ssh_public_keys.empty? }.map(&:id)
         unless members_wo_ssh_keys.empty?
@@ -24,7 +24,7 @@ class Api::Admin::UnpreparedStatsController < Api::Admin::ApplicationController
   pb :discord, Isuxportal::Proto::Services::Admin::GetDiscordStatsQuery
   def discord
     items = []
-    Team.active.includes(:members).find_in_batches do |batch|
+    Team.visible.active.includes(:members).find_in_batches do |batch|
       batch.each do |team|
         members_not_guild_member = team.members.select{ |c| !c.is_discord_guild_member }.map(&:id)
         unless members_not_guild_member.empty?
@@ -44,7 +44,7 @@ class Api::Admin::UnpreparedStatsController < Api::Admin::ApplicationController
   pb :env_check, Isuxportal::Proto::Services::Admin::GetEnvCheckStatsQuery
   def env_check
     items = []
-    Team.active.find_in_batches do |batch|
+    Team.visible.active.find_in_batches do |batch|
       batch.each do |team|
         unless EnvCheck.of_team(team).test_ssh_passed.exists?
           items << team.to_pb

@@ -4,7 +4,7 @@ class Api::Audience::DashboardsController < Api::Audience::ApplicationController
   pb :show, Isuxportal::Proto::Services::Audience::DashboardQuery
   def show
     expires_in 20.seconds, public: true, 's-maxage' => '30'
-    round = Rails.application.config.x.contest.final ? "final" : "qualify"
+    round = Rails.application.config.x.contest.final ? "final" : "contest"
 
     cache_sum, cache = Rails.cache.read("dashboard-v2:#{round}:audience")
     if cache && cache_sum
@@ -23,7 +23,7 @@ class Api::Audience::DashboardsController < Api::Audience::ApplicationController
   pb :show_solo, Isuxportal::Proto::Services::Audience::SoloDashboardQuery
   def show_solo
     expires_in 20.seconds, public: true, 's-maxage' => '30'
-    round = Rails.application.config.x.contest.final ? "final" : "qualify"
+    round = Rails.application.config.x.contest.final ? "final" : "contest"
 
     id = params[:id]
     cache_sum, cache = Rails.cache.read("dashboard-v2:#{round}:audience:team-#{id}")

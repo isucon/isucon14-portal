@@ -171,7 +171,7 @@ export class ContestantApp extends React.Component<Props, State> {
         />
 
         <div className="container px-5 py-5">
-          {false && <ContestantCloudFormationMessage instances={this.props.session.contestantInstances} />}
+          {true && <ContestantCloudFormationMessage instances={this.props.session.contestantInstances} />}
 
           <Routes>
             <Route

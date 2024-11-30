@@ -4,7 +4,11 @@ package isuxportal.proto.services.contestant;
 
 import "isuxportal/resources/benchmark_job.proto";
 
-message ListBenchmarkJobsQuery { int64 limit = 1; }
+message ListBenchmarkJobsQuery {
+  int64 limit = 1;
+  // optional filter by status
+  isuxportal.proto.resources.BenchmarkJob.Status status = 2;
+}
 
 message ListBenchmarkJobsResponse {
   repeated isuxportal.proto.resources.BenchmarkJob jobs = 1;

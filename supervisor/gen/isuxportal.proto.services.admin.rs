@@ -131,7 +131,7 @@ pub struct CreateClarificationResponse {
 pub struct GetCloudFormationQuery {
     #[prost(int64, tag="1")]
     pub id: i64,
-    /// query parameter. "test" | "qualify"
+    /// query parameter. "test" | "contest"
     #[prost(string, tag="2")]
     pub r#type: ::prost::alloc::string::String,
 }
@@ -245,7 +245,7 @@ pub struct GetInstanceCommandExecuteRequestOutputResponse {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetLeaderboardDumpQuery {
-    /// ISO8601 or "qualify-end"
+    /// ISO8601 or "contest-end"
     #[prost(string, tag="1")]
     pub when: ::prost::alloc::string::String,
 }

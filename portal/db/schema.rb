@@ -135,7 +135,7 @@ ActiveRecord::Schema.define(version: 2024_11_30_031659) do
     t.index ["team_id"], name: "index_extra_time_assignments_on_team_id"
   end
 
-  create_table "instance_command_execute_request_results", primary_key: ["instance_command_execute_request_id", "contestant_instance_id"], charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "instance_command_execute_request_results", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.integer "instance_command_execute_request_id", null: false
     t.integer "contestant_instance_id", null: false
     t.text "output"

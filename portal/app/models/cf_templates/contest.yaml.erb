@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  AWS CloudFormation for ISUCON14 Qualify
+  AWS CloudFormation for ISUCON14
 Resources:
   GetAvailabilityZoneFunctionExecutionRole:
     Type: AWS::IAM::Role
@@ -95,7 +95,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       VpcId: !Ref VPC
-      GroupDescription: Security Group for ISUCON14 Qualify
+      GroupDescription: Security Group for ISUCON14
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: "22"
@@ -143,7 +143,7 @@ Resources:
       Roles:
         - !Ref InstanceRole
 
-  QualifyInstance1:
+  Instance1:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: <%= ami_id %>
@@ -161,7 +161,7 @@ Resources:
             VolumeType: gp3
       Tags:
         - Key: Name
-          Value: isucon14-qualify-1
+          Value: isucon14-contest-1
       UserData:
         Fn::Base64: |
           #cloud-config
@@ -173,12 +173,12 @@ Resources:
             content: '<%= portal_credentials %>'
           runcmd:
             - 'curl --retry 5 --retry-connrefused --max-time 10 --connect-timeout 5 "https://<%= portal_host %>/api/ssh_public_keys?token=<%= token %>" | sudo -u isucon sh -c "umask 077; cat > /home/isucon/.ssh/authorized_keys"'
-  QualifyInstanceIP1:
+  InstanceIP1:
     Type: AWS::EC2::EIP
     Properties:
       Domain: vpc
-      InstanceId: !Ref QualifyInstance1
-  QualifyInstance2:
+      InstanceId: !Ref Instance1
+  Instance2:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: <%= ami_id %>
@@ -196,7 +196,7 @@ Resources:
             VolumeType: gp3
       Tags:
         - Key: Name
-          Value: isucon14-qualify-2
+          Value: isucon14-contest-2
       UserData:
         Fn::Base64: |
           #cloud-config
@@ -208,12 +208,12 @@ Resources:
             content: '<%= portal_credentials %>'
           runcmd:
             - 'curl --retry 5 --retry-connrefused --max-time 10 --connect-timeout 5 "https://<%= portal_host %>/api/ssh_public_keys?token=<%= token %>" | sudo -u isucon sh -c "umask 077; cat > /home/isucon/.ssh/authorized_keys"'
-  QualifyInstanceIP2:
+  InstanceIP2:
     Type: AWS::EC2::EIP
     Properties:
       Domain: vpc
-      InstanceId: !Ref QualifyInstance2
-  QualifyInstance3:
+      InstanceId: !Ref Instance2
+  Instance3:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: <%= ami_id %>
@@ -231,7 +231,7 @@ Resources:
             VolumeType: gp3
       Tags:
         - Key: Name
-          Value: isucon14-qualify-3
+          Value: isucon14-contest-3
       UserData:
         Fn::Base64: |
           #cloud-config
@@ -243,8 +243,8 @@ Resources:
             content: '<%= portal_credentials %>'
           runcmd:
             - 'curl --retry 5 --retry-connrefused --max-time 10 --connect-timeout 5 "https://<%= portal_host %>/api/ssh_public_keys?token=<%= token %>" | sudo -u isucon sh -c "umask 077; cat > /home/isucon/.ssh/authorized_keys"'
-  QualifyInstanceIP3:
+  InstanceIP3:
     Type: AWS::EC2::EIP
     Properties:
       Domain: vpc
-      InstanceId: !Ref QualifyInstance3
+      InstanceId: !Ref Instance3

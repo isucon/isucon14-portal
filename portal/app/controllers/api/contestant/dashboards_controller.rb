@@ -4,7 +4,7 @@ class Api::Contestant::DashboardsController < Api::Contestant::ApplicationContro
   pb :show, Isuxportal::Proto::Services::Contestant::DashboardQuery
   def show
     # See also: UpdateContestantDashboardJob
-    round = Rails.application.config.x.contest.final ? "final" : "qualify"
+    round = Rails.application.config.x.contest.final ? "final" : "contest"
 
     expires_in 20.seconds, public: false
 
