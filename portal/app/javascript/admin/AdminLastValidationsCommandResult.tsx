@@ -130,7 +130,7 @@ const InstanceCommandExecuteResultRow = ({
       setRequesting(true);
       try {
         const resp = await client.getInstanceCommandExecuteRequestOutput(result.id!);
-        setModalContent(resp.output!.output);
+        setModalContent(resp.output);
       } catch (e) {
         setModalContent(null);
       } finally {
