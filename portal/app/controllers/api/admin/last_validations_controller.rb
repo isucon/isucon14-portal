@@ -7,7 +7,7 @@ class Api::Admin::LastValidationsController < Api::Admin::ApplicationController
 
     ExecuteOnMultipleContestantInstancesJob.perform_later(
       team_ids,
-      "sudo systemctl start isucon-env-checker",
+      "sudo systemctl start envcheck",
     )
 
     render protobuf: Isuxportal::Proto::Services::Admin::TriggerEnvCheckResponse.new()
