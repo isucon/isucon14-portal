@@ -93,6 +93,11 @@ export declare type BenchmarkJob = Message<"isuxportal.proto.resources.Benchmark
    * @generated from field: isuxportal.proto.resources.BenchmarkJob.EnqueuedBy enqueued_by = 19;
    */
   enqueuedBy?: BenchmarkJob_EnqueuedBy;
+
+  /**
+   * @generated from field: bool post_validation = 20;
+   */
+  postValidation: boolean;
 };
 
 /**

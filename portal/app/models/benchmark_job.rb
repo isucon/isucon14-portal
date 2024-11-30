@@ -29,6 +29,8 @@ class BenchmarkJob < ApplicationRecord
     end
   }
 
+  scope :normal, -> { where(post_validation: false) }
+
   scope :active, -> { where.not(status: %i(cancelled errored finished)) }
 
   def score

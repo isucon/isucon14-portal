@@ -230,6 +230,8 @@ pub struct BenchmarkJob {
     pub result: ::core::option::Option<BenchmarkResult>,
     #[prost(message, optional, tag="19")]
     pub enqueued_by: ::core::option::Option<benchmark_job::EnqueuedBy>,
+    #[prost(bool, tag="20")]
+    pub post_validation: bool,
 }
 /// Nested message and enum types in `BenchmarkJob`.
 pub mod benchmark_job {

@@ -28,6 +28,7 @@ class Api::Bench::QueueController < Api::Bench::ApplicationController
               target_ipv4_address: job.target.public_ipv4_address, # TODO: Switch between public and private
               description_human: "", # TODO:
               all_ipv4_addresses: all_addresses,
+              extra_command_args: job.post_validation ? ['--only-post-validation'] : [],
             ),
           )
         else

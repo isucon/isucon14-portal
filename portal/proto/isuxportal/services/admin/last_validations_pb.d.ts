@@ -75,6 +75,11 @@ export declare type TriggerBenchmarksRequest = Message<"isuxportal.proto.service
    * @generated from field: repeated int64 team_ids = 1;
    */
   teamIds: bigint[];
+
+  /**
+   * @generated from field: bool post_validation = 2;
+   */
+  postValidation: boolean;
 };
 
 /**

@@ -23,6 +23,7 @@ message ReceiveBenchmarkJobResponse {
     string target_ipv4_address = 3;
     string description_human = 4;
     repeated string all_ipv4_addresses = 5;
+    repeated string extra_command_args = 6;
   }
   // optional
   JobHandle job_handle = 1;

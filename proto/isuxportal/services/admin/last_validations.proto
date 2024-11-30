@@ -18,6 +18,7 @@ message TriggerInstanceRestartResponse {}
 
 message TriggerBenchmarksRequest {
   repeated int64 team_ids = 1;
+  bool post_validation = 2;
 }
 
 message TriggerBenchmarksResponse {}

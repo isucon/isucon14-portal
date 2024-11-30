@@ -82,6 +82,11 @@ export declare type ReceiveBenchmarkJobResponse_JobHandle = Message<"isuxportal.
    * @generated from field: repeated string all_ipv4_addresses = 5;
    */
   allIpv4Addresses: string[];
+
+  /**
+   * @generated from field: repeated string extra_command_args = 6;
+   */
+  extraCommandArgs: string[];
 };
 
 /**
