@@ -43,8 +43,12 @@ import {
   GetInstanceCommandExecuteRequestOutputResponseSchema,
   GetInstanceCommandExecuteRequestResponseSchema,
   ListInstanceCommandExecuteRequestsResponseSchema,
+  TriggerEnvCheckRequestSchema,
   TriggerEnvCheckResponseSchema,
+  TriggerInstanceRestartRequestSchema,
   TriggerInstanceRestartResponseSchema,
+  type TriggerEnvCheckRequest,
+  type TriggerInstanceRestartRequest,
 } from "../../../proto/isuxportal/services/admin/last_validations_pb";
 
 export class AdminApiClient {
@@ -277,13 +281,15 @@ export class AdminApiClient {
     return fromBinary(GetInstanceCommandExecuteRequestOutputResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async triggerEnvCheck() {
-    const resp = await this.request(`${this.baseUrl}/api/admin/last_validations/env_check`, "POST", null, null);
+  public async triggerEnvCheck(payload: TriggerEnvCheckRequest) {
+    const payloadMessage = toBinary(TriggerEnvCheckRequestSchema, payload);
+    const resp = await this.request(`${this.baseUrl}/api/admin/last_validations/env_check`, "POST", null, payloadMessage);
     return fromBinary(TriggerEnvCheckResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
-  public async triggerInstanceRestart() {
-    const resp = await this.request(`${this.baseUrl}/api/admin/last_validations/instance_restart`, "POST", null, null);
+  public async triggerInstanceRestart(payload: TriggerInstanceRestartRequest) {
+    const payloadMessage = toBinary(TriggerInstanceRestartRequestSchema, payload);
+    const resp = await this.request(`${this.baseUrl}/api/admin/last_validations/instance_restart`, "POST", null, payloadMessage);
     return fromBinary(TriggerInstanceRestartResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 

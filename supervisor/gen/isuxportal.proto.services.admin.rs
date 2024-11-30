@@ -190,19 +190,21 @@ pub struct ListEnvChecksResponse {
     #[prost(message, repeated, tag="1")]
     pub env_checks: ::prost::alloc::vec::Vec<super::super::resources::EnvCheck>,
 }
-/// limit to top-N teams (filter student teams?)
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TriggerEnvCheckRequest {
+    #[prost(int64, repeated, tag="1")]
+    pub team_ids: ::prost::alloc::vec::Vec<i64>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TriggerEnvCheckResponse {
 }
-/// limit to top-N teams (filter student teams?)
 #[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TriggerInstanceRestartRequest {
+    #[prost(int64, repeated, tag="1")]
+    pub team_ids: ::prost::alloc::vec::Vec<i64>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]

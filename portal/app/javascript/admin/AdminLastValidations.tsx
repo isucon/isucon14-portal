@@ -1,10 +1,15 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import type { GetCurrentSessionResponse } from "../../../proto/isuxportal/services/common/me_pb";
 import type { AdminApiClient } from "./AdminApiClient";
 import { ErrorMessage } from "../ErrorMessage";
 import type { InstanceCommandExecuteRequest } from "../../../proto/isuxportal/resources/instance_command_execute_request_pb";
 import { Timestamp } from "../Timestamp";
 import { Link } from "react-router-dom";
+import { create } from "@bufbuild/protobuf";
+import {
+  TriggerEnvCheckRequestSchema,
+  TriggerInstanceRestartRequestSchema,
+} from "../../../proto/isuxportal/services/admin/last_validations_pb";
 
 export interface Props {
   session: GetCurrentSessionResponse;
@@ -12,6 +17,23 @@ export interface Props {
 }
 
 export const AdminLastValidations: React.FC<Props> = (props: Props) => {
+  return (
+    <>
+      <header>
+        <h1 className="title is-1">Last Validations</h1>
+      </header>
+      <main className="mt-5">
+        <CommandTriggerForm client={props.client} />
+        <InstanceCommandExecuteRequests client={props.client} />
+      </main>
+    </>
+  );
+};
+
+const CommandTriggerForm = (props: { client: AdminApiClient }) => {
+  const [rawTeamIds, setRawTeamIds] = useState("");
+  const teamIds = useMemo(() => rawTeamIds.trim() === "" ? [] : rawTeamIds.split(",").map((v) => BigInt(v.trim())), [rawTeamIds]);
+
   const [requestingTriggerEnvCheck, setRequestingTriggerEnvCheck] = React.useState(false);
   const [triggerEnvCheckResult, setTriggerEnvCheckResult] = React.useState<true | Error | null>(null);
 
@@ -20,14 +42,14 @@ export const AdminLastValidations: React.FC<Props> = (props: Props) => {
 
     setRequestingTriggerEnvCheck(true);
     try {
-      await props.client.triggerEnvCheck();
+      await props.client.triggerEnvCheck(create(TriggerEnvCheckRequestSchema, { teamIds }));
       setTriggerEnvCheckResult(true);
     } catch (e) {
       setTriggerEnvCheckResult(e);
     } finally {
       setRequestingTriggerEnvCheck(false);
     }
-  }, [requestingTriggerEnvCheck, props.client]);
+  }, [requestingTriggerEnvCheck, teamIds, props.client]);
 
   const [requestingTriggerInstanceRestart, setRequesting] = React.useState(false);
   const [triggerInstanceRestartResult, setTriggerInstanceRestartResult] = React.useState<true | Error | null>(null);
@@ -37,59 +59,80 @@ export const AdminLastValidations: React.FC<Props> = (props: Props) => {
 
     setRequesting(true);
     try {
-      await props.client.triggerInstanceRestart();
+      await props.client.triggerInstanceRestart(create(TriggerInstanceRestartRequestSchema, { teamIds }));
       setTriggerInstanceRestartResult(true);
     } catch (e) {
       setTriggerInstanceRestartResult(e);
     } finally {
       setRequesting(false);
     }
-  }, [requestingTriggerInstanceRestart, props.client]);
+  }, [requestingTriggerInstanceRestart, teamIds, props.client]);
 
   return (
-    <>
-      <header>
-        <h1 className="title is-1">Last Validations</h1>
-      </header>
-      <main className="mt-5">
-        <div className="block">
+    <div className="card">
+      <div className="card-content">
+        <form>
+          <div className="columns">
+            <div className="column is-3 field">
+              <label className="label" htmlFor="AdminLastValidationsCommandTriggerForm-teamId">
+                Team IDs
+              </label>
+              <div className="control">
+                <input
+                  className="input"
+                  type="text"
+                  id="AdminLastValidationsCommandTriggerForm-teamIds"
+                  placeholder="空の場合は全チームが対象になります。例) 1,2,3"
+                  onChange={(e) => setRawTeamIds(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="column is-3 field">
+              <div className="is-flex is-align-items-center">
+                <button
+                  className="button is-light"
+                  type="button"
+                  disabled={requestingTriggerEnvCheck}
+                  onClick={onTriggerEnvCheckClick}
+                >
+                  Trigger Env Check
+                </button>
+                {triggerInstanceRestartResult === true ? (
+                  <span className="icon ml-2">
+                    <i className="material-icons-outlined" aria-hidden={"true"}>
+                      check
+                    </i>
+                  </span>
+                ) : null}
+              </div>
+              <div className="is-flex is-align-items-center mt-1">
+                <button
+                  className="button is-light"
+                  type="button"
+                  disabled={requestingTriggerInstanceRestart}
+                  onClick={onTriggerInstanceRestartClick}
+                >
+                  Trigger Instance Restart
+                </button>
+                {triggerInstanceRestartResult === true ? (
+                  <span className="icon ml-2">
+                    <i className="material-icons-outlined" aria-hidden={"true"}>
+                      check
+                    </i>
+                  </span>
+                ) : null}
+              </div>
+            </div>
+          </div>
           {triggerEnvCheckResult !== true && triggerEnvCheckResult ? (
             <ErrorMessage error={triggerEnvCheckResult} />
           ) : null}
-          <div className="is-flex is-align-items-center">
-            <button className="button is-light" onClick={onTriggerEnvCheckClick}>
-              Trigger Env Check on All Teams
-            </button>
-            {triggerEnvCheckResult === true ? (
-              <span className="icon ml-2">
-                <i className="material-icons-outlined" aria-hidden={"true"}>
-                  check
-                </i>
-              </span>
-            ) : null}
-          </div>
-        </div>
-        <div className="block">
           {triggerInstanceRestartResult !== true && triggerInstanceRestartResult ? (
             <ErrorMessage error={triggerInstanceRestartResult} />
           ) : null}
-          <div className="is-flex is-align-items-center">
-            <button className="button is-light" onClick={onTriggerInstanceRestartClick}>
-              Trigger Instance Restart on All Teams
-            </button>
-            {triggerInstanceRestartResult === true ? (
-              <span className="icon ml-2">
-                <i className="material-icons-outlined" aria-hidden={"true"}>
-                  check
-                </i>
-              </span>
-            ) : null}
-          </div>
-        </div>
-
-        <InstanceCommandExecuteRequests client={props.client} />
-      </main>
-    </>
+        </form>
+      </div>
+    </div>
   );
 };
 
@@ -128,7 +171,7 @@ const InstanceCommandExecuteRequests = (props: { client: AdminApiClient }) => {
   );
 
   return (
-    <table className="table is-striped is-fullwidth">
+    <table className="table is-striped is-fullwidth mt-5">
       <thead>
         <tr>
           <th>ID</th>
