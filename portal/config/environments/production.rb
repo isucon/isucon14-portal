@@ -147,6 +147,8 @@ Rails.application.configure do
   config.x.checker_token.secret = ENV.fetch('ISUXPORTAL_CHECKER_SECRET').unpack1('m0') # ruby -rsecurerandom -e 'puts SecureRandom.base64(96)'
   config.x.ssh_key_api.secret = ENV.fetch('ISUXPORTAL_SSH_KEY_API_SECRET')
 
+  config.x.isucon_admin_ssh_private_key_path = ENV.fetch('ISUXPORTAL_ISUCON_ADMIN_SSH_PRIVATE_KEY_PATH')
+
   config.x.cloudformation_staging = ENV['ISUXPORTAL_CLOUDFORMATION_STAGING'] == '1'
 
   config.x.terms_url = ENV.fetch('ISUXPORTAL_TERMS_URL', 'https://isucon.net/archives/58657108.html')

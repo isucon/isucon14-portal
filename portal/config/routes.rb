@@ -147,6 +147,9 @@ Rails.application.routes.draw do
       # admin/clarifications CreateClarification: POST /api/admin/clarifications
       resources :clarifications, only: %i(index show update create)
 
+      # admin/last_validations TriggerEnvCheck: POST /api/admin/last_validations/env_check
+      post 'last_validations/env_check' => 'last_validations#trigger_env_check'
+
       # admin/contestant_instances ListContestantInstances: GET /api/admin/contestant_instances
       resources :contestant_instances, only: %i(index)
 
@@ -190,6 +193,7 @@ Rails.application.routes.draw do
     get '/benchmark_jobs/:id' => 'root#index'
     get '/clarifications' => 'root#index'
     get '/clarifications/:id' => 'root#index'
+    get '/last_validations' => 'root#index'
     get '/contestant_instances' => 'root#index'
     get '/unprepared_stats' => 'root#index'
 
