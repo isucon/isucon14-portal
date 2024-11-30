@@ -68,6 +68,34 @@ export declare type TriggerInstanceRestartResponse = Message<"isuxportal.proto.s
 export declare const TriggerInstanceRestartResponseSchema: GenMessage<TriggerInstanceRestartResponse>;
 
 /**
+ * @generated from message isuxportal.proto.services.admin.TriggerBenchmarksRequest
+ */
+export declare type TriggerBenchmarksRequest = Message<"isuxportal.proto.services.admin.TriggerBenchmarksRequest"> & {
+  /**
+   * @generated from field: repeated int64 team_ids = 1;
+   */
+  teamIds: bigint[];
+};
+
+/**
+ * Describes the message isuxportal.proto.services.admin.TriggerBenchmarksRequest.
+ * Use `create(TriggerBenchmarksRequestSchema)` to create a new message.
+ */
+export declare const TriggerBenchmarksRequestSchema: GenMessage<TriggerBenchmarksRequest>;
+
+/**
+ * @generated from message isuxportal.proto.services.admin.TriggerBenchmarksResponse
+ */
+export declare type TriggerBenchmarksResponse = Message<"isuxportal.proto.services.admin.TriggerBenchmarksResponse"> & {
+};
+
+/**
+ * Describes the message isuxportal.proto.services.admin.TriggerBenchmarksResponse.
+ * Use `create(TriggerBenchmarksResponseSchema)` to create a new message.
+ */
+export declare const TriggerBenchmarksResponseSchema: GenMessage<TriggerBenchmarksResponse>;
+
+/**
  * @generated from message isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsRequest
  */
 export declare type ListInstanceCommandExecuteRequestsRequest = Message<"isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsRequest"> & {

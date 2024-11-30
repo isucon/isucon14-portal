@@ -7,6 +7,7 @@ import { Timestamp } from "../Timestamp";
 import { Link } from "react-router-dom";
 import { create } from "@bufbuild/protobuf";
 import {
+  TriggerBenchmarksRequestSchema,
   TriggerEnvCheckRequestSchema,
   TriggerInstanceRestartRequestSchema,
 } from "../../../proto/isuxportal/services/admin/last_validations_pb";
@@ -43,6 +44,9 @@ const CommandTriggerForm = (props: { client: AdminApiClient }) => {
   const onTriggerEnvCheckClick = useCallback(async () => {
     if (requestingTriggerEnvCheck) return;
 
+    if (teamIds.length === 0 && !confirm('全チームに実行しますか？')) {
+      return;
+    }
     setRequestingTriggerEnvCheck(true);
     try {
       await props.client.triggerEnvCheck(create(TriggerEnvCheckRequestSchema, { teamIds }));
@@ -54,22 +58,45 @@ const CommandTriggerForm = (props: { client: AdminApiClient }) => {
     }
   }, [requestingTriggerEnvCheck, teamIds, props.client]);
 
-  const [requestingTriggerInstanceRestart, setRequesting] = React.useState(false);
+  const [requestingTriggerInstanceRestart, setRequestingTriggerInstanceRestart] = React.useState(false);
   const [triggerInstanceRestartResult, setTriggerInstanceRestartResult] = React.useState<true | Error | null>(null);
 
   const onTriggerInstanceRestartClick = useCallback(async () => {
     if (requestingTriggerInstanceRestart) return;
 
-    setRequesting(true);
+    if (teamIds.length === 0 && !confirm('全チームに実行しますか？')) {
+      return;
+    }
+    setRequestingTriggerInstanceRestart(true);
     try {
       await props.client.triggerInstanceRestart(create(TriggerInstanceRestartRequestSchema, { teamIds }));
       setTriggerInstanceRestartResult(true);
     } catch (e) {
       setTriggerInstanceRestartResult(e);
     } finally {
-      setRequesting(false);
+      setRequestingTriggerInstanceRestart(false);
     }
   }, [requestingTriggerInstanceRestart, teamIds, props.client]);
+
+  const [requestingTriggerBenchmarks, setRequestingTriggerBenchmarks] = React.useState(false);
+  const [triggerBenchmarksResult, setTriggerBenchmarksResult] = React.useState<true | Error | null>(null);
+
+  const onTriggerBenchmarksClick = useCallback(async () => {
+    if (requestingTriggerBenchmarks) return;
+
+    if (teamIds.length === 0 && !confirm('全チームに実行しますか？')) {
+      return;
+    }
+    setRequestingTriggerBenchmarks(true);
+    try {
+      await props.client.triggerBenchmarks(create(TriggerBenchmarksRequestSchema, { teamIds }));
+      setTriggerBenchmarksResult(true);
+    } catch (e) {
+      setTriggerBenchmarksResult(e);
+    } finally {
+      setRequestingTriggerBenchmarks(false);
+    }
+  }, [requestingTriggerBenchmarks, teamIds, props.client]);
 
   return (
     <div className="card">
@@ -125,6 +152,23 @@ const CommandTriggerForm = (props: { client: AdminApiClient }) => {
                   </span>
                 ) : null}
               </div>
+              <div className="is-flex is-align-items-center mt-1">
+                <button
+                  className="button is-light"
+                  type="button"
+                  disabled={requestingTriggerBenchmarks}
+                  onClick={onTriggerBenchmarksClick}
+                >
+                  Trigger Benchmarks
+                </button>
+                {triggerBenchmarksResult === true ? (
+                  <span className="icon ml-2">
+                    <i className="material-icons-outlined" aria-hidden={"true"}>
+                      check
+                    </i>
+                  </span>
+                ) : null}
+              </div>
             </div>
           </div>
           {triggerEnvCheckResult !== true && triggerEnvCheckResult ? (
@@ -132,6 +176,9 @@ const CommandTriggerForm = (props: { client: AdminApiClient }) => {
           ) : null}
           {triggerInstanceRestartResult !== true && triggerInstanceRestartResult ? (
             <ErrorMessage error={triggerInstanceRestartResult} />
+          ) : null}
+          {triggerBenchmarksResult !== true && triggerBenchmarksResult ? (
+            <ErrorMessage error={triggerBenchmarksResult} />
           ) : null}
         </form>
       </div>

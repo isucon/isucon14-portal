@@ -211,6 +211,16 @@ pub struct TriggerInstanceRestartRequest {
 pub struct TriggerInstanceRestartResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TriggerBenchmarksRequest {
+    #[prost(int64, repeated, tag="1")]
+    pub team_ids: ::prost::alloc::vec::Vec<i64>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TriggerBenchmarksResponse {
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ListInstanceCommandExecuteRequestsRequest {
 }

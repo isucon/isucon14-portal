@@ -16,6 +16,11 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "isuxportal.proto.services.admin.TriggerInstanceRestartResponse" do
     end
+    add_message "isuxportal.proto.services.admin.TriggerBenchmarksRequest" do
+      repeated :team_ids, :int64, 1
+    end
+    add_message "isuxportal.proto.services.admin.TriggerBenchmarksResponse" do
+    end
     add_message "isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsRequest" do
     end
     add_message "isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsResponse" do
@@ -44,6 +49,8 @@ module Isuxportal
         TriggerEnvCheckResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.TriggerEnvCheckResponse").msgclass
         TriggerInstanceRestartRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.TriggerInstanceRestartRequest").msgclass
         TriggerInstanceRestartResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.TriggerInstanceRestartResponse").msgclass
+        TriggerBenchmarksRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.TriggerBenchmarksRequest").msgclass
+        TriggerBenchmarksResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.TriggerBenchmarksResponse").msgclass
         ListInstanceCommandExecuteRequestsRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsRequest").msgclass
         ListInstanceCommandExecuteRequestsResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.ListInstanceCommandExecuteRequestsResponse").msgclass
         GetInstanceCommandExecuteRequestRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestRequest").msgclass
