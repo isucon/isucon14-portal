@@ -11,7 +11,7 @@ class InstanceCommandExecuteRequestResult < ApplicationRecord
       id: id,
       target: contestant_instance.to_pb,
       exit_code: exit_code,
-      finished_at: finished_at.to_time,
+      finished_at: finished_at&.to_time,
     )
   end
 end
