@@ -16,7 +16,7 @@ class ExecuteOnMultipleContestantInstancesJob < ApplicationJob
     )
     InstanceCommandExecuteRequestResult.includes(:contestant_instance).where(instance_command_execute_request_id: request.id).each do |result|
       Rails.logger.info "ExecuteOnMultipleContestantInstancesJob: team_id=#{result.contestant_instance.team_id} instance_ip=#{result.contestant_instance.public_ipv4_address} command=#{command}"
-      ExecuteOnContestantInstanceJob.perform_now(result.id)
+      ExecuteOnContestantInstanceJob.perform_later(result.id)
     end
   end
 end
