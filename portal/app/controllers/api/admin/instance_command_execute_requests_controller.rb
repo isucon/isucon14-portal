@@ -4,7 +4,7 @@ class Api::Admin::InstanceCommandExecuteRequestsController < Api::Admin::Applica
   pb :index, Isuxportal::Proto::Services::Admin::ListInstanceCommandExecuteRequestsRequest
   def index
     render protobuf: Isuxportal::Proto::Services::Admin::ListInstanceCommandExecuteRequestsResponse.new(
-      requests: InstanceCommandExecuteRequest.all.map do |request|
+      requests: InstanceCommandExecuteRequest.all.order(id: :desc).map do |request|
         request.to_pb
       end,
     )
