@@ -239,8 +239,8 @@ pub struct GetInstanceCommandExecuteRequestOutputRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetInstanceCommandExecuteRequestOutputResponse {
-    #[prost(message, optional, tag="1")]
-    pub output: ::core::option::Option<super::super::resources::InstanceCommandExecuteRequestResultOutput>,
+    #[prost(string, tag="1")]
+    pub output: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

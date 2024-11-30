@@ -4,7 +4,7 @@
 
 import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
 import type { Message } from "@bufbuild/protobuf";
-import type { InstanceCommandExecuteRequest, InstanceCommandExecuteRequestResult, InstanceCommandExecuteRequestResultOutput } from "../../resources/instance_command_execute_request_pb";
+import type { InstanceCommandExecuteRequest, InstanceCommandExecuteRequestResult } from "../../resources/instance_command_execute_request_pb";
 
 /**
  * Describes the file isuxportal/services/admin/last_validations.proto.
@@ -144,9 +144,9 @@ export declare const GetInstanceCommandExecuteRequestOutputRequestSchema: GenMes
  */
 export declare type GetInstanceCommandExecuteRequestOutputResponse = Message<"isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestOutputResponse"> & {
   /**
-   * @generated from field: isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput output = 1;
+   * @generated from field: string output = 1;
    */
-  output?: InstanceCommandExecuteRequestResultOutput;
+  output: string;
 };
 
 /**

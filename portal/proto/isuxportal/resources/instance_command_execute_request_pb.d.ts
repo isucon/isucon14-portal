@@ -79,19 +79,3 @@ export declare type InstanceCommandExecuteRequestResult = Message<"isuxportal.pr
  */
 export declare const InstanceCommandExecuteRequestResultSchema: GenMessage<InstanceCommandExecuteRequestResult>;
 
-/**
- * @generated from message isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput
- */
-export declare type InstanceCommandExecuteRequestResultOutput = Message<"isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput"> & {
-  /**
-   * @generated from field: string output = 1;
-   */
-  output: string;
-};
-
-/**
- * Describes the message isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput.
- * Use `create(InstanceCommandExecuteRequestResultOutputSchema)` to create a new message.
- */
-export declare const InstanceCommandExecuteRequestResultOutputSchema: GenMessage<InstanceCommandExecuteRequestResultOutput>;
-

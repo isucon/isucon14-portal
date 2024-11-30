@@ -454,12 +454,6 @@ pub struct InstanceCommandExecuteRequestResult {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct InstanceCommandExecuteRequestResultOutput {
-    #[prost(string, tag="1")]
-    pub output: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LeaderboardItem {
     #[prost(message, optional, tag="2")]
     pub best_score: ::core::option::Option<leaderboard_item::LeaderboardScore>,

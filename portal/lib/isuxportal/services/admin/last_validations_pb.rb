@@ -29,7 +29,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :id, :int64, 1
     end
     add_message "isuxportal.proto.services.admin.GetInstanceCommandExecuteRequestOutputResponse" do
-      optional :output, :message, 1, "isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput"
+      optional :output, :string, 1
     end
   end
 end

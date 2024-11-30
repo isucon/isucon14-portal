@@ -35,5 +35,5 @@ message GetInstanceCommandExecuteRequestOutputRequest {
 }
 
 message GetInstanceCommandExecuteRequestOutputResponse {
-  isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput output = 1;
+  string output = 1;
 }

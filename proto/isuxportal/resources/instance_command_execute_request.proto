@@ -20,7 +20,3 @@ message InstanceCommandExecuteRequestResult {
   int32 exit_code = 3;
   google.protobuf.Timestamp finished_at = 4;
 }
-
-message InstanceCommandExecuteRequestResultOutput {
-  string output = 1;
-}

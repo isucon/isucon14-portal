@@ -20,9 +20,6 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :exit_code, :int32, 3
       optional :finished_at, :message, 4, "google.protobuf.Timestamp"
     end
-    add_message "isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput" do
-      optional :output, :string, 1
-    end
   end
 end
 
@@ -31,7 +28,6 @@ module Isuxportal
     module Resources
       InstanceCommandExecuteRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.resources.InstanceCommandExecuteRequest").msgclass
       InstanceCommandExecuteRequestResult = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.resources.InstanceCommandExecuteRequestResult").msgclass
-      InstanceCommandExecuteRequestResultOutput = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("isuxportal.proto.resources.InstanceCommandExecuteRequestResultOutput").msgclass
     end
   end
 end
