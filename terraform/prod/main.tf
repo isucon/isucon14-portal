@@ -40,6 +40,8 @@ module "isuxportal" {
     max_capacity = 128
     min_capacity = 0.5
   }
+
+  tfstate_bucket = "arn:aws:s3:::tfstate-isucon14-portal-prod"
 }
 
 module "ami" {
