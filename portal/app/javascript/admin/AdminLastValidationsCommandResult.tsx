@@ -4,7 +4,7 @@ import type { AdminApiClient } from "./AdminApiClient";
 import { ErrorMessage } from "../ErrorMessage";
 import type { InstanceCommandExecuteRequestResult } from "../../../proto/isuxportal/resources/instance_command_execute_request_pb";
 import { Timestamp } from "../Timestamp";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export interface Props {
   session: GetCurrentSessionResponse;
@@ -144,7 +144,15 @@ const InstanceCommandExecuteResultRow = ({
     return (
       <div className="modal is-active">
         <div className="modal-background"></div>
-        <div className="modal-content">{requesting ? <p>Loading...</p> : <pre>{modalContent}</pre>}</div>
+        <div className="modal-content">
+          {requesting ? (
+            <p>Loading...</p>
+          ) : modalContent === null ? (
+            <p className="is-italic">No output</p>
+          ) : (
+            <pre>{modalContent}</pre>
+          )}
+        </div>
         <button className="modal-close is-large" aria-label="close" onClick={() => setIsModalOpen(false)}></button>
       </div>
     );
@@ -152,7 +160,11 @@ const InstanceCommandExecuteResultRow = ({
 
   return (
     <tr>
-      {teamIdLength > 0 ? <td rowSpan={teamIdLength}>{result.target!.teamId.toString()}</td> : null}
+      {teamIdLength > 0 ? (
+        <td rowSpan={teamIdLength}>
+          <Link to={`/admin/teams/${result.target!.teamId.toString()}`}>{result.target!.teamId.toString()}</Link>
+        </td>
+      ) : null}
       <td>{result.target!.number.toString()}</td>
       <td className={result.exitCode != 0 ? "has-text-danger" : ""}>{result.exitCode.toString()}</td>
       <td>
@@ -162,11 +174,15 @@ const InstanceCommandExecuteResultRow = ({
           <span className="has-text-weight-bold">Running</span>
         )}
       </td>
-      <td onClick={() => setIsModalOpen(true)}>
-        <button className="button is-small">
-          <span className="material-icons-outlined">launch</span>
-        </button>
-      </td>
+      {result.finishedAt ? (
+        <td onClick={() => setIsModalOpen(true)}>
+          <button className="button is-small">
+            <span className="material-icons-outlined">launch</span>
+          </button>
+        </td>
+      ) : (
+        <td></td>
+      )}
       {renderModal()}
     </tr>
   );
