@@ -29,6 +29,8 @@ class BenchmarkJob < ApplicationRecord
     end
   }
 
+  scope :normal, -> { where(post_validation: false) }
+
   scope :active, -> { where.not(status: %i(cancelled errored finished)) }
 
   def score
@@ -54,6 +56,7 @@ class BenchmarkJob < ApplicationRecord
         name: enqueued_by.name,
         avatar_url: enqueued_by.avatar_url,
       ) : nil,
+      post_validation: admin ? post_validation : nil,
     )
   end
 

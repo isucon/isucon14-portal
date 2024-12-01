@@ -24,8 +24,9 @@ impl Worker {
         job_handle: JobHandle,
         config: &Config,
         command_exec: String,
-        command_args: Vec<String>,
+        mut command_args: Vec<String>,
     ) -> Self {
+        command_args.extend_from_slice(&job_handle.extra_command_args);
         Self {
             job_handle,
             hard_timeout: config.hard_timeout,

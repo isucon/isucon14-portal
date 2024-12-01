@@ -27,7 +27,7 @@ class Api::Admin::LeaderboardController < Api::Admin::ApplicationController
 
     targets = {}
     lb.teams.each do |item|
-      job = BenchmarkJob.where(team_id: item.team.id).order(id: :desc).limit(1).first
+      job = BenchmarkJob.normal.where(team_id: item.team.id).order(id: :desc).limit(1).first
       next unless job
       targets[item.team.id] = job.target
     end

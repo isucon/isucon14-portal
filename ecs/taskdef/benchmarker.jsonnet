@@ -22,6 +22,10 @@
         initProcessEnabled: true,
       },
       stopTimeout: 120,
+      restartPolicy: {
+        enabled: true,
+        ignoredExitCodes: [0],
+      },
       ulimits: [
         {
           softLimit: 100000,

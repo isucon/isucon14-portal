@@ -192,6 +192,72 @@ pub struct ListEnvChecksResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TriggerEnvCheckRequest {
+    #[prost(int64, repeated, tag="1")]
+    pub team_ids: ::prost::alloc::vec::Vec<i64>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TriggerEnvCheckResponse {
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TriggerInstanceRestartRequest {
+    #[prost(int64, repeated, tag="1")]
+    pub team_ids: ::prost::alloc::vec::Vec<i64>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TriggerInstanceRestartResponse {
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TriggerBenchmarksRequest {
+    #[prost(int64, repeated, tag="1")]
+    pub team_ids: ::prost::alloc::vec::Vec<i64>,
+    #[prost(bool, tag="2")]
+    pub post_validation: bool,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TriggerBenchmarksResponse {
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ListInstanceCommandExecuteRequestsRequest {
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListInstanceCommandExecuteRequestsResponse {
+    #[prost(message, repeated, tag="1")]
+    pub requests: ::prost::alloc::vec::Vec<super::super::resources::InstanceCommandExecuteRequest>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct GetInstanceCommandExecuteRequestRequest {
+    #[prost(int64, tag="1")]
+    pub id: i64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetInstanceCommandExecuteRequestResponse {
+    #[prost(message, repeated, tag="1")]
+    pub results: ::prost::alloc::vec::Vec<super::super::resources::InstanceCommandExecuteRequestResult>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct GetInstanceCommandExecuteRequestOutputRequest {
+    #[prost(int64, tag="1")]
+    pub id: i64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetInstanceCommandExecuteRequestOutputResponse {
+    #[prost(string, tag="1")]
+    pub output: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetLeaderboardDumpQuery {
     /// ISO8601 or "contest-end"
     #[prost(string, tag="1")]

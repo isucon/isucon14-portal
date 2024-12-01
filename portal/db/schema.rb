@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_17_112054) do
+ActiveRecord::Schema.define(version: 2024_11_30_135122) do
 
   create_table "benchmark_executions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 2024_11_17_112054) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "target_id"
     t.integer "enqueued_by_id"
+    t.boolean "post_validation", default: false
     t.index ["instance_name", "id"], name: "index_benchmark_jobs_on_instance_name_and_id"
     t.index ["status", "team_id", "id"], name: "index_benchmark_jobs_on_status_and_team_id_and_id"
     t.index ["team_id", "id"], name: "index_benchmark_jobs_on_team_id_and_id"
@@ -133,6 +134,23 @@ ActiveRecord::Schema.define(version: 2024_11_17_112054) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["team_id", "final"], name: "index_extra_time_assignments_on_team_id_and_final", unique: true
     t.index ["team_id"], name: "index_extra_time_assignments_on_team_id"
+  end
+
+  create_table "instance_command_execute_request_results", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.integer "instance_command_execute_request_id", null: false
+    t.integer "contestant_instance_id", null: false
+    t.text "output"
+    t.integer "exit_code"
+    t.datetime "finished_at", precision: 6
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["instance_command_execute_request_id", "contestant_instance_id"], name: "index_command_execute_results_on_request_id_and_ci_id", unique: true
+  end
+
+  create_table "instance_command_execute_requests", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.text "command"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|

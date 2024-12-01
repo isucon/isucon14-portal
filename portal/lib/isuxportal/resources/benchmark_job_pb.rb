@@ -24,6 +24,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :target, :message, 17, "isuxportal.proto.resources.ContestantInstance"
       optional :result, :message, 18, "isuxportal.proto.resources.BenchmarkResult"
       optional :enqueued_by, :message, 19, "isuxportal.proto.resources.BenchmarkJob.EnqueuedBy"
+      optional :post_validation, :bool, 20
     end
     add_message "isuxportal.proto.resources.BenchmarkJob.EnqueuedBy" do
       optional :name, :string, 1

@@ -42,4 +42,6 @@ message BenchmarkJob {
     string avatar_url = 2;
   }
   EnqueuedBy enqueued_by = 19;
+
+  bool post_validation = 20;
 }

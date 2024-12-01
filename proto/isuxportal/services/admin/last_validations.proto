@@ -1,0 +1,46 @@
+syntax = "proto3";
+package isuxportal.proto.services.admin;
+
+
+import "isuxportal/resources/instance_command_execute_request.proto";
+
+message TriggerEnvCheckRequest {
+  repeated int64 team_ids = 1;
+}
+
+message TriggerEnvCheckResponse {}
+
+message TriggerInstanceRestartRequest {
+  repeated int64 team_ids = 1;
+}
+
+message TriggerInstanceRestartResponse {}
+
+message TriggerBenchmarksRequest {
+  repeated int64 team_ids = 1;
+  bool post_validation = 2;
+}
+
+message TriggerBenchmarksResponse {}
+
+message ListInstanceCommandExecuteRequestsRequest {}
+
+message ListInstanceCommandExecuteRequestsResponse {
+  repeated isuxportal.proto.resources.InstanceCommandExecuteRequest requests = 1;
+}
+
+message GetInstanceCommandExecuteRequestRequest {
+  int64 id = 1;
+}
+
+message GetInstanceCommandExecuteRequestResponse {
+  repeated isuxportal.proto.resources.InstanceCommandExecuteRequestResult results = 1;
+}
+
+message GetInstanceCommandExecuteRequestOutputRequest {
+  int64 id = 1;
+}
+
+message GetInstanceCommandExecuteRequestOutputResponse {
+  string output = 1;
+}

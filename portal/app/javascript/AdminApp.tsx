@@ -14,9 +14,11 @@ import { AdminBenchmarkJobList } from "./admin/AdminBenchmarkJobList";
 import { AdminBenchmarkJobDetail } from "./admin/AdminBenchmarkJobDetail";
 import { AdminClarificationList } from "./admin/AdminClarificationList";
 import { AdminClarificationDetail } from "./admin/AdminClarificationDetail";
+import { AdminLastValidations } from "./admin/AdminLastValidations";
 import { AdminContestantInstanceList } from "./admin/AdminContestantInstanceList";
 import { AdminDashboard } from "./admin/AdminDashboard";
 import { AdminUnpreparedStats } from "./admin/AdminUnpreparedStats";
+import { AdminLastValidationsCommandResult } from "./admin/AdminLastValidationsCommandResult";
 
 export interface Props {
   session: GetCurrentSessionResponse;
@@ -59,6 +61,11 @@ export class AdminApp extends React.Component<Props, State> {
                   <li>
                     <NavLink to="/admin/clarifications" className={({ isActive }) => (isActive ? "is-active" : "")}>
                       Clarifications
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/admin/last_validations" className={({ isActive }) => (isActive ? "is-active" : "")}>
+                      Last Validations
                     </NavLink>
                   </li>
                 </ul>
@@ -120,6 +127,16 @@ export class AdminApp extends React.Component<Props, State> {
                   <Route
                     path="/admin/clarifications/:id"
                     element={<AdminClarificationDetail session={this.props.session} client={this.state.adminClient} />}
+                  />
+                  <Route
+                    path="/admin/last_validations"
+                    element={<AdminLastValidations session={this.props.session} client={this.state.adminClient} />}
+                  />
+                  <Route
+                    path="/admin/last_validations/command_result/:id"
+                    element={
+                      <AdminLastValidationsCommandResult session={this.props.session} client={this.state.adminClient} />
+                    }
                   />
                   <Route
                     path="/admin/contestant_instances"

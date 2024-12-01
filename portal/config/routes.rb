@@ -147,6 +147,19 @@ Rails.application.routes.draw do
       # admin/clarifications CreateClarification: POST /api/admin/clarifications
       resources :clarifications, only: %i(index show update create)
 
+      # admin/instance_command_execute_requests ListInstanceCommandExecuteRequests: GET /api/admin/instance_command_execute_requests
+      # admin/instance_command_execute_requests GetInstanceCommandExecuteRequest: GET /api/admin/instance_command_execute_requests/:id
+      resources :instance_command_execute_requests, only: %i(index show)
+      # admin/instance_command_execute_requests/:id/output GetInstanceCommandExecuteRequestOutput: GET /api/admin/instance_command_execute_requests/:id/output
+      get 'instance_command_execute_requests/:request_id/:id/output' => 'instance_command_execute_requests#output'
+
+      # admin/last_validations TriggerEnvCheck: POST /api/admin/last_validations/env_check
+      post 'last_validations/env_check' => 'last_validations#trigger_env_check'
+      # admin/last_validations TriggerInstanceRestart: POST /api/admin/last_validations/instance_restart
+      post 'last_validations/instance_restart' => 'last_validations#trigger_instance_restart'
+      # admin/last_validations TriggerBenchmarks: POST /api/admin/last_validations/benchmarks
+      post 'last_validations/benchmarks' => 'last_validations#trigger_benchmarks'
+
       # admin/contestant_instances ListContestantInstances: GET /api/admin/contestant_instances
       resources :contestant_instances, only: %i(index)
 
@@ -190,6 +203,8 @@ Rails.application.routes.draw do
     get '/benchmark_jobs/:id' => 'root#index'
     get '/clarifications' => 'root#index'
     get '/clarifications/:id' => 'root#index'
+    get '/last_validations' => 'root#index'
+    get '/last_validations/command_result/:id' => 'root#index'
     get '/contestant_instances' => 'root#index'
     get '/unprepared_stats' => 'root#index'
 

@@ -39,6 +39,20 @@ import {
   GetEnvCheckStatsResponseSchema,
   GetSSHKeyStatsResponseSchema,
 } from "../../../proto/isuxportal/services/admin/unprepared_stats_pb";
+import {
+  GetInstanceCommandExecuteRequestOutputResponseSchema,
+  GetInstanceCommandExecuteRequestResponseSchema,
+  ListInstanceCommandExecuteRequestsResponseSchema,
+  TriggerBenchmarksRequestSchema,
+  TriggerBenchmarksResponseSchema,
+  TriggerEnvCheckRequestSchema,
+  TriggerEnvCheckResponseSchema,
+  TriggerInstanceRestartRequestSchema,
+  TriggerInstanceRestartResponseSchema,
+  type TriggerBenchmarksRequest,
+  type TriggerEnvCheckRequest,
+  type TriggerInstanceRestartRequest,
+} from "../../../proto/isuxportal/services/admin/last_validations_pb";
 
 export class AdminApiClient {
   public apiClient: ApiClient;
@@ -243,6 +257,49 @@ export class AdminApiClient {
   public async getEnvCheckStats() {
     const resp = await this.request(`${this.baseUrl}/api/admin/unprepared_stats/env_check_stats`, "GET", null, null);
     return fromBinary(GetEnvCheckStatsResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async listInstanceCommandExecuteRequests() {
+    const resp = await this.request(`${this.baseUrl}/api/admin/instance_command_execute_requests`, "GET", null, null);
+    return fromBinary(ListInstanceCommandExecuteRequestsResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async getInstanceCommandExecuteRequest(id: bigint) {
+    const resp = await this.request(
+      `${this.baseUrl}/api/admin/instance_command_execute_requests/${encodeURIComponent(id.toString())}`,
+      "GET",
+      null,
+      null,
+    );
+    return fromBinary(GetInstanceCommandExecuteRequestResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async getInstanceCommandExecuteRequestOutput(id: bigint) {
+    const resp = await this.request(
+      `${this.baseUrl}/api/admin/instance_command_execute_requests/_/${encodeURIComponent(id.toString())}/output`,
+      "GET",
+      null,
+      null,
+    );
+    return fromBinary(GetInstanceCommandExecuteRequestOutputResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async triggerEnvCheck(payload: TriggerEnvCheckRequest) {
+    const payloadMessage = toBinary(TriggerEnvCheckRequestSchema, payload);
+    const resp = await this.request(`${this.baseUrl}/api/admin/last_validations/env_check`, "POST", null, payloadMessage);
+    return fromBinary(TriggerEnvCheckResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async triggerInstanceRestart(payload: TriggerInstanceRestartRequest) {
+    const payloadMessage = toBinary(TriggerInstanceRestartRequestSchema, payload);
+    const resp = await this.request(`${this.baseUrl}/api/admin/last_validations/instance_restart`, "POST", null, payloadMessage);
+    return fromBinary(TriggerInstanceRestartResponseSchema, new Uint8Array(await resp.arrayBuffer()));
+  }
+
+  public async triggerBenchmarks(payload: TriggerBenchmarksRequest) {
+    const payloadMessage = toBinary(TriggerBenchmarksRequestSchema, payload);
+    const resp = await this.request(`${this.baseUrl}/api/admin/last_validations/benchmarks`, "POST", null, payloadMessage);
+    return fromBinary(TriggerBenchmarksResponseSchema, new Uint8Array(await resp.arrayBuffer()));
   }
 
   public request(path: string, method: string, query: object | null, payload: Uint8Array | null) {
