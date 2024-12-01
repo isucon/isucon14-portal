@@ -56,6 +56,7 @@ class BenchmarkJob < ApplicationRecord
         name: enqueued_by.name,
         avatar_url: enqueued_by.avatar_url,
       ) : nil,
+      post_validation: admin ? post_validation : nil,
     )
   end
 
