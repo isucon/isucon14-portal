@@ -12,7 +12,7 @@ DOCKER_CMD?=docker
 login:
 	aws ecr get-login-password | docker login --username AWS --password-stdin $(ECR_HOST)
 
-build/app:
+build/app: ../portal/isucon-portal
 	cd ../portal && \
 	$(DOCKER_CMD) build \
 		--platform linux/arm64 \
@@ -95,7 +95,11 @@ env:
 	sops $(ENV).encrypted.env
 
 $(ENV).env: $(ENV).encrypted.env
-	sops -d $(ENV).encrypted.env > $(ENV).env
+	sops -d $< > $@
+
+../portal/isucon-portal: ../portal/isucon-portal.encrypted
+	AWS_PROFILE=portal-prod sops -d $< > $@
+	chmod 400 $@
 
 .PHONY: clean
 clean:
