@@ -22,8 +22,8 @@ jobs:
         working-directory: ecs
         # sudoがない環境なので公式GitHub Actionsは使えない
         run: |
-          wget https://github.com/kayac/ecspresso/releases/download/v2.4.1/ecspresso_2.4.1_linux_amd64.tar.gz
-          tar xvf ecspresso_2.4.1_linux_amd64.tar.gz
+          wget https://github.com/kayac/ecspresso/releases/download/v2.4.4/ecspresso_2.4.4_linux_amd64.tar.gz
+          tar xvf ecspresso_2.4.4_linux_amd64.tar.gz
           ./ecspresso deploy --config benchmarker.yml --no-wait
         env:
           TAG: ${{ github.event.inputs.TAG || 'latest' }}
