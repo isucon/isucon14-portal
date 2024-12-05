@@ -277,7 +277,7 @@ impl Worker {
     }
 }
 
-const LOG_MAX: i64 = 48000;
+const LOG_MAX: i64 = 64000;
 async fn read_log(path: String) -> Result<String, Error> {
     let mut buf: Vec<u8> = Vec::with_capacity(16000);
     let mut f = tokio::fs::File::open(path.clone()).await?;
