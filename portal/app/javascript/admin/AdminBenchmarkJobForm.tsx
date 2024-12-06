@@ -26,7 +26,7 @@ export const AdminBenchmarkJobForm: React.FC<Props> = (props: Props) => {
     formState: { errors },
   } = useForm<{
     teamId: string;
-    targetId: string;
+    instanceNumber: string;
   }>({
     defaultValues: {},
   });
@@ -36,7 +36,7 @@ export const AdminBenchmarkJobForm: React.FC<Props> = (props: Props) => {
       const resp = await props.client.enqueueBenchmarkJob(
         create(EnqueueBenchmarkJobRequestSchema, {
           teamId: BigInt(data.teamId),
-          targetId: data.targetId ? BigInt(data.targetId) : 0n,
+          number: data.instanceNumber ? BigInt(data.instanceNumber) : 0n,
         }),
       );
       setRedirect(
@@ -68,11 +68,11 @@ export const AdminBenchmarkJobForm: React.FC<Props> = (props: Props) => {
               </div>
             </div>
             <div className="column is-3 field">
-              <label className="label" htmlFor="AdminBenchmarkJobForm-targetId">
-                Target ID
+              <label className="label" htmlFor="AdminBenchmarkJobForm-instanceNumber">
+                Target Instance Number
               </label>
               <div className="control">
-                <input className="input" type="text" id="AdminBenchmarkJobForm-targetId" {...register("targetId")} />
+                <input className="input" type="text" id="AdminBenchmarkJobForm-instanceNumber" {...register("instanceNumber")} />
               </div>
             </div>
             <div className="column is-3 field">

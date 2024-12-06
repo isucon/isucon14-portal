@@ -50,7 +50,7 @@ class Api::Admin::BenchmarkJobsController < Api::Admin::ApplicationController
     @benchmark_job = BenchmarkJob.create!(
       team_id: @team.id,
       instance_name: @team.availability_zone,
-      target: ContestantInstance.find(pb.target_id),
+      target: ContestantInstance.find_by(number: pb.number)
     )
     render protobuf: Isuxportal::Proto::Services::Admin::EnqueueBenchmarkJobResponse.new(
       job: @benchmark_job.to_pb(admin: true, team: true, detail: true)

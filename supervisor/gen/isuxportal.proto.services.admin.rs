@@ -29,9 +29,9 @@ pub struct ListBenchmarkJobsResponse {
 pub struct EnqueueBenchmarkJobRequest {
     #[prost(int64, tag="1")]
     pub team_id: i64,
-    /// target ContestantInstance id
+    /// target ContestantInstance number
     #[prost(int64, tag="2")]
-    pub target_id: i64,
+    pub number: i64,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
