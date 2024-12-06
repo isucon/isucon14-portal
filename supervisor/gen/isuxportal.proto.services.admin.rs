@@ -30,8 +30,12 @@ pub struct EnqueueBenchmarkJobRequest {
     #[prost(int64, tag="1")]
     pub team_id: i64,
     /// target ContestantInstance id
+    #[deprecated]
     #[prost(int64, tag="2")]
     pub target_id: i64,
+    /// target ContestantInstance number
+    #[prost(int64, tag="3")]
+    pub target_number: i64,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

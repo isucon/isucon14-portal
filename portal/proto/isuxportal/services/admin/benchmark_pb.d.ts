@@ -83,9 +83,17 @@ export declare type EnqueueBenchmarkJobRequest = Message<"isuxportal.proto.servi
   /**
    * target ContestantInstance id
    *
-   * @generated from field: int64 target_id = 2;
+   * @generated from field: int64 target_id = 2 [deprecated = true];
+   * @deprecated
    */
   targetId: bigint;
+
+  /**
+   * target ContestantInstance number
+   *
+   * @generated from field: int64 target_number = 3;
+   */
+  targetNumber: bigint;
 };
 
 /**
