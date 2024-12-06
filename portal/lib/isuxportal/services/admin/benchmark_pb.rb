@@ -18,7 +18,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "isuxportal.proto.services.admin.EnqueueBenchmarkJobRequest" do
       optional :team_id, :int64, 1
-      optional :number, :int64, 2
+      optional :target_id, :int64, 2
+      optional :target_number, :int64, 3
     end
     add_message "isuxportal.proto.services.admin.EnqueueBenchmarkJobResponse" do
       optional :job, :message, 1, "isuxportal.proto.resources.BenchmarkJob"

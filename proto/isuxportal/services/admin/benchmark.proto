@@ -22,8 +22,10 @@ message ListBenchmarkJobsResponse {
 
 message EnqueueBenchmarkJobRequest {
   int64 team_id = 1;
+  // target ContestantInstance id
+  int64 target_id = 2 [ deprecated = true ];
   // target ContestantInstance number
-  int64 number = 2;
+  int64 target_number = 3;
 }
 
 message EnqueueBenchmarkJobResponse {
