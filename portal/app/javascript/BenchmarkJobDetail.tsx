@@ -141,7 +141,6 @@ const renderJobExecution = (job: BenchmarkJob, admin: boolean) => {
 
         <div className="mt-3">
           <h5 className="subtitle is-5">Stdout</h5>
-          <pre>{execution.stdout}</pre>
           <StdoutWithColor stdout={execution.stdout} />
 
           {admin ? (
@@ -186,7 +185,7 @@ const levelToColor = {
   warn: "has-text-warning",
   error: "has-text-danger",
 };
-const stdoutLineRE = /^\s*(time=[\d:.]+\s+level=(INFO|WARN|ERROR))(\s+msg=.*)$/;
+const stdoutLineRE = /^\s*(time=[\d:.]+Z?\s+level=(INFO|WARN|ERROR))(\s+msg=.*)$/;
 const StdoutLineWithColor = ({ line }: { line: string }) => {
   const match = line.match(stdoutLineRE);
   if (!match)
