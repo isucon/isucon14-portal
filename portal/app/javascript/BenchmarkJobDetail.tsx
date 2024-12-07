@@ -142,6 +142,7 @@ const renderJobExecution = (job: BenchmarkJob, admin: boolean) => {
         <div className="mt-3">
           <h5 className="subtitle is-5">Stdout</h5>
           <pre>{execution.stdout}</pre>
+          <StdoutWithColor stdout={execution.stdout} />
 
           {admin ? (
             <>
@@ -165,6 +166,44 @@ export const BenchmarkJobDetail: React.FC<Props> = (props: Props) => {
         {renderJobResult(job, !!props.admin)}
         {renderJobExecution(job, !!props.admin)}
       </section>
+    </>
+  );
+};
+
+const StdoutWithColor = ({ stdout }: { stdout: string }) => {
+  const lines = stdout.trim().split("\n");
+  return (
+    <pre>
+      {lines.map((line, idx) => (
+        <StdoutLineWithColor line={line} key={idx} />
+      ))}
+    </pre>
+  );
+};
+
+const levelToColor = {
+  info: "",
+  warn: "has-text-warning",
+  error: "has-text-danger",
+};
+const stdoutLineRE = /^\s*(time=[\d:.]+\s+level=(INFO|WARN|ERROR))(\s+msg=.*)$/;
+const StdoutLineWithColor = ({ line }: { line: string }) => {
+  const match = line.match(stdoutLineRE);
+  if (!match)
+    return (
+      <span>
+        {line}
+        {"\n"}
+      </span>
+    );
+
+  const [, prefix, level, suffix] = match;
+  const lev = level.toLowerCase() as "info" | "warn" | "error";
+  return (
+    <>
+      <span className="has-text-grey">{prefix}</span>
+      <span className={levelToColor[lev]}>{suffix}</span>
+      {"\n"}
     </>
   );
 };
