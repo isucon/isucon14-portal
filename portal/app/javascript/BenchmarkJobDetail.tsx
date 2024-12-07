@@ -185,7 +185,7 @@ const levelToColor = {
   warn: "has-background-warning",
   error: "has-text-danger",
 };
-const stdoutLineRE = /^\s*(time=[\d:.]+Z?\s+level=(INFO|WARN|ERROR))(\s+msg=.*)$/;
+const stdoutLineRE = /^\s*(time=[\d:.]+Z?\s+level=(INFO|WARN|ERROR)\s+)(msg=.*)$/;
 const StdoutLineWithColor = ({ line }: { line: string }) => {
   const match = line.match(stdoutLineRE);
   if (!match)
