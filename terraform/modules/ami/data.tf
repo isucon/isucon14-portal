@@ -13,6 +13,6 @@ data "aws_ami" "qualify" {
   owners      = var.ami_account_ids
   filter {
     name   = "image-id"
-    values = ["ami-0564ef843495f6d80"]
+    values = ["ami-0e334c50145a3ee41"]
   }
 }

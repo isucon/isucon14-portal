@@ -11,7 +11,7 @@ module "isuxportal" {
   }
 
   enable_auth         = false
-  enable_auto_scaling = true
+  enable_auto_scaling = false
 
   env     = local.env
   project = local.project
@@ -38,7 +38,7 @@ module "isuxportal" {
 
   aurora_serverless_configuration = {
     max_capacity = 128
-    min_capacity = 0.5
+    min_capacity = 8
   }
 
   tfstate_bucket = "arn:aws:s3:::tfstate-isucon14-portal-prod"
