@@ -255,7 +255,7 @@ class AdminBenchmarkJobListInternal extends React.Component<Props, State> {
         <td>
           <Link to={`/admin/benchmark_jobs/${encodeURIComponent(id)}`}>#{id}</Link>
         </td>
-        <td>
+        <td className="isux-word-break-all">
           <Link to={`/admin/teams/${encodeURIComponent(job.team!.id!.toString())}`}>
             {job.team!.name} (#{job.team!.id.toString()})
           </Link>

@@ -171,7 +171,7 @@ class AdminContestantInstanceListInternal extends React.Component<Props, State> 
             {ci.cloudId}
           </a>
         </td>
-        <td>
+        <td className="isux-word-break-all">
           <Link to={`/admin/teams/${ci.team!.id}`}>
             {ci.team!.name} (#{ci.team!.id.toString()})
           </Link>
