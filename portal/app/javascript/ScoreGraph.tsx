@@ -164,6 +164,7 @@ export const ScoreGraph: React.FC<Props> = ({ teams, contest, width, teamId }) =
         </div>
       </div>
       <div className={classNames.join(" ")} ref={elem} />
+      <p className="is-size-7 mt-2">自チームとピン留めしたチームが表示されます</p>
     </section>
   );
 };
