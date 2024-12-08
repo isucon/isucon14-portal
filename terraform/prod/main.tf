@@ -38,7 +38,7 @@ module "isuxportal" {
 
   aurora_serverless_configuration = {
     max_capacity = 128
-    min_capacity = 8
+    min_capacity = 4
   }
 
   tfstate_bucket = "arn:aws:s3:::tfstate-isucon14-portal-prod"
