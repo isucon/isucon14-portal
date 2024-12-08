@@ -11,7 +11,7 @@ module "isuxportal" {
   }
 
   enable_auth         = false
-  enable_auto_scaling = true
+  enable_auto_scaling = false
 
   env     = local.env
   project = local.project

@@ -68,7 +68,7 @@ rollback/%:
 	ecspresso rollback --config $*.yml
 
 scale/%:
-	ecspresso scale --tasks=$(TASKS) --config $*.yml
+	ecspresso scale --tasks=$(TASKS) --config $*.yml --no-wait
 
 status/%:
 	ecspresso status --config $*.yml
