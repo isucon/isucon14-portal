@@ -34,7 +34,6 @@ class Api::Admin::LastValidationsController < Api::Admin::ApplicationController
     team_ids.each do |team_id|
       last_benchmark_job = BenchmarkJob.where(team_id: team_id).order(id: :desc).limit(1).first;
       next unless last_benchmark_job;
-      next unless last_benchmark_job.benchmark_result.passed;
 
       BenchmarkJob.create!(
         team_id: team_id,
