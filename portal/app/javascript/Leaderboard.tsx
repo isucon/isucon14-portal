@@ -66,7 +66,7 @@ const TeamItem: React.FC<TeamItemProps> = (props: TeamItemProps) => {
         )}
       </th>
       <th className="has-text-right">{position}</th>
-      <td>
+      <td className="isux-word-break-all">
         {item.team!.id.toString()}: {item.team!.name}
       </td>
       <td className="has-text-right">{(item.bestScore?.score || 0n).toString()}</td>
