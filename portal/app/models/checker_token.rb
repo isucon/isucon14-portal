@@ -15,7 +15,8 @@ module CheckerToken
 
     payload = decode_payload(payload_str)
     if payload[:expiry] < Time.now.to_i
-      return nil
+      # FIXME: 感想戦時にenvcheckできるように、有効期限のチェックを無効化する。
+      # return nil
     end
 
     payload
