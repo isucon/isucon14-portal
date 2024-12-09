@@ -10,7 +10,12 @@
   enableECSManagedTags: true,
   enableExecuteCommand: true,
   healthCheckGracePeriodSeconds: 0,
-  launchType: 'FARGATE',
+  capacityProviderStrategy: [
+    {
+      capacityProvider: 'FARGATE_SPOT',
+      weight: 1,
+    },
+  ],
   loadBalancers: [
     {
       containerName: 'nginx',

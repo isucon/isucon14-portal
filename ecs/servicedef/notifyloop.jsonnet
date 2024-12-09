@@ -10,7 +10,12 @@
   desiredCount: 1,
   enableECSManagedTags: true,
   enableExecuteCommand: true,
-  launchType: 'FARGATE',
+  capacityProviderStrategy: [
+    {
+      capacityProvider: 'FARGATE_SPOT',
+      weight: 1,
+    },
+  ],
   networkConfiguration: {
     awsvpcConfiguration: {
       assignPublicIp: 'ENABLED',

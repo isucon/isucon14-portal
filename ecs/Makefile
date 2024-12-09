@@ -59,10 +59,7 @@ deploy/env: diff/env
 deploy: deploy/app deploy/worker
 
 deploy/%: verify/% deploy/env
-	ecspresso deploy --config $*.yml --no-wait
-
-deploy/bot: verify/bot
-	ecspresso deploy --config bot.yml
+	ecspresso deploy --config $*.yml --no-wait --force-new-deployment
 
 rollback/%:
 	ecspresso rollback --config $*.yml
