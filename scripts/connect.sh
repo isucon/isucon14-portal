@@ -15,8 +15,8 @@ done
 export AWS_PROFILE="$PROFILE"
 export AWS_DEFAULT_REGION="ap-northeast-1"
 
-TASK=$(aws ecs describe-tasks --cluster "$CLUSTER" --tasks $(aws ecs list-tasks --cluster "$CLUSTER" | jq -r .taskArns[]) | jq -r '.. | select(.runtimeId? and .name == "bot") | "\(.taskArn)/\(.runtimeId)" | split("/")[1:] | join("_")')
-echo "Bot Task: ${TASK}"
+TASK=$(aws ecs describe-tasks --cluster "$CLUSTER" --tasks $(aws ecs list-tasks --cluster "$CLUSTER" | jq -r .taskArns[]) | jq -r '.. | select(.runtimeId? and .name == "app") | "\(.taskArn)/\(.runtimeId)" | split("/")[1:] | join("_")')
+echo "App Task: ${TASK}"
 
 HOST=$(aws rds describe-db-cluster-endpoints | jq -r ".DBClusterEndpoints[] | select(.DBClusterIdentifier == \"$CLUSTER\" and .EndpointType == \"${ENDPOINT_TYPE}\").Endpoint")
 echo "DB Host: ${HOST}"
