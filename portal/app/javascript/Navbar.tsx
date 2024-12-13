@@ -43,6 +43,7 @@ export class Navbar extends React.Component<Props, State> {
               <div className="navbar-item">
                 <div className="buttons">
                   {this.renderNavbarContestButton()}
+                  {this.renderMyPageButton()}
                   {this.renderNavbarLoginButtons()}
                 </div>
               </div>
@@ -66,22 +67,19 @@ export class Navbar extends React.Component<Props, State> {
   }
 
   public renderNavbarContestButton() {
-    switch (this.props.session.contest?.status) {
-      case Contest_Status.REGISTRATION:
-      case Contest_Status.STANDBY:
-        return (
-          <a className="button is-light" href="/registration">
-            {this.props.session.contestant ? "マイページ" : "参加登録"}
-          </a>
-        );
-      case Contest_Status.STARTED:
-      case Contest_Status.FINISHED:
-        return this.props.session.contestant ? (
-          <a className="button is-light" href="/contestant">
-            競技ページ
-          </a>
-        ) : null;
-    }
+    return this.props.session.contest?.status === Contest_Status.STARTED && this.props.session.contestant ? (
+      <a className="button is-light" href="/contestant">
+        競技ページ
+      </a>
+    ) : null;
+  }
+
+  public renderMyPageButton() {
+    return (
+      <a className="button is-light" href="/registration">
+        {this.props.session.contestant ? "マイページ" : "参加登録"}
+      </a>
+    );
   }
 
   public renderNavbarLoginButtons() {
