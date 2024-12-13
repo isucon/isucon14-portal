@@ -1,7 +1,7 @@
-import React from "react";
 import dayjs from "dayjs";
 import durationPlugin from "dayjs/plugin/duration";
 import relativeTimePlugin from "dayjs/plugin/relativeTime";
+import React from "react";
 import type { Contest } from "../../proto/isuxportal/resources/contest_pb";
 dayjs.extend(durationPlugin);
 dayjs.extend(relativeTimePlugin);
@@ -25,15 +25,15 @@ export const ContestClock: React.FC<Props> = ({ contest }) => {
   const duration = contestEndsAt.diff(contestStartsAt);
   const untilEnd = contestEndsAt.diff(now);
 
-  const remaining = dayjs.duration(untilEnd);
-  const digits = (n: number) => (n < 10 ? `0${Math.floor(n)}` : `${Math.floor(n)}`);
+  const remaining = dayjs.duration(untilEnd < 0 ? 0 : untilEnd);
+  const digits = (n: number) => Math.floor(n).toString().padStart(2, "0");
 
   return (
     <div className="isux-contest-clock">
       <div className="columns is-vcentered">
         <div className="column is-narrow">
           <p>
-            日程: <time dateTime={contestStartsAt.toISOString()}>{contestStartsAt.format("YYYY-MM-DD HH:mm")}</time> -{" "}
+            日程: <time dateTime={contestStartsAt.toISOString()}>{contestStartsAt.format("YYYY-MM-DD HH:mm")}</time>〜
             <time dateTime={contestEndsAt.toISOString()}>{contestEndsAt.format("YYYY-MM-DD HH:mm")}</time>
           </p>
         </div>
@@ -43,13 +43,9 @@ export const ContestClock: React.FC<Props> = ({ contest }) => {
           </p>
         </div>
         <div className="column is-4">
-          {untilEnd > 0 ? (
-            <p>
-              残時間: {digits(remaining.hours())}:{digits(remaining.minutes())}:{digits(remaining.seconds())}
-            </p>
-          ) : (
-            <p>残時間: 終了</p>
-          )}
+          <p>
+            残り時間: {digits(remaining.asHours())}:{digits(remaining.minutes())}:{digits(remaining.seconds())}
+          </p>
         </div>
       </div>
     </div>
