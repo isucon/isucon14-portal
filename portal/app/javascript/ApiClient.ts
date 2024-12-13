@@ -1,33 +1,14 @@
+import { create, fromBinary, toBinary } from "@bufbuild/protobuf";
 import * as Rails from "@rails/ujs";
 import { ErrorSchema, type Error as RemoteError } from "../../proto/isuxportal/error_pb";
-import { create, fromBinary, toBinary } from "@bufbuild/protobuf";
+import type { BenchmarkJob_Status } from "../../proto/isuxportal/resources/benchmark_job_pb";
+import {
+  DashboardResponseSchema as AudienceDashboardResponseSchema,
+  SoloDashboardResponseSchema,
+} from "../../proto/isuxportal/services/audience/dashboard_pb";
 import { ListTeamsResponseSchema } from "../../proto/isuxportal/services/audience/team_list_pb";
 import { GetCurrentSessionResponseSchema } from "../../proto/isuxportal/services/common/me_pb";
-import {
-  DeleteRegistrationResponseSchema,
-  GetRegistrationSessionQuerySchema,
-  GetRegistrationSessionResponseSchema,
-  UpdateRegistrationRequestSchema,
-  UpdateRegistrationResponseSchema,
-  type GetRegistrationSessionQuery,
-  type UpdateRegistrationRequest,
-} from "../../proto/isuxportal/services/registration/session_pb";
-import {
-  CreateTeamRequestSchema,
-  CreateTeamResponseSchema,
-  type CreateTeamRequest,
-} from "../../proto/isuxportal/services/registration/create_team_pb";
-import {
-  JoinTeamRequestSchema,
-  JoinTeamResponseSchema,
-  type JoinTeamRequest,
-} from "../../proto/isuxportal/services/registration/join_pb";
-import { GetEnvCheckInformationResponseSchema } from "../../proto/isuxportal/services/registration/env_check_pb";
-import {
-  ActivateCouponRequestSchema,
-  ActivateCouponResponseSchema,
-  type ActivateCouponRequest,
-} from "../../proto/isuxportal/services/registration/activate_coupon_pb";
+import { GetAvatarUrlResponseSchema } from "../../proto/isuxportal/services/common/storage_pb";
 import {
   EnqueueBenchmarkJobRequestSchema,
   EnqueueBenchmarkJobResponseSchema,
@@ -36,24 +17,44 @@ import {
   type EnqueueBenchmarkJobRequest,
 } from "../../proto/isuxportal/services/contestant/benchmark_pb";
 import {
+  ListClarificationsResponseSchema,
+  RequestClarificationRequestSchema,
+  RequestClarificationResponseSchema,
+  type RequestClarificationRequest,
+} from "../../proto/isuxportal/services/contestant/clarifications_pb";
+import { GetCloudFormationResponseSchema } from "../../proto/isuxportal/services/contestant/cloud_formation_pb";
+import { DashboardResponseSchema } from "../../proto/isuxportal/services/contestant/dashboard_pb";
+import {
   ListNotificationsResponseSchema,
   SubscribeNotificationRequestSchema,
   SubscribeNotificationResponseSchema,
   UnsubscribeNotificationRequestSchema,
   UnsubscribeNotificationResponseSchema,
 } from "../../proto/isuxportal/services/contestant/notifications_pb";
-import { SoloDashboardResponseSchema } from "../../proto/isuxportal/services/audience/dashboard_pb";
 import {
-  ListClarificationsResponseSchema,
-  RequestClarificationRequestSchema,
-  RequestClarificationResponseSchema,
-  type RequestClarificationRequest,
-} from "../../proto/isuxportal/services/contestant/clarifications_pb";
-import { DashboardResponseSchema } from "../../proto/isuxportal/services/contestant/dashboard_pb";
-import { DashboardResponseSchema as AudienceDashboardResponseSchema } from "../../proto/isuxportal/services/audience/dashboard_pb";
-import { GetCloudFormationResponseSchema } from "../../proto/isuxportal/services/contestant/cloud_formation_pb";
-import { GetAvatarUrlResponseSchema } from "../../proto/isuxportal/services/common/storage_pb";
-import type { BenchmarkJob_Status } from "../../proto/isuxportal/resources/benchmark_job_pb";
+  ActivateCouponRequestSchema,
+  ActivateCouponResponseSchema,
+  type ActivateCouponRequest,
+} from "../../proto/isuxportal/services/registration/activate_coupon_pb";
+import {
+  CreateTeamRequestSchema,
+  CreateTeamResponseSchema,
+  type CreateTeamRequest,
+} from "../../proto/isuxportal/services/registration/create_team_pb";
+import { GetEnvCheckInformationResponseSchema } from "../../proto/isuxportal/services/registration/env_check_pb";
+import {
+  JoinTeamRequestSchema,
+  JoinTeamResponseSchema,
+  type JoinTeamRequest,
+} from "../../proto/isuxportal/services/registration/join_pb";
+import {
+  DeleteRegistrationResponseSchema,
+  GetRegistrationSessionResponseSchema,
+  UpdateRegistrationRequestSchema,
+  UpdateRegistrationResponseSchema,
+  type GetRegistrationSessionQuery,
+  type UpdateRegistrationRequest,
+} from "../../proto/isuxportal/services/registration/session_pb";
 
 export class ApiError extends Error {
   public localError: Error;
@@ -62,7 +63,9 @@ export class ApiError extends Error {
   constructor(localError: Error, remoteError: RemoteError | null, ...params: any[]) {
     super(...params);
 
+    // @ts-ignore
     if (Error.captureStackTrace) {
+      // @ts-ignore
       Error.captureStackTrace(this, ApiError);
     }
     this.name = `ApiError(local=${localError.name},remote=${remoteError && remoteError.name})`;

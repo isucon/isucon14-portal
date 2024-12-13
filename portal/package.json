@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "webpack": "webpack",
     "watch": "webpack --progress --watch",
     "format": "prettier --write app/javascript/**/*.{ts,tsx,scss}",
     "typecheck": "tsc --noEmit"
@@ -42,5 +43,5 @@
     "workbox-core": "^7.1.0",
     "workbox-precaching": "^7.1.0"
   },
-  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
+  "packageManager": "pnpm@9.15.0"
 }

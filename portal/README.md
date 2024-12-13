@@ -6,9 +6,8 @@
 ```
 docker compose up -d
 docker compose exec app bundle exec rake db:migrate
-corepack enable yarn
-yarn
-npx webpack --progress --watch
+pnpm i
+pnpm run watch
 ```
 
 ## Setup
@@ -26,7 +25,7 @@ docker compose up -d mysql
   - 注：OpenSSL >= 3.x なら ruby >= 3.1 が必要
 - gem
 - bundler
-- yarn
+- pnpm
 
 
 ## Set Platform
@@ -42,7 +41,7 @@ see: `gem help platform`
 https://docs.komagata.org/5926
 
 ```
-yarn
+pnpm i
 bundle install
 bundle exec rake db:migrate
 ```

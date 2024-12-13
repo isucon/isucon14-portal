@@ -2,15 +2,16 @@ FROM --platform=$BUILDPLATFORM node:20 AS assets-builder
 
 RUN mkdir /app
 WORKDIR /app
-COPY package.json yarn.lock /app/
-RUN yarn install && rm -rf /root/.cache/yarn
+RUN corepack enable
+COPY package.json pnpm-lock.yaml /app/
+RUN pnpm i
 COPY webpack.config.js ./
 COPY tsconfig.json ./
 COPY types ./
 COPY sw ./sw
 COPY proto ./proto
 COPY app/javascript ./app/javascript
-RUN NODE_ENV=production node_modules/.bin/webpack
+RUN NODE_ENV=production pnpm run webpack
 
 # https://github.com/sorah-rbpkg/dockerfiles
 FROM sorah/ruby:3.3-dev-jammy AS builder
