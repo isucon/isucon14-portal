@@ -9,7 +9,7 @@
         },
       ],
       essential: true,
-      image: '{{ tfstate `module.isuxportal.aws_ecr_repository.benchmarker.repository_url` }}:v1.2.0',
+      image: '{{ tfstate `module.isuxportal.aws_ecr_repository.benchmarker.repository_url` }}:1fe3111035e149eda12951788d84e017838e6767',
       logConfiguration: {
         logDriver: 'awslogs',
         options: {
@@ -49,7 +49,7 @@
     'FARGATE',
   ],
   runtimePlatform: {
-    cpuArchitecture: 'X86_64',
+    cpuArchitecture: 'ARM64',
     operatingSystemFamily: 'LINUX',
   },
   tags: [
