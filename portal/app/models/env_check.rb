@@ -15,15 +15,17 @@ class EnvCheck < ApplicationRecord
   scope :test_ssh_passed, -> { where(name: 'test-ssh', passed: true) }
 
   def self.status(team_id)
-    if Rails.application.config.x.test_ami_id.nil?
-      Isuxportal::Proto::Resources::EnvCheckStatus::PREPARING
-    elsif self.of_team(team_id).test_ssh_passed.exists?
-      Isuxportal::Proto::Resources::EnvCheckStatus::DONE
-    elsif self.of_team(team_id).test_boot.last&.ip_address.present?
-      Isuxportal::Proto::Resources::EnvCheckStatus::CREATED_INSTANCE
-    else
-      Isuxportal::Proto::Resources::EnvCheckStatus::NOT_STARTED
-    end
+    # FIXME: 感想戦用に、EnvCheckをステータスを固定
+    # if Rails.application.config.x.test_ami_id.nil?
+    #   Isuxportal::Proto::Resources::EnvCheckStatus::PREPARING
+    # elsif self.of_team(team_id).test_ssh_passed.exists?
+    #   Isuxportal::Proto::Resources::EnvCheckStatus::DONE
+    # elsif self.of_team(team_id).test_boot.last&.ip_address.present?
+    #   Isuxportal::Proto::Resources::EnvCheckStatus::CREATED_INSTANCE
+    # else
+    #   Isuxportal::Proto::Resources::EnvCheckStatus::NOT_STARTED
+    # end
+    Isuxportal::Proto::Resources::EnvCheckStatus::DONE
   end
 
   def to_pb()

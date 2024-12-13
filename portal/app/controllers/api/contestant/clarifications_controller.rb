@@ -14,6 +14,9 @@ class Api::Contestant::ClarificationsController < Api::Contestant::ApplicationCo
 
   pb :create, Isuxportal::Proto::Services::Contestant::RequestClarificationRequest
   def create
+    # FIXME: 感想戦中はClar受け付けない
+    raise Api::ApplicationController::Error::Forbidden.new("You cannot request clarification now")
+
     @clarification = Clarification.create!(
       team: current_team,
       original_question: pb.question,

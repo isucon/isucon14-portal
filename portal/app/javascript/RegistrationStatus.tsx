@@ -2,9 +2,7 @@ import React from "react";
 import { ApiClient } from "./ApiClient";
 
 import { create } from "@bufbuild/protobuf";
-import { Link } from "react-router-dom";
 import type { Contestant } from "../../proto/isuxportal/resources/contestant_pb";
-import { EnvCheckStatus } from "../../proto/isuxportal/resources/env_check_pb";
 import type { GetCurrentSessionResponse } from "../../proto/isuxportal/services/common/me_pb";
 import { ActivateCouponRequestSchema } from "../../proto/isuxportal/services/registration/activate_coupon_pb";
 import type { GetRegistrationSessionResponse } from "../../proto/isuxportal/services/registration/session_pb";
@@ -203,42 +201,66 @@ export class RegistrationStatus extends React.Component<Props, State> {
     );
     const envCheckStatus = this.props.registrationSession.envCheckStatus;
 
-    let message: React.ReactNode = "現時点での準備が整っています。次のアナウンスをお待ちください。";
+    // FIXME: 感想戦用のメッセージ
+    // let message: React.ReactNode = "現時点での準備が整っています。次のアナウンスをお待ちください。";
+    // let isOk = true;
+    // if (!isDiscordSynced || !isSshKeySynced) {
+    //   message = (
+    //     <>
+    //       参加準備が整っていません。
+    //       <ul>
+    //         {!isSshKeySynced && (
+    //           <li>
+    //             GitHubからSSHキーを取得できていないメンバーがいます。GitHubにSSHキーを登録していない場合、
+    //             <a
+    //               target="_blank"
+    //               href="https://docs.github.com/ja/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account"
+    //             >
+    //               新しいSSHキーを追加
+    //             </a>
+    //             し、本サイト (ポータル)に再ログインしてください。
+    //           </li>
+    //         )}
+    //         {!isDiscordSynced && (
+    //           <li>
+    //             <a target="_blank" href={this.state.discordInviteUrl}>
+    //               Discordサーバーへの参加
+    //             </a>
+    //             が完了していないメンバーがいます。参加後しばらく経っても本サイト
+    //             (ポータル)に反映されない場合、Discordサーバー内 #readme チャンネルのメッセージをご覧ください。
+    //           </li>
+    //         )}
+    //       </ul>
+    //     </>
+    //   );
+    //   isOk = false;
+    // } else if (envCheckStatus !== EnvCheckStatus.PREPARING && envCheckStatus !== EnvCheckStatus.DONE) {
+    //   message = (
+    //     <>
+    //       参加準備が整っていません。<Link to="/registration/env_check">競技環境確認</Link>を行ってください。
+    //     </>
+    //   );
+    //   isOk = false;
+    // }
+    let message: React.ReactNode = "準備が整っています。右上の「競技ページ」からご参加ください。";
     let isOk = true;
-    if (!isDiscordSynced || !isSshKeySynced) {
+    if (!isSshKeySynced) {
       message = (
         <>
           参加準備が整っていません。
           <ul>
-            {!isSshKeySynced && (
-              <li>
-                GitHubからSSHキーを取得できていないメンバーがいます。GitHubにSSHキーを登録していない場合、
-                <a
-                  target="_blank"
-                  href="https://docs.github.com/ja/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account"
-                >
-                  新しいSSHキーを追加
-                </a>
-                し、本サイト (ポータル)に再ログインしてください。
-              </li>
-            )}
-            {!isDiscordSynced && (
-              <li>
-                <a target="_blank" href={this.state.discordInviteUrl}>
-                  Discordサーバーへの参加
-                </a>
-                が完了していないメンバーがいます。参加後しばらく経っても本サイト
-                (ポータル)に反映されない場合、Discordサーバー内 #readme チャンネルのメッセージをご覧ください。
-              </li>
-            )}
+            <li>
+              GitHubからSSHキーを取得できていないメンバーがいます。登録直後の場合は、しばらくしてからリロードしてください。
+              GitHubにSSHキーを登録していない場合、
+              <a
+                target="_blank"
+                href="https://docs.github.com/ja/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account"
+              >
+                新しいSSHキーを追加
+              </a>
+              し、本サイト (ポータル)に再ログインしてください。
+            </li>
           </ul>
-        </>
-      );
-      isOk = false;
-    } else if (envCheckStatus !== EnvCheckStatus.PREPARING && envCheckStatus !== EnvCheckStatus.DONE) {
-      message = (
-        <>
-          参加準備が整っていません。<Link to="/registration/env_check">競技環境確認</Link>を行ってください。
         </>
       );
       isOk = false;

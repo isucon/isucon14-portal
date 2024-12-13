@@ -58,7 +58,8 @@ class Api::Registration::SessionsController < Api::Registration::ApplicationCont
   pb :update, Isuxportal::Proto::Services::Registration::UpdateRegistrationRequest
   def update
     raise ActiveRecord::RecordNotFound unless current_contestant
-    raise Api::ApplicationController::Error::Forbidden.new("You cannot update registration details after start") if Contest.contest_started?
+    # FIXME: 感想戦用に編集開放
+    # raise Api::ApplicationController::Error::Forbidden.new("You cannot update registration details after start") if Contest.contest_started?
     raise Api::ApplicationController::Error::Forbidden.new("You cannot update at this moment") if Contest.registration_update_closed?
 
     ApplicationRecord.transaction do
@@ -85,7 +86,8 @@ class Api::Registration::SessionsController < Api::Registration::ApplicationCont
     was_leader = current_contestant.leader?
 
     if was_leader || !current_bypass_allowed?(:LEAVE_TEAM)
-      raise Api::ApplicationController::Error::Forbidden.new("You cannot withdraw after start") if Contest.contest_started?
+      # FIXME: 感想戦用に編集開放
+      # raise Api::ApplicationController::Error::Forbidden.new("You cannot withdraw after start") if Contest.contest_started?
       raise Api::ApplicationController::Error::Forbidden.new("You cannot withdraw at this moment") if Contest.registration_update_closed?
     end
 
